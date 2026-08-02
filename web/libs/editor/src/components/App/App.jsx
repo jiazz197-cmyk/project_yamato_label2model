@@ -1,0 +1,330 @@
+/**
+ * Libraries
+ */
+import React, { Component } from "react";
+import { Result, Spin } from "antd";
+import { getEnv, getRoot } from "mobx-state-tree";
+import { observer, Provider } from "mobx-react";
+import { QueryClientProvider } from "@tanstack/react-query";
+
+/**
+ * Core
+ */
+import { CommentsOverlay } from "../InteractiveOverlays/CommentsOverlay";
+import { TreeValidation } from "../TreeValidation/TreeValidation";
+
+/**
+ * Tags
+ */
+import "../../tags/object";
+import "../../tags/control";
+import "../../tags/visual";
+import "../../tags/Custom";
+
+/**
+ * Utils and common components
+ */
+import { Space } from "../../common/Space/Space";
+import { Button, EmptyState, IconCheck } from "@humansignal/ui";
+import { isStarterCloudPlan } from "@humansignal/core";
+import { cn } from "../../utils/bem";
+import { FF_BULK_ANNOTATION, FF_LSDV_4620_3_ML, FF_SIMPLE_INIT, isFF } from "../../utils/feature-flags";
+import { reactCleaner } from "../../utils/reactCleaner";
+import { guidGenerator } from "../../utils/unique";
+import { isDefined, sortAnnotations } from "../../utils/utilities";
+import { queryClient } from "@humansignal/core/lib/utils/query-client";
+import { ToastProvider, ToastViewport } from "@humansignal/ui/lib/toast/toast";
+
+/**
+ * Components
+ */
+import { Annotation } from "./Annotation";
+import { BottomBar } from "../BottomBar/BottomBar";
+import Debug from "../Debug";
+import { InstructionsModal } from "../InstructionsModal/InstructionsModal";
+import { RelationsOverlay } from "../InteractiveOverlays/RelationsOverlay";
+import Settings from "../Settings/Settings";
+import { SideTabsPanels } from "../SidePanels/TabPanels/SideTabsPanels";
+import { TopBar } from "../TopBar/TopBar";
+import { ViewAll } from "./ViewAll";
+
+/**
+ * Styles
+ */
+import "./App.prefix.css";
+
+/**
+ * Check if annotation has any tag that should be rendered in sidebar
+ * Used to conditionally show the custom tab in the side panel
+ * @returns {boolean|string} - false or the title of the tab that should be rendered in sidebar
+ */
+const hasTagInSidebar = (annotation) => {
+  if (!annotation?.names) return false;
+  for (const tag of annotation.names.values()) {
+    if (tag.renderInSidebar) {
+      return tag.sidebar;
+    }
+  }
+  return false;
+};
+
+/**
+ * App
+ */
+class App extends Component {
+  relationsRef = React.createRef();
+
+  componentDidMount() {
+    // Hack to activate app hotkeys
+    window.blur();
+    document.body.focus();
+  }
+
+  renderSuccess() {
+    const messages = getEnv(this.props.store).messages;
+    return (
+      <div className={cn("editor").toClassName()}>
+        <EmptyState
+          variant="positive"
+          icon={<IconCheck />}
+          title={messages.DONE}
+          description="Your annotation has been submitted."
+        />
+      </div>
+    );
+  }
+
+  renderNoAnnotation() {
+    const messages = getEnv(this.props.store).messages;
+    return (
+      <div className={cn("editor").toClassName()}>
+        <EmptyState
+          variant="positive"
+          icon={<IconCheck />}
+          title={messages.NO_COMP_LEFT}
+          description="You've viewed all annotations for this task."
+        />
+      </div>
+    );
+  }
+
+  renderNothingToLabel(store) {
+    const messages = getEnv(this.props.store).messages;
+    return (
+      <div
+        className={cn("editor").toClassName()}
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          flexDirection: "column",
+          paddingBottom: "30vh",
+        }}
+      >
+        <EmptyState
+          variant="positive"
+          icon={<IconCheck />}
+          title={messages.NO_NEXT_TASK}
+          description="All tasks in the queue have been completed"
+          actions={
+            store.taskHistory.length > 0 ? (
+              <Button
+                onClick={(e) => store.prevTask(e, true)}
+                variant="primary"
+                aria-label="Previous task"
+                data-testid="editor-empty-queue-previous-task"
+              >
+                Go to Previous Task
+              </Button>
+            ) : undefined
+          }
+          data-testid="editor-empty-queue"
+        />
+      </div>
+    );
+  }
+
+  renderNoAccess() {
+    return (
+      <div className={cn("editor").toClassName()}>
+        <Result status="warning" title={getEnv(this.props.store).messages.NO_ACCESS} />
+      </div>
+    );
+  }
+
+  renderConfigValidationException(_store) {
+    return (
+      <div className={cn("main-view").toClassName()}>
+        <div className={cn("main-view").elem("annotation").toClassName()}>
+          <TreeValidation errors={this.props.store.annotationStore.validation} />
+        </div>
+      </div>
+    );
+  }
+
+  renderLoader() {
+    return <Result icon={<Spin size="large" />} />;
+  }
+
+  _renderUI(root, as) {
+    if (as.viewingAll && getRoot(as).hasInterface("annotations:view-all")) {
+      return this.renderAllAnnotations();
+    }
+
+    return (
+      <div
+        key={(as.selectedHistory ?? as.selected)?.id}
+        className={cn("main-view").toClassName()}
+        onScrollCapture={this._notifyScroll}
+      >
+        <div className={cn("main-view").elem("annotation").toClassName()}>
+          {<Annotation root={root} annotation={as.selected} />}
+          {this.renderRelations(as.selected)}
+          {this.renderCommentsOverlay(as.selected)}
+        </div>
+      </div>
+    );
+  }
+
+  _renderInfobar(as) {
+    const { id, queue } = getRoot(as).task;
+
+    return (
+      <Space className={cn("main-view").elem("infobar").toClassName()} size="small">
+        <span>Task #{id}</span>
+
+        {queue && <span>{queue}</span>}
+      </Space>
+    );
+  }
+
+  renderAllAnnotations() {
+    const as = this.props.store.annotationStore;
+    const entities = [...as.annotations, ...as.predictions];
+
+    if (isFF(FF_SIMPLE_INIT)) {
+      // the same sorting we have in AnnotationsCarousel, so we'll see the same order in both places
+      sortAnnotations(entities);
+    }
+
+    return <ViewAll store={as} annotations={entities} root={as.root} />;
+  }
+
+  renderRelations(selectedStore) {
+    const store = selectedStore.relationStore;
+    const taskData = this.props.store.task?.data;
+
+    return (
+      <RelationsOverlay
+        key={guidGenerator()}
+        store={store}
+        ref={this.relationsRef}
+        tags={selectedStore.names}
+        taskData={taskData}
+      />
+    );
+  }
+
+  renderCommentsOverlay(selectedAnnotation) {
+    const { store } = this.props;
+    const { commentStore } = store;
+
+    if (!store.hasInterface("annotations:comments") || !commentStore.isCommentable) return null;
+    return <CommentsOverlay commentStore={commentStore} annotation={selectedAnnotation} />;
+  }
+
+  render() {
+    const { store } = this.props;
+    const as = store.annotationStore;
+    const root = as.selected && as.selected.root;
+    const { settings } = store;
+
+    if (store.isLoading) return this.renderLoader();
+
+    if (store.noTask) return this.renderNothingToLabel(store);
+
+    if (store.noAccess) return this.renderNoAccess();
+
+    if (store.labeledSuccess) return this.renderSuccess();
+
+    if (!root) return this.renderNoAnnotation();
+
+    const viewingAll = as.viewingAll;
+
+    // tags can be styled in config when user is awaiting for suggestions from ML backend
+    const mainContent = (
+      <div
+        className={cn("main-content")
+          .mix(...(store.awaitingSuggestions ? ["requesting"] : []))
+          .toClassName()}
+      >
+        {as.validation === null
+          ? this._renderUI(as.selectedHistory?.root ?? root, as)
+          : this.renderConfigValidationException(store)}
+      </div>
+    );
+
+    const isBulkMode = isFF(FF_BULK_ANNOTATION) && !isStarterCloudPlan() && store.hasInterface("annotation:bulk");
+    return (
+      <div
+        className={cn("editor").mod({ fullscreen: settings.fullscreen }).toClassName()}
+        ref={isFF(FF_LSDV_4620_3_ML) ? reactCleaner(this) : null}
+      >
+        <QueryClientProvider client={queryClient}>
+          <Settings store={store} />
+          <Provider store={store}>
+            <ToastProvider>
+              <InstructionsModal
+                visible={store.showingDescription}
+                onCancel={() => store.toggleDescription()}
+                title={store.hasInterface("review") ? "Review Instructions" : "Labeling Instructions"}
+              >
+                {store.description}
+              </InstructionsModal>
+
+              {isDefined(store) && store.hasInterface("topbar") && <TopBar store={store} />}
+              <div
+                className={cn("wrapper")
+                  .mod({
+                    viewAll: viewingAll,
+                    bsp: settings.effectiveBottomSidePanel,
+                    showingBottomBar: true,
+                  })
+                  .toClassName()}
+              >
+                {isBulkMode || !store.hasInterface("side-column") ? (
+                  <>
+                    {mainContent}
+                    {store.hasInterface("topbar") && <BottomBar store={store} />}
+                  </>
+                ) : (
+                  <SideTabsPanels
+                    panelsHidden={viewingAll}
+                    currentEntity={as.selectedHistory ?? as.selected}
+                    regions={as.selected.regionStore}
+                    showComments={store.hasInterface("annotations:comments")}
+                    showCustomTab={hasTagInSidebar(as.selected)}
+                    focusTab={store.commentStore.tooltipMessage ? "comments" : null}
+                  >
+                    {mainContent}
+                    {store.hasInterface("topbar") && <BottomBar store={store} />}
+                  </SideTabsPanels>
+                )}
+              </div>
+              <ToastViewport />
+            </ToastProvider>
+          </Provider>
+          {store.hasInterface("debug") && <Debug store={store} />}
+        </QueryClientProvider>
+      </div>
+    );
+  }
+
+  _notifyScroll = () => {
+    if (this.relationsRef.current) {
+      this.relationsRef.current.onResize();
+    }
+  };
+}
+
+export default observer(App);
