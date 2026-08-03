@@ -157,7 +157,7 @@ module.exports = composePlugins(
         );
 
         const innerTest = oneOfRule.test?.toString() ?? "";
-        const cssLoader = oneOfRule.use.find((use) => use.loader?.includes("/css-loader/"));
+        const cssLoader = oneOfRule.use.find((use) => use.loader?.match(/[/\\]css-loader[/\\]/));
 
         if (innerTest.includes("module") && cssLoader?.options) {
           cssLoader.options.modules = {
@@ -173,7 +173,7 @@ module.exports = composePlugins(
       rule.oneOf.forEach((oneOfRule, idx) => {
         if (!oneOfRule.test || !oneOfRule.use) return;
         const t = oneOfRule.test.toString();
-        if (/^\/\\\.css\$\/$/.test(t) && oneOfRule.use.some((u) => u.loader?.includes("/css-loader/"))) {
+        if (/^\/\\\.css\$\/$/.test(t) && oneOfRule.use.some((u) => u.loader?.match(/[/\\]css-loader[/\\]/))) {
           insertions.push(idx);
         }
       });
@@ -183,7 +183,7 @@ module.exports = composePlugins(
         const template = rule.oneOf[idx];
         const prefixUse = template.use.map((u) => {
           if (typeof u === "string") return u;
-          if (u.loader?.includes("/css-loader/")) {
+          if (u.loader?.match(/[/\\]css-loader[/\\]/)) {
             return {
               ...u,
               options: {
@@ -192,6 +192,7 @@ module.exports = composePlugins(
                   localIdentName: `${css_prefix}[local]`,
                   getLocalIdent(_ctx, _ident, className) {
                     if (className.includes("ant")) return className;
+                    return `${css_prefix}${className}`;
                   },
                 },
               },
@@ -202,7 +203,6 @@ module.exports = composePlugins(
 
         rule.oneOf.splice(idx, 0, {
           test: /\.prefix\.css$/,
-          include: template.include,
           exclude: /node_modules/,
           use: prefixUse,
         });
