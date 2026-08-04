@@ -1,6 +1,6 @@
-title: Search Page Ranking
+title: 搜索页面排序
 type: community
-group: Ranking & Scoring
+group: 排序与评分
 image: /static/templates/serp-ranking.png
 details: <h1>Rank different kinds of results by given search query</h1>
 config: |
@@ -12,15 +12,15 @@ config: |
       <Choices name="dynamic_choices" toName="text" selection="checkbox" value="$options" layout="vertical" choice="multiple" allownested="true"/>
     </View>
     <View style="box-shadow: 2px 2px 5px #999; padding: 20px; margin-top: 1em; border-radius: 5px;">
-      <Header value="Search Quality"/>
+      <Header value="搜索质量"/>
       <Rating name="relevance" toName="text"/>
     </View>
     <View style="box-shadow: 2px 2px 5px #999; padding: 15px 5px 10px 20px; margin-top: 1.5em; margin-bottom: 1.25em; border-radius: 5px; display: flex; align-items: center;">
-      <Header value="Labeling Confidence" style="font-size: 1.25em"/>
+      <Header value="标注置信度" style="font-size: 1.25em"/>
       <View style="margin: 0 1em 0.5em 1.5em">
         <Choices name="confidence" toName="text" choice="single" showInLine="true">
-          <Choice value="Low" html="&lt;img width='40' src='https://www.iconsdb.com/icons/preview/green/thumbs-up-xxl.png'/&gt;"/>
-          <Choice value="High" html="&lt;img width='40' src='https://www.iconsdb.com/icons/preview/red/thumbs-down-xxl.png'/&gt;"/>
+          <Choice value="低" html="&lt;img width='40' src='https://www.iconsdb.com/icons/preview/green/thumbs-up-xxl.png'/&gt;"/>
+          <Choice value="高" html="&lt;img width='40' src='https://www.iconsdb.com/icons/preview/red/thumbs-down-xxl.png'/&gt;"/>
         </Choices>
       </View>
     </View>

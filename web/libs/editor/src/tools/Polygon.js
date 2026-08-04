@@ -39,7 +39,7 @@ const _Tool = types
       },
 
       get viewTooltip() {
-        return "Polygon region";
+        return "多边形区域";
       },
       get iconComponent() {
         return self.dynamic ? NodeViews.PolygonRegionModel.altIcon : NodeViews.PolygonRegionModel.icon;

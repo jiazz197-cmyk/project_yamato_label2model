@@ -64,7 +64,7 @@ const ParagraphAudio = observer(({ item }) => {
 
   return (
     <>
-      {isBuffering && <div className="lsf-timeline-controls__buffering" aria-label="Buffering Media Source" />}
+      {isBuffering && <div className="lsf-timeline-controls__buffering" aria-label="正在缓冲媒体源" />}
       <audio
         {...audioDefaultProps}
         controls={item.showplayer && !item.syncedAudio}
@@ -543,7 +543,7 @@ class HtxParagraphsView extends Component {
     // Check if a label is selected
     const states = item.activeStates && item.activeStates();
     if (!states || states.length === 0) {
-      console.warn("No label selected. Annotation will not be created.");
+      console.warn("未选择标签，不会创建标注。");
     }
     if (isFF(FF_DEV_2918)) {
       const htxRanges = item.addRegions(selectedRanges);
@@ -682,7 +682,7 @@ class HtxParagraphsView extends Component {
         range.setEnd(...findNodeAt(endNode, endOffset));
 
         if (r.text && range.toString().replace(/\s+/g, "") !== r.text.replace(/\s+/g, "")) {
-          console.info("Restore broken position", i, range.toString(), "->", r.text, r);
+          console.info("恢复损坏的位置", i, range.toString(), "->", r.text, r);
           if (
             // span breaks the mock-up by its end, so the start of next one is wrong
             item.regs.slice(0, i).some((other) => r.start === other.end) &&
@@ -692,7 +692,7 @@ class HtxParagraphsView extends Component {
             // find region's text in the node (disregarding spaces)
             const match = startNode.textContent.match(new RegExp(r.text.replace(/\s+/g, "\\s+")));
 
-            if (!match) console.warn("Can't find the text", r);
+            if (!match) console.warn("找不到文本", r);
             const { index = 0 } = match || {};
 
             if (r.endOffset - r.startOffset !== r.text.length)
@@ -979,7 +979,7 @@ class HtxParagraphsView extends Component {
               }}
               label={"Auto-scroll"}
             />
-            <Tooltip alignment="top-left" title="Automatically sync transcript scrolling with audio playback">
+            <Tooltip alignment="top-left" title="自动将转写滚动与音频播放同步">
               <IconHelp />
             </Tooltip>
           </div>

@@ -477,7 +477,7 @@ export class Regions {
   private cursorInRegion(e: MouseEvent, region: Segment) {
     const { xStart, width } = region;
     const { container, timelinePlacement, timelineHeight = 0, height } = this.visualizer;
-    const timelineLayer = this.visualizer.getLayer("timeline");
+    const timelineLayer = this.visualizer.getLayer("时间轴");
     const timelineTop = timelinePlacement === defaults.timelinePlacement;
     const yStart = timelineTop && timelineLayer?.isVisible ? timelineHeight : 0;
     const x = getCursorPositionX(e, container);

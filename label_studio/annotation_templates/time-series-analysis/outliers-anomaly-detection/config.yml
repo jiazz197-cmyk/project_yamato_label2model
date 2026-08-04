@@ -1,15 +1,15 @@
-title: Outliers & Anomaly Detection
+title: 离群值与异常检测
 type: community
-group: Time Series Analysis
+group: 时间序列分析
 image: /static/templates/outliers-anomaly-detection.png
 details: |
-  <h1>Select time spans identifying outliers or anomalies on time series signals</h1>
+  <h1>选择时间序列信号中的离群值或异常时间范围</h1>
   <dl>
-    <dt>Industry Applications</dt>
+    <dt>行业应用</dt>
     <dd>fraud detection, cybersecurity, network monitoring, industrial IoT, predictive maintenance, financial trading, healthcare monitoring, quality control, equipment failure prediction, supply chain monitoring, energy grid monitoring, sensor fault detection, system health monitoring</dd>
-    <dt>Associated Models</dt>
+    <dt>相关模型</dt>
     <dd>isolation forest, one-class SVM, LSTM autoencoders, statistical process control</dd>
-    <dt>Domain Terminology</dt>
+    <dt>领域术语</dt>
     <dd>CSV, Excel, XLS, Sheet, statistical outliers, point anomalies, contextual anomalies, collective anomalies, drift detection</dd>
   </dl>
 config: |
@@ -31,13 +31,13 @@ config: |
 
       <!-- Control tag for region labels -->
       <TimeSeriesLabels name="label" toName="ts">
-          <Label value="Region" background="red" />
+          <Label value="区域" background="red" />
       </TimeSeriesLabels>
 
       <Choices name="region_type" toName="ts"
             perRegion="true" required="true">
-          <Choice value="Outlier"/>
-          <Choice value="Anomaly"/>
+          <Choice value="离群值"/>
+          <Choice value="异常"/>
       </Choices>
   </View>
 

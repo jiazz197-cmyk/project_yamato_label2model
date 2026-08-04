@@ -1,23 +1,23 @@
-title: Video Classification
+title: 视频分类
 type: community
-group: Videos
+group: 视频
 image: /static/templates/video-classification.png
 details: |
-  <h1>Classify video</h1>
+  <h1>对视频分类</h1>
   <dl>
-    <dt>Industry Applications</dt>
+    <dt>行业应用</dt>
     <dd>content moderation, sports analysis, medical video analysis, surveillance footage review, entertainment industry, educational content, quality control, social media filtering, broadcast media, security monitoring, autonomous vehicles, drone footage analysis</dd>
-    <dt>Associated Models</dt>
+    <dt>相关模型</dt>
     <dd>3D CNN, I3D, SlowFast, TSN, TimeSformer, Video Transformer</dd>
-    <dt>Domain Terminology</dt>
+    <dt>领域术语</dt>
     <dd>action recognition, temporal modeling, video understanding, activity classification, motion recognition</dd>
   </dl>
 config: |
   <View>
     <Video name="video" value="$video"/>
     <Choices name="choice" toName="video" showInLine="true">
-      <Choice value="Blurry" />
-      <Choice value="Sharp" />
+      <Choice value="模糊" />
+      <Choice value="清晰" />
     </Choices>
   </View>
 

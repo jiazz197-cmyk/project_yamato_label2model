@@ -65,7 +65,7 @@ export default inject("store")(
       const canSkip = !skipDisabled || hasForceSkipPermission;
       const skipButtonDisabled = disabled || !canSkip;
 
-      const skipTooltip = canSkip ? "Cancel (skip) task: [ Ctrl+Space ]" : "This task cannot be skipped";
+      const skipTooltip = canSkip ? "取消（跳过）任务：[ Ctrl+Space ]" : "此任务无法跳过";
 
       const showInfoIcon = skipButtonDisabled && hasForceSkipPermission;
 
@@ -73,7 +73,7 @@ export default inject("store")(
         skipButton = (
           <>
             {showInfoIcon && (
-              <Tooltip title="Annotators and Reviewers will not be able to skip this task">
+              <Tooltip title="标注员和审核员将无法跳过此任务">
                 <IconInfoOutline width={20} height={20} className="text-neutral-content ml-auto cursor-pointer" />
               </Tooltip>
             )}
@@ -97,7 +97,7 @@ export default inject("store")(
             look="primary"
             icon={<CheckOutlined />}
             onClick={store.submitAnnotation}
-            tooltip="Save results: [ Ctrl+Enter ]"
+            tooltip="保存结果：[ Ctrl+Enter ]"
             className={`${styles.submit} ${submitButtonClassName}`}
           >
             Submit {buttons.submit}
@@ -112,7 +112,7 @@ export default inject("store")(
             look="primary"
             icon={<CheckCircleOutlined />}
             onClick={store.updateAnnotation}
-            tooltip="Update this task: [ Alt+Enter ]"
+            tooltip="更新此任务：[ Alt+Enter ]"
             className={updateButtonClassName}
           >
             {sentUserGenerate || versions.result ? "Update" : "Submit"} {buttons.update}

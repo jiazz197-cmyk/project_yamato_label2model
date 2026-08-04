@@ -19,10 +19,10 @@ export const ViewAll = ({ store: annotationStore, annotations, root }: Props) =>
         <Tabs variant="default" value={tab} onValueChange={(value) => setTab(value as "summary" | "compare")}>
           <TabsList>
             <TabsTrigger value="summary" data-testid="compare-all-summary-tab">
-              Summary
+              摘要
             </TabsTrigger>
             <TabsTrigger value="compare" data-testid="compare-all-side-by-side-tab">
-              Side-by-side
+              并排
             </TabsTrigger>
           </TabsList>
 

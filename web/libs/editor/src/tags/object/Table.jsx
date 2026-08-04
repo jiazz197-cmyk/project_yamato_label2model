@@ -96,13 +96,13 @@ const Model = types
         }
         // Otherwise, use generic Name/Value columns
         return [
-          { title: "Name", dataIndex: "type" },
+          { title: "姓名", dataIndex: "type" },
           { title: "Value", dataIndex: "value" },
         ];
       }
       if (!self._value[0]) {
         return [
-          { title: "Name", dataIndex: "type" },
+          { title: "姓名", dataIndex: "type" },
           { title: "Value", dataIndex: "value" },
         ];
       }

@@ -188,7 +188,7 @@ export const VectorTransformer: React.FC<VectorTransformerProps> = ({
               });
             }
           } catch (error) {
-            console.warn("Transform error:", error);
+            console.warn("变换出错：", error);
           }
         }
       }}
@@ -414,7 +414,7 @@ export const VectorTransformer: React.FC<VectorTransformerProps> = ({
               onPointsChange?.(updatedPoints);
             });
           } catch (error) {
-            console.warn("Drag move error:", error);
+            console.warn("拖动移动出错：", error);
           }
         }
       }}
@@ -478,7 +478,7 @@ export const VectorTransformer: React.FC<VectorTransformerProps> = ({
           // Don't reset transformer - keep proxy points where they are
           transformer.getLayer()?.batchDraw();
         } catch (error) {
-          console.warn("Drag end error:", error);
+          console.warn("拖动结束出错：", error);
         }
 
         // Notify that transformation has ended (for history unfreezing)
@@ -546,7 +546,7 @@ export const VectorTransformer: React.FC<VectorTransformerProps> = ({
           // This maintains the rotation state of the transformer
           transformer.getLayer()?.batchDraw();
         } catch (error) {
-          console.warn("Transform end error:", error);
+          console.warn("变换结束出错：", error);
         }
 
         // Notify that transformation has ended

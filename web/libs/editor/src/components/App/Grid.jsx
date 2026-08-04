@@ -93,7 +93,7 @@ export const VirtualizedAnnotationPanel = observer(
             <div className="min-h-0 flex-1 flex flex-col items-center justify-center bg-[var(--color-neutral-surface)]">
               <Spin size="large" />
               <span className="mt-300 text-neutral-content-subtler">
-                {isHydrating ? "Loading annotation..." : "Waiting to load..."}
+                {isHydrating ? "正在加载标注…" : "等待加载…"}
               </span>
             </div>
           ) : (
@@ -424,7 +424,7 @@ const VirtualizedGrid = observer(({ store, annotations, root }) => {
             look="string"
             onClick={scrollLeft}
             className={styles.left}
-            aria-label="Move left"
+            aria-label="左移"
             disabled={isLeftDisabled}
           >
             <LeftCircleOutlined />
@@ -434,7 +434,7 @@ const VirtualizedGrid = observer(({ store, annotations, root }) => {
             look="string"
             onClick={scrollRight}
             className={styles.right}
-            aria-label="Move right"
+            aria-label="右移"
             disabled={isRightDisabled}
           >
             <RightCircleOutlined />
@@ -577,7 +577,7 @@ class GridClassComponent extends Component {
             .filter((c) => !c.hidden)
             .map((c) => (
               <div id={`c-${c.id}`} key={`anno-${c.id}`} style={{ position: "relative" }}>
-                <Tooltip title="Open Annotation Tab">
+                <Tooltip title="打开标注标签页">
                   <div>
                     <EntityTab
                       entity={c}
@@ -622,10 +622,10 @@ class GridClassComponent extends Component {
             </div>
           )}
         </div>
-        <Button size="small" look="string" onClick={this.left} className={styles.left} aria-label="Move left">
+        <Button size="small" look="string" onClick={this.left} className={styles.left} aria-label="左移">
           <LeftCircleOutlined />
         </Button>
-        <Button size="small" look="string" onClick={this.right} className={styles.right} aria-label="Move right">
+        <Button size="small" look="string" onClick={this.right} className={styles.right} aria-label="右移">
           <RightCircleOutlined />
         </Button>
       </div>

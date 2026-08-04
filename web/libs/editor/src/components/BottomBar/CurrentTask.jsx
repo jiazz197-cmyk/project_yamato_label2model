@@ -72,7 +72,7 @@ export const CurrentTask = observer(({ store }) => {
 
   // Memoized messages for previous button
   const prevButtonMessage = useMemo(() => {
-    return !store.canGoPrevTask ? "No previous task" : "Previous task";
+    return !store.canGoPrevTask ? "No previous task" : "上一个任务";
   }, [store.canGoPrevTask]);
 
   // Memoized messages for next button

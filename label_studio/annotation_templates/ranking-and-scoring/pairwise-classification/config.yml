@@ -1,6 +1,6 @@
-title: Pairwise classification
+title: 成对分类
 type: community
-group: Ranking & Scoring
+group: 排序与评分
 image: /static/templates/pairwise-classification.png
 details: <h1>Select one of two items</h1>
 config: |

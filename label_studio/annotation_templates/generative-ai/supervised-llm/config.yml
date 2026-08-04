@@ -1,16 +1,16 @@
 title: "Supervised Language Model Fine-tuning"
 type: community
-group: Generative AI
+group: 生成式 AI
 order: 1
 image: /static/templates/generative-supervised-llm.png
 details: |
-  <h1>Create training data for supervised fine-tuning of language models</h1>
+  <h1>为语言模型监督式微调创建训练数据</h1>
   <dl>
-    <dt>Industry Applications</dt>
+    <dt>行业应用</dt>
     <dd>instruction fine-tuning, domain adaptation, task-specific LLM, enterprise AI customization, code generation models, medical AI, legal AI, customer service automation, educational AI, technical writing assistance, specialized chatbots, domain expertise</dd>
-    <dt>Associated Models</dt>
+    <dt>相关模型</dt>
     <dd>supervised fine-tuning, instruction following, prompt-response pairs, few-shot learning</dd>
-    <dt>Domain Terminology</dt>
+    <dt>领域术语</dt>
     <dd>gen AI, SFT, instruction tuning, model specialization, task adaptation, performance optimization</dd>
   </dl>
 config: |

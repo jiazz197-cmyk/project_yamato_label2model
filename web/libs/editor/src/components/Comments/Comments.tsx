@@ -16,7 +16,7 @@ const CommentsLoadingSkeleton: FC = () => (
   <div className={cn("comments").elem("loading").toClassName()}>
     <div style={{ display: "flex", justifyContent: "center", alignItems: "center", padding: "40px 0" }}>
       <Spin size="default" />
-      <span style={{ marginLeft: 12, color: "#999" }}>Loading comments...</span>
+      <span style={{ marginLeft: 12, color: "#999" }}>正在加载评论…</span>
     </div>
   </div>
 );

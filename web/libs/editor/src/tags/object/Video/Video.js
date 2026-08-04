@@ -121,7 +121,7 @@ const Model = types
     },
 
     get timelineControl() {
-      return self.annotation.toNames.get(self.name)?.find((s) => s.type.includes("timeline"));
+      return self.annotation.toNames.get(self.name)?.find((s) => s.type.includes("时间轴"));
     },
 
     get videoControl() {
@@ -397,7 +397,7 @@ const Model = types
               self.ref.current.currentTime = frame / self.framerate;
             }
           } catch (error) {
-            console.warn("Error seeking video:", error);
+            console.warn("视频定位出错：", error);
           }
         }
       },
@@ -406,7 +406,7 @@ const Model = types
         const control = self.videoControl;
 
         if (!control) {
-          console.error("No video control is found");
+          console.error("未找到视频控件");
           return;
         }
 
@@ -437,7 +437,7 @@ const Model = types
         const control = self.videoVectorControl;
 
         if (!control) {
-          console.error("No video vector control is found");
+          console.error("未找到视频向量控件");
           return;
         }
 
@@ -466,7 +466,7 @@ const Model = types
         const control = self.timelineControl;
 
         if (!control) {
-          console.error("No video timeline control is found");
+          console.error("未找到视频时间轴控件");
           return;
         }
 

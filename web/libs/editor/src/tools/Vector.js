@@ -38,7 +38,7 @@ const _Tool = types
       },
 
       get viewTooltip() {
-        return "Vector region";
+        return "向量区域";
       },
 
       get iconComponent() {

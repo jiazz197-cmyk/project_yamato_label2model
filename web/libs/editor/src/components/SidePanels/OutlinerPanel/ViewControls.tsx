@@ -72,7 +72,7 @@ export const ViewControls: FC<ViewControlsProps> = observer(
           return {
             label: (
               <>
-                <IconList /> Group Manually
+                <IconList /> 手动分组
               </>
             ),
             selectedLabel: "Manual",
@@ -83,23 +83,23 @@ export const ViewControls: FC<ViewControlsProps> = observer(
           return {
             label: (
               <>
-                <IconBoundingBox /> Group by Label
+                <IconBoundingBox /> 按标签分组
               </>
             ),
             selectedLabel: "By Label",
             icon: <IconBoundingBox width={16} height={16} />,
-            tooltip: "Grouped by Label",
+            tooltip: "已按标签分组",
           };
         case "type":
           return {
             label: (
               <>
-                <IconCursor /> Group by Tool
+                <IconCursor /> 按工具分组
               </>
             ),
-            selectedLabel: "By Tool",
+            selectedLabel: "按工具",
             icon: <IconCursor width={16} height={16} />,
-            tooltip: "Grouped by Tool",
+            tooltip: "已按工具分组",
           };
       }
     }, []);
@@ -110,30 +110,30 @@ export const ViewControls: FC<ViewControlsProps> = observer(
           return {
             label: (
               <>
-                <IconClockTimeFourOutline /> Order by Time
+                <IconClockTimeFourOutline /> 按时间排序
               </>
             ),
-            selectedLabel: "By Time",
+            selectedLabel: "按时间",
             icon: <IconClockTimeFourOutline width={16} height={16} />,
           };
         case "score":
           return {
             label: (
               <>
-                <IconPredictions /> Order by Score
+                <IconPredictions /> 按得分排序
               </>
             ),
-            selectedLabel: "By Score",
+            selectedLabel: "按得分",
             icon: <IconPredictions width={16} height={16} />,
           };
         case "mediaStartTime":
           return {
             label: (
               <>
-                <IconTimelineRegion /> Order by Media Start Time
+                <IconTimelineRegion /> 按媒体开始时间排序
               </>
             ),
-            selectedLabel: "By Media Start Time",
+            selectedLabel: "按媒体开始时间",
             icon: <IconTimelineRegion width={16} height={16} />,
           };
       }
@@ -306,8 +306,8 @@ const ToggleRegionsVisibilityButton = observer<FC<ToggleRegionsVisibilityButton>
       look="string"
       disabled={isDisabled}
       onClick={toggleRegionsVisibility}
-      aria-label={isAllHidden ? "Show all regions" : "Hide all regions"}
-      tooltip={isAllHidden ? "Show all regions" : "Hide all regions"}
+      aria-label={isAllHidden ? "显示所有区域" : "隐藏所有区域"}
+      tooltip={isAllHidden ? "显示所有区域" : "隐藏所有区域"}
     >
       {isAllHidden ? (
         <IconOutlinerEyeClosed width={16} height={16} />

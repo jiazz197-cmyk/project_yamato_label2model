@@ -212,11 +212,11 @@ export const CommentItem: FC<CommentItemProps> = observer(
                     size="small"
                     look="danger"
                     autoFocus
-                    aria-label="Delete comment"
+                    aria-label="删除评论"
                   >
-                    Yes
+                    是
                   </Button>
-                  <Button onClick={() => setConfirmMode(false)} size="small" aria-label="Cancel delete">
+                  <Button onClick={() => setConfirmMode(false)} size="small" aria-label="取消删除">
                     No
                   </Button>
                 </div>
@@ -264,16 +264,16 @@ export const CommentItem: FC<CommentItemProps> = observer(
                             }
                           }}
                         >
-                          {isEditMode ? "Cancel edit" : "Edit"}
+                          {isEditMode ? "取消编辑" : "编辑"}
                         </Menu.Item>
-                        <Menu.Item onClick={toggleLink}>{regionRef?.region ? "Unlink" : "Link to..."}</Menu.Item>
+                        <Menu.Item onClick={toggleLink}>{regionRef?.region ? "Unlink" : "关联到…"}</Menu.Item>
                         {!isConfirmDelete && (
                           <Menu.Item
                             onClick={() => {
                               setConfirmMode(true);
                             }}
                           >
-                            Delete
+                            删除
                           </Menu.Item>
                         )}
                       </>

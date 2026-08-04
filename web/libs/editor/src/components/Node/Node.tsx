@@ -58,7 +58,7 @@ const NodeViews: Record<string, NodeViewProps> = {
   },
 
   AudioRegionModel: {
-    name: "Audio",
+    name: "音频",
     icon: AudioOutlined,
   },
 

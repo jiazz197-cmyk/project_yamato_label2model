@@ -20,7 +20,7 @@ const _Tool = types
       };
     },
     get viewTooltip() {
-      return "Key Point";
+      return "关键点";
     },
     get iconComponent() {
       return self.dynamic ? NodeViews.KeyPointRegionModel.altIcon : NodeViews.KeyPointRegionModel.icon;

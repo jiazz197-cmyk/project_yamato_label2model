@@ -43,7 +43,7 @@ export class Region extends Segment {
       const layer = this.controller.layerGroup;
       const color = this.color;
       const timelineTop = this.timelinePlacement;
-      const timelineLayer = this.visualizer.getLayer("timeline");
+      const timelineLayer = this.visualizer.getLayer("时间轴");
       const timelineHeight = this.timelineHeight;
       const top = (timelineLayer?.isVisible && timelineTop ? timelineHeight : 0) + 4;
       const labelMeasures = this.labels.map((label) => layer.context.measureText(label));

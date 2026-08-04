@@ -1,6 +1,6 @@
-title: OCR Invoices Pre-NER BIO Format
+title: 发票 OCR 预命名实体识别 BIO 格式
 type: community
-group: Community Contributions
+group: 社区贡献
 image: /static/templates/community-contributions/ocr-invoices-pre-ner-bio-format.jpg
 details: <h1>OCR Invoices Pre-NER BIO Format</h1>
 source_repo: https://github.com/humanSignal/awesome-label-studio-config/tree/main/label-configs/ocr-invoices-pre-ner-bio-format

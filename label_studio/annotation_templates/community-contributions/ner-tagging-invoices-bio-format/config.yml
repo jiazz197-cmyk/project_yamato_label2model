@@ -1,6 +1,6 @@
-title: NER Tagging for Invoices (BIO Format)
+title: 发票命名实体识别标注（BIO 格式）
 type: community
-group: Community Contributions
+group: 社区贡献
 image: /static/templates/community-contributions/ner-tagging-invoices-bio-format.jpg
 details: <h1>NER Tagging for Invoices (BIO Format)</h1>
 source_repo: https://github.com/humanSignal/awesome-label-studio-config/tree/main/label-configs/ner-tagging-invoices-bio-format
@@ -10,7 +10,7 @@ config: |
   
     <!-- Left panel: labels + filter -->
     <View style="min-width: 250px; padding: 0.5em; background: #f7f7f7; border-radius: 4px;">
-      <Header value="NER Tags" />
+      <Header value="命名实体识别标签" />
       <Labels name="ner" toName="text" showInline="false">
         <Label value="B-NIF"    background="#FF5733" />
         <Label value="B-FORN"   background="#33FF57" />

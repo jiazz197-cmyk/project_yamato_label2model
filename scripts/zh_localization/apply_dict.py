@@ -10,9 +10,12 @@ import warnings
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from main_app_dict import DICT, TEXT_DICT  # noqa: E402
 from more_dict import DICT as MORE_DICT, TEXT as MORE_TEXT  # noqa: E402
+from editor_dict import DICT as EDITOR_DICT, TEXT as EDITOR_TEXT  # noqa: E402
 
 DICT = {**DICT, **MORE_DICT}
 TEXT_DICT = {**TEXT_DICT, **MORE_TEXT}
+DICT = {**DICT, **EDITOR_DICT}
+TEXT_DICT = {**TEXT_DICT, **EDITOR_TEXT}
 
 JSX_RE = re.compile(r"(?:>|\})\s*([^<>{}\n]+?)\s*(?=<)")
 

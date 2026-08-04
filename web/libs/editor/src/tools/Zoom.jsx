@@ -15,7 +15,7 @@ const ToolView = observer(({ item }) => {
         active={item.selected}
         icon={<IconHandTool />}
         ariaLabel="pan"
-        label="Pan Image"
+        label="平移图像"
         shortcut="tool:pan-image"
         onClick={() => {
           const sel = item.selected;
@@ -26,7 +26,7 @@ const ToolView = observer(({ item }) => {
       <Tool
         icon={<IconZoomIn />}
         ariaLabel="zoom-in"
-        label="Zoom In"
+        label="放大"
         shortcut="tool:zoom-in"
         onClick={() => {
           item.handleZoom(1);
@@ -36,14 +36,14 @@ const ToolView = observer(({ item }) => {
         icon={<IconExpandTool />}
         items={[
           {
-            label: "Zoom to fit",
+            label: "适应窗口",
             shortcut: "tool:zoom-to-fit",
             onClick: () => {
               item.sizeToFit();
             },
           },
           {
-            label: "Zoom to actual size",
+            label: "实际大小",
             shortcut: "tool:zoom-to-actual",
             onClick: () => {
               item.sizeToOriginal();
@@ -54,7 +54,7 @@ const ToolView = observer(({ item }) => {
       <Tool
         icon={<IconZoomOut />}
         ariaLabel="zoom-out"
-        label="Zoom Out"
+        label="缩小"
         shortcut="tool:zoom-out"
         onClick={() => {
           item.handleZoom(-1);

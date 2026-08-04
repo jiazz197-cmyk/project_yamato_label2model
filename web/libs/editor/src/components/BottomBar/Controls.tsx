@@ -43,10 +43,10 @@ type ControlButtonProps = {
   onClick: (e: React.MouseEvent) => void;
 };
 
-export const EMPTY_SUBMIT_TOOLTIP = "Empty annotations denied in this project";
-export const INCOMPLETE_SUBMIT_TOOLTIP = "Complete all regions before submitting";
-export const INCOMPLETE_UPDATE_TOOLTIP = "Complete all regions before updating";
-export const INCOMPLETE_ACCEPT_TOOLTIP = "Complete all regions before accepting";
+export const EMPTY_SUBMIT_TOOLTIP = "此项目不允许空标注";
+export const INCOMPLETE_SUBMIT_TOOLTIP = "提交前请完成所有区域";
+export const INCOMPLETE_UPDATE_TOOLTIP = "更新前请完成所有区域";
+export const INCOMPLETE_ACCEPT_TOOLTIP = "接受前请完成所有区域";
 
 /**
  * Custom action button component, rendering buttons from store.customButtons
@@ -186,7 +186,7 @@ export const Controls = controlsInjector<{ annotation: MSTAnnotation }>(
     } else if (annotation.skipped) {
       buttons.push(
         <div className={cn("controls").elem("skipped-info").toClassName()} key="skipped">
-          <IconBan /> Was skipped
+          <IconBan /> 已跳过
         </div>,
       );
       buttons.push(<UnskipButton key="unskip" disabled={disabled} store={store} />);
@@ -247,14 +247,14 @@ export const Controls = controlsInjector<{ annotation: MSTAnnotation }>(
             ? store.overlapReachedMessage
             : submitDisabled
               ? EMPTY_SUBMIT_TOOLTIP
-              : "Save results: [ Ctrl+Enter ]";
+              : "保存结果：[ Ctrl+Enter ]";
 
         buttons.push(
           <ButtonTooltip key="submit" title={title} className="whitespace-nowrap max-w-none">
             <div className={cn("controls").elem("tooltip-wrapper").toClassName()}>
               <ButtonGroup>
                 <Button
-                  aria-label="Submit current annotation"
+                  aria-label="提交当前标注"
                   name="submit"
                   className="w-[150px]"
                   disabled={isDisabled}
@@ -268,7 +268,7 @@ export const Controls = controlsInjector<{ annotation: MSTAnnotation }>(
                   }}
                   data-testid="bottombar-submit-button"
                 >
-                  Submit
+                  提交
                 </Button>
                 {useExitOption ? (
                   <Dropdown.Trigger
@@ -281,7 +281,7 @@ export const Controls = controlsInjector<{ annotation: MSTAnnotation }>(
                   >
                     <Button
                       disabled={isDisabled}
-                      aria-label="Submit annotation"
+                      aria-label="提交标注"
                       data-testid="bottombar-submit-dropdown"
                     >
                       <IconChevronDown />
@@ -302,7 +302,7 @@ export const Controls = controlsInjector<{ annotation: MSTAnnotation }>(
           : overlapDisabled
             ? store.overlapReachedMessage
             : noChanges
-              ? "No changes were made"
+              ? "没有做出更改"
               : "Update this task: [ Ctrl+Enter ]";
         const button = (
           <ButtonTooltip key="update" title={updateTitle} className="whitespace-nowrap max-w-none">

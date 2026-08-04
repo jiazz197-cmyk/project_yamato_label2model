@@ -329,7 +329,7 @@ function extractNames(root: IAnyStateTreeNode) {
   const toNames = new Map<string, IAnyStateTreeNode[]>();
 
   // hacky way to get all the available object tag names
-  const objectTypes = Registry.objectTypes().map((type) => type.name.replace("Model", "").toLowerCase());
+  const objectTypes = Registry.objectTypes().map((type) => type.name.replace("模型", "").toLowerCase());
 
   traverseTree(root, (node) => {
     if (node.name) {

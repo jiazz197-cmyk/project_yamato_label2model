@@ -1,16 +1,16 @@
-title: Relation Extraction
+title: 关系抽取
 type: community
-group: Natural Language Processing
+group: 自然语言处理
 order: 5
 image: /static/templates/relation-extraction.png
 details: |
-  <h1>Predict attributes and relations for entities in a sentence</h1>
+  <h1>预测句子中实体的属性和关系</h1>
   <dl>
-    <dt>Industry Applications</dt>
+    <dt>行业应用</dt>
     <dd>knowledge base construction, biomedical literature mining, financial entity relationships, legal document analysis, news event extraction, corporate intelligence, supply chain mapping, scientific paper analysis, patent mining, social network analysis, genealogy research, business intelligence</dd>
-    <dt>Associated Models</dt>
+    <dt>相关模型</dt>
     <dd>distant supervision, joint extraction, transformer models, graph neural networks</dd>
-    <dt>Domain Terminology</dt>
+    <dt>领域术语</dt>
     <dd>NLP, entity linking, knowledge graph construction, semantic relationships, structured information extraction</dd>
   </dl>
 config: |
@@ -20,9 +20,9 @@ config: |
       <Relation value="org:founded"/>
     </Relations>
     <Labels name="label" toName="text">
-      <Label value="Organization" background="orange"/>
-      <Label value="Person" background="green"/>
-      <Label value="Datetime" background="blue"/>
+      <Label value="组织" background="orange"/>
+      <Label value="人物" background="green"/>
+      <Label value="日期时间" background="blue"/>
     </Labels>
 
     <Text name="text" value="$text"/>

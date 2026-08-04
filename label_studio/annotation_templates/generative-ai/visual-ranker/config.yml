@@ -1,16 +1,16 @@
 title: "Visual Ranker"
 type: community
-group: Generative AI
+group: 生成式 AI
 order: 5
 image: /static/templates/visual-ranker.png
 details: |
-  <h1>Rank and compare AI-generated visual content</h1>
+  <h1>对 AI 生成的视觉内容排序和比较</h1>
   <dl>
-    <dt>Industry Applications</dt>
+    <dt>行业应用</dt>
     <dd>AI image generation evaluation, creative AI assessment, generative art evaluation, marketing content creation, e-commerce product imagery, advertising creative, social media content, design iteration, brand asset generation, visual content optimization, creative workflow, art direction</dd>
-    <dt>Associated Models</dt>
+    <dt>相关模型</dt>
     <dd>DALL-E, Midjourney, Stable Diffusion, Firefly, generative adversarial networks</dd>
-    <dt>Domain Terminology</dt>
+    <dt>领域术语</dt>
     <dd>gen AI, visual quality ranking, image generation comparison, creative AI evaluation, aesthetic assessment, visual preference modeling</dd>
   </dl>
 config: |

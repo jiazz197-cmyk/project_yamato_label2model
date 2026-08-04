@@ -116,7 +116,7 @@ const _Tool3Point = types
   })
   .views((self) => ({
     get viewTooltip() {
-      return "3 Point Rectangle";
+      return "三点矩形";
     },
     get iconComponent() {
       return self.dynamic ? NodeViews.Rect3PointRegionModel.altIcon : NodeViews.Rect3PointRegionModel.icon;

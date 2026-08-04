@@ -182,7 +182,7 @@ export const Controls: FC<TimelineControlsProps> = memo(
         {buffering && (
           <div
             className={cn("timeline-controls").elem("buffering").toClassName()}
-            aria-label="Buffering Media Source"
+            aria-label="正在缓冲媒体源"
           />
         )}
         {mediaType === "audio" ? (

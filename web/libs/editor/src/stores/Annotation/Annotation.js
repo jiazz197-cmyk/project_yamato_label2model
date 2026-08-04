@@ -939,7 +939,7 @@ const _Annotation = types
           else audioNode = node;
 
           node.hotkey = comb;
-          hotkeys.addKey(comb, node.onHotKey, "Play an audio", Hotkey.ALL_SCOPES);
+          hotkeys.addKey(comb, node.onHotKey, "播放音频", Hotkey.ALL_SCOPES);
 
           audiosNum++;
         }

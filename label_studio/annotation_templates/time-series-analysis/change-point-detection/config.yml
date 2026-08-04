@@ -1,22 +1,22 @@
-title: Change Point Detection
+title: 变点检测
 type: community
-group: Time Series Analysis
+group: 时间序列分析
 image: /static/templates/change-point-detection.png
 details: |
-  <h1>Identify changing points on time series signals</h1>
+  <h1>识别时间序列信号中的变点</h1>
   <dl>
-    <dt>Industry Applications</dt>
+    <dt>行业应用</dt>
     <dd>financial market analysis, climate data analysis, medical signal analysis, manufacturing process control, energy consumption monitoring, network traffic analysis, supply chain optimization, economic forecasting, epidemiological studies, quality assurance, system performance monitoring, behavioral analysis</dd>
-    <dt>Associated Models</dt>
+    <dt>相关模型</dt>
     <dd>PELT, CUSUM, Bayesian change point detection, segmentation algorithms</dd>
-    <dt>Domain Terminology</dt>
+    <dt>领域术语</dt>
     <dd>CSV, Excel, XLS, Sheet, structural breaks, regime change, trend analysis, segmentation, temporal boundaries</dd>
   </dl>
 config: |
   <View>
       <!-- Control tag for region labels -->
       <TimeSeriesLabels name="label" toName="ts">
-          <Label value="Change" background="red" />
+          <Label value="变化" background="red" />
       </TimeSeriesLabels>
 
       <!-- Object tag for time series data source -->

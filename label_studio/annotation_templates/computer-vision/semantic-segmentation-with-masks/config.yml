@@ -1,24 +1,24 @@
-title: Semantic Segmentation with Masks
+title: 掩码语义分割
 type: community
-group: Computer Vision
+group: 计算机视觉
 order: 2
 image: /static/templates/semantic-segmentation-with-masks.png
 details: |
-  <h1>Draw masks around the object with the brush tool</h1>
+  <h1>使用画笔工具在目标周围绘制掩码</h1>
   <dl>
-    <dt>Industry Applications</dt>
+    <dt>行业应用</dt>
     <dd>autonomous driving, medical image analysis, satellite imagery analysis, robotics vision, agriculture monitoring, urban planning, environmental monitoring, quality inspection, pathology diagnosis, dermatology, retinal analysis, manufacturing defects</dd>
-    <dt>Associated Models</dt>
+    <dt>相关模型</dt>
     <dd>U-Net, DeepLab, Mask R-CNN, SegNet, PSPNet, FCN</dd>
-    <dt>Domain Terminology</dt>
+    <dt>领域术语</dt>
     <dd>pixel-level classification, dense prediction, instance segmentation, panoptic segmentation</dd>
   </dl>
 config: |
   <View>
     <Image name="image" value="$image" zoom="true"/>
     <BrushLabels name="tag" toName="image">
-      <Label value="Airplane" background="rgba(255, 0, 0, 0.7)"/>
-      <Label value="Car" background="rgba(0, 0, 255, 0.7)"/>
+      <Label value="飞机" background="rgba(255, 0, 0, 0.7)"/>
+      <Label value="汽车" background="rgba(0, 0, 255, 0.7)"/>
     </BrushLabels>
   </View>
 

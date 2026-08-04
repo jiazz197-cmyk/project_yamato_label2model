@@ -150,7 +150,7 @@ export const CommentForm: FC<CommentFormProps> = observer(({ commentStore, annot
         <TextArea
           actionRef={actionRef}
           name="comment"
-          placeholder="Add a comment"
+          placeholder="添加评论"
           value={text}
           rows={ROWS}
           maxRows={MAX_ROWS}

@@ -1,29 +1,29 @@
 title: "LLM Ranker"
 type: community
-group: Generative AI
+group: 生成式 AI
 order: 4
 image: /static/templates/llm-ranker.png
 details: |
-  <h1>Rank and compare LLM responses</h1>
+  <h1>对 LLM 回复排序和比较</h1>
   <dl>
-    <dt>Industry Applications</dt>
+    <dt>行业应用</dt>
     <dd>model evaluation, A/B testing, model comparison, performance ranking, response quality, model benchmarking, AI model selection, bias detection, fairness evaluation, AI safety, red teaming, harmful content, model auditing, responsible AI, chatbot evaluation, conversational AI, customer service AI, content generation</dd>
-    <dt>Associated Models</dt>
+    <dt>相关模型</dt>
     <dd>RLHF, reward modeling, constitutional AI, alignment, fine-tuning, instruction tuning</dd>
-    <dt>Domain Terminology</dt>
+    <dt>领域术语</dt>
     <dd>gen AI, human feedback, preference learning, prompt engineering</dd>
   </dl>
 config: |
   <View>
      <View style="display: flex; align-items: center; font-size: 1em;">
         <View style="margin: var(--spacing-tight) var(--spacing-tight) 0 0;">
-          <Header value="Task: " style="font-size: 1em;"/>
+          <Header value="任务：" style="font-size: 1em;"/>
         </View>
         <Text name="task" value="$task"/>
       </View>
      <View style="display: flex; align-items: center; box-shadow: 0px 2px 5px 0px rgba(var(--color-neutral-shadow-raw) / 10%); padding: var(--spacing-tight); border-radius: 5px; background-color: var(--color-neutral-background); font-size: 1.25em; border: 1px solid var(--color-neutral-border); margin-bottom: var(--spacing-tight);">
         <View style="margin: 0 1em 0 0">
-          <Header value="Prompt: "  />
+          <Header value="提示词："  />
         </View>
         <Text name="prompt" value="$prompt"/>
       </View>

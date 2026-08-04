@@ -54,8 +54,8 @@ const Model = types
   .volatile(() => ({
     hideable: true,
     editableFields: [
-      { property: "start", label: "Start frame" },
-      { property: "end", label: "End frame" },
+      { property: "start", label: "起始帧" },
+      { property: "end", label: "结束帧" },
     ],
   }))
   .views((self) => ({

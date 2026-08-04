@@ -17,7 +17,7 @@ import { ff } from "@humansignal/core";
 const HotkeysDescription = () => {
   const columns = [
     { title: "Shortcut", dataIndex: "combo", key: "combo" },
-    { title: "Description", dataIndex: "descr", key: "descr" },
+    { title: "描述", dataIndex: "descr", key: "descr" },
   ];
 
   const keyNamespaces = Hotkey.namespaces();
@@ -137,7 +137,7 @@ const LayoutSettings = observer(({ store }) => {
 
       <div className={cn("settings").elem("field").toClassName()}>
         <Checkbox
-          value="Show Annotations panel"
+          value="显示标注面板"
           defaultChecked={store.settings.showAnnotationsPanel}
           onChange={() => {
             store.settings.toggleAnnotationsPanel();
@@ -149,7 +149,7 @@ const LayoutSettings = observer(({ store }) => {
 
       <div className={cn("settings").elem("field").toClassName()}>
         <Checkbox
-          value="Show Predictions panel"
+          value="显示预测面板"
           defaultChecked={store.settings.showPredictionsPanel}
           onChange={() => {
             store.settings.togglePredictionsPanel();
@@ -184,7 +184,7 @@ const DEFAULT_ACTIVE = Object.keys(Settings)[0];
 
 const DEFAULT_MODAL_SETTINGS = {
   name: "settings-modal",
-  title: "Labeling Interface Settings",
+  title: "标注界面设置",
   closeIcon: <IconClose />,
 };
 

@@ -52,7 +52,7 @@ export default observer(({ store }) => {
             ev.preventDefault();
           }}
         >
-          Redo
+          重做
         </Button>
         <Button
           type="ghost"
@@ -62,7 +62,7 @@ export default observer(({ store }) => {
             history && history.reset();
           }}
         >
-          Reset
+          重置
         </Button>
         {store.setPrelabeling && (
           <Button
@@ -101,7 +101,7 @@ export default observer(({ store }) => {
               store.toggleDescription();
             }}
           >
-            Instructions
+            说明
           </Button>
         )}
 

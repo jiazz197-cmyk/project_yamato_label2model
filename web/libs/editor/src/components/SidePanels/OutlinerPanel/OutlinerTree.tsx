@@ -573,7 +573,7 @@ const RegionControls: FC<RegionControlsProps> = injector(
                 onClick={onToggleLocked}
                 variant="neutral"
                 look="string"
-                tooltip={item?.locked ? "Unlock Region" : "Lock Region"}
+                tooltip={item?.locked ? "解锁区域" : "Lock Region"}
               />
             </div>
           )}

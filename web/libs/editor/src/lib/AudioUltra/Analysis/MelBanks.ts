@@ -14,7 +14,7 @@ export class MelBanks {
    */
   constructor(sampleRate: number, linearBinCount: number, numBands: number) {
     if (numBands <= 0) {
-      console.warn("Number of Mel bands must be positive.");
+      console.warn("Mel 频带数量必须为正数。");
       // Provide a default empty filterbank to avoid errors later
       this.filterbank = [];
       this.numBands = 0;

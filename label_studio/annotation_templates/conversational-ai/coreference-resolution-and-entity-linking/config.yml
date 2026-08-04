@@ -1,13 +1,13 @@
-title: Coreference Resolution & Entity Linking
+title: 共指消解与实体链接
 type: community
-group: Conversational AI
+group: 对话式 AI
 image: /static/templates/coreference-resolution-and-entity-linking.png
 details: <h1>Do coreference resolution between parts of speech and link entities in text</h1>
 config: |
   <View>
     <Labels name="label" toName="text">
-      <Label value="Noun" background="red"/>
-      <Label value="Pronoun" background="darkorange"/>
+      <Label value="名词" background="red"/>
+      <Label value="代词" background="darkorange"/>
     </Labels>
 
     <Text name="text" value="$corefText"/>

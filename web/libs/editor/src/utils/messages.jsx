@@ -5,9 +5,9 @@ const URL_TAGS_DOCS = "https://labelstud.io/tags";
 
 export default {
   DONE: "Done!",
-  NO_COMP_LEFT: "No more annotations",
-  NO_NEXT_TASK: "You're all caught up!",
-  NO_ACCESS: "You don't have access to this task",
+  NO_COMP_LEFT: "没有更多标注",
+  NO_NEXT_TASK: "全部处理完毕！",
+  NO_ACCESS: "你没有访问此任务的权限",
 
   CONFIRM_TO_DELETE_ALL_REGIONS: "Please confirm you want to delete all labeled regions",
 
@@ -66,11 +66,11 @@ export default {
     return `
     <div>
       <p>
-        There was an issue loading URL from <code>${attr}</code> value.
+        从以下位置加载 URL 时出现问题 <code>${attr}</code> value.
         The request parameters are invalid.
         If you are using S3, make sure you’ve specified the right bucket region name.
       </p>
-      <p>URL: <code><a href="${encodeURI(url)}" target="_blank" rel="noreferrer">${htmlEscape(url)}</a></code></p>
+      <p>URL： <code><a href="${encodeURI(url)}" target="_blank" rel="noreferrer">${htmlEscape(url)}</a></code></p>
     </div>`;
   },
 
@@ -78,18 +78,18 @@ export default {
     return `
     <div>
       <p>
-        There was an issue loading URL from <code>${attr}</code> value.
+        从以下位置加载 URL 时出现问题 <code>${attr}</code> value.
         Most likely that's because static server has wide-open CORS.
         <a href="${URL_CORS_DOCS}" target="_blank">Read more on that here.</a>
       </p>
       <p>
         Also check that:
         <ul>
-          <li>URL is valid</li>
+          <li>URL 有效</li>
           <li>Network is reachable</li>
         </ul>
       </p>
-      <p>URL: <code><a href="${encodeURI(url)}" target="_blank" rel="noreferrer">${htmlEscape(url)}</a></code></p>
+      <p>URL： <code><a href="${encodeURI(url)}" target="_blank" rel="noreferrer">${htmlEscape(url)}</a></code></p>
     </div>`;
   },
 
@@ -97,12 +97,12 @@ export default {
     return `
     <div data-testid="error:http">
       <p>
-        There was an issue loading URL from <code>${attr}</code> value
+        从以下位置加载 URL 时出现问题 <code>${attr}</code> value
       </p>
       <p>
         Things to look out for:
         <ul>
-          <li>URL is valid</li>
+          <li>URL 有效</li>
           <li>URL scheme matches the service scheme, i.e. https and https</li>
           <li>
             The static server has wide-open CORS,
@@ -113,7 +113,7 @@ export default {
       <p>
         Technical description: <code>${error}</code>
         <br />
-        URL: <code><a href="${encodeURI(url)}" target="_blank" rel="noreferrer">${htmlEscape(url)}</a></code>
+        URL： <code><a href="${encodeURI(url)}" target="_blank" rel="noreferrer">${htmlEscape(url)}</a></code>
       </p>
     </div>`;
   },

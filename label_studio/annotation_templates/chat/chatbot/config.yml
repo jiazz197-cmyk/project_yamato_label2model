@@ -1,16 +1,16 @@
-title: Chatbot Evaluation
+title: 聊天机器人评估
 type: enterprise
-group: Chat
+group: 聊天
 order: 1
 image: /static/templates/chat-evaluate-agent.png
 details: |
-  <h1>Assess whether your chatbot is ready for production</h1>
+  <h1>评估你的聊天机器人是否可上线</h1>
   <dl>
-    <dt>Industry Applications</dt>
+    <dt>行业应用</dt>
     <dd>chatbot quality assurance, conversational AI evaluation, customer service AI, virtual assistant evaluation, LLM evaluation, production readiness assessment, response quality validation, customer support automation, enterprise chatbots, AI safety assessment, RLHF data collection</dd>
-    <dt>Associated Models</dt>
+    <dt>相关模型</dt>
     <dd>human evaluation, conversational AI assessment, quality metrics, response grading, safety evaluation</dd>
-    <dt>Domain Terminology</dt>
+    <dt>领域术语</dt>
     <dd>gen AI, conversation evaluation, chatbot grading, response accuracy, answer quality, documentation coverage, tone analysis</dd>
   </dl>
 config: |
@@ -77,28 +77,28 @@ config: |
       
           <!-- Per message evaluation -->
           <View visibleWhen="region-selected" whenRole="assistant" className="evaluation">
-            <Header value="Response Accuracy"/>
+            <Header value="回复准确性"/>
             <Rating name="accuracy" toName="chat" perRegion="true" maxRating="5" icon="star"/>
             
-            <Header value="Documentation Provided"/>
+            <Header value="提供的文档"/>
             <Choices name="documentation" toName="chat" perRegion="true" >
-              <Choice value="Comprehensive documentation provided" />
-              <Choice value="Provided some documentation, missing some" />
-              <Choice value="Missing critical documentation, provided incorrect or irrelevant documentation" />
+              <Choice value="提供了完整文档" />
+              <Choice value="提供部分文档，缺少部分" />
+              <Choice value="缺少关键文档，或提供了错误/无关文档" />
             </Choices>
             
-            <Header value="Answered question"/>
+            <Header value="已回答问题"/>
             <Choices name="questions_answered" toName="chat" perRegion="true" >
-              <Choice value="Yes" />
-              <Choice value="No" />
-              <Choice value="Partial" />
+              <Choice value="是" />
+              <Choice value="否" />
+              <Choice value="部分" />
             </Choices>
             
-            <Header value="Tone/Style"/>
+            <Header value="语气/风格"/>
             <Choices name="style" toName="chat" perRegion="true" choice="multiple" >
-              <Choice value="Too verbose" />
-              <Choice value="Too friendly" />
-              <Choice value="Too technical" />
+              <Choice value="过于冗长" />
+              <Choice value="过于友好" />
+              <Choice value="过于技术化" />
             </Choices>
             
         </View>

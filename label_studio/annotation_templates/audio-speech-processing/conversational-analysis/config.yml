@@ -1,22 +1,22 @@
-title: Conversational Analysis
+title: 对话分析
 type: community
-group: Audio/Speech Processing
+group: 音频/语音处理
 image: /static/templates/thumbnail-conversation-sentiment.png
 details: |
-  <h1>Analyse dialogue utterances and markup facts and sentiment aspects</h1>
+  <h1>分析对话语句并标注事实和情感方面</h1>
   <dl>
-    <dt>Industry Applications</dt>
+    <dt>行业应用</dt>
     <dd>call center quality, customer service analysis, sales call analysis, therapy session analysis, meeting transcription, interview analysis, focus group research, market research, podcast analysis, conference call analysis, legal deposition, telehealth consultations</dd>
-    <dt>Associated Models</dt>
+    <dt>相关模型</dt>
     <dd>conversation mining, dialogue act classification, sentiment analysis, emotion recognition</dd>
-    <dt>Domain Terminology</dt>
+    <dt>领域术语</dt>
     <dd>turn-taking, conversational AI, dialogue systems, discourse analysis, speech sentiment</dd>
   </dl>
 config: |
   <View>
       <Audio name="audio" value="$audio"
              hotkey="space" sync="text"/>
-      <Header value="Transcript"/>
+      <Header value="转写文本"/>
       <Paragraphs audioUrl="$audio"
                   sync="audio"
                   name="text"
@@ -27,10 +27,10 @@ config: |
                   granularity="paragraph"
                   contextscroll="true" />
        <View style="position: sticky">
-        <Header value="Sentiment Labels"/>
+        <Header value="情感标签"/>
         <ParagraphLabels name="label" toName="text">
-          <Label value="Positive1" background="#00ff00"/>
-          <Label value="Negative" background="#ff0000"/>
+          <Label value="正面1" background="#00ff00"/>
+          <Label value="负面" background="#ff0000"/>
         </ParagraphLabels>
       </View>
   </View>

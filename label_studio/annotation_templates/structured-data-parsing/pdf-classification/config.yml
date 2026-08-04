@@ -1,16 +1,16 @@
-title: PDF Classification
+title: PDF 分类
 type: community
-group: Structured Data Parsing
+group: 结构化数据解析
 image: /static/templates/pdf-classification.png
 details: <h1>Classify PDF documents</h1>
 config: |
   <View>
-    <Header value="Rate this article"/>
+    <Header value="为这篇文章评分"/>
     <Rating name="rating" toName="pdf" maxRating="10" icon="star" size="medium" />
 
     <Choices name="choices" choice="single-radio" toName="pdf" showInline="true">
-      <Choice value="Important article"/>
-      <Choice value="Yellow press"/>
+      <Choice value="重要文章"/>
+      <Choice value="八卦报道"/>
     </Choices>
     <Pdf name="pdf" value="$pdf"/>
   </View>

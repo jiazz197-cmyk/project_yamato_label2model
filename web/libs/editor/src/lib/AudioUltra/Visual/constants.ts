@@ -16,7 +16,7 @@ export const WINDOWING_OPTIONS = [
   { value: "hann", label: "Hann" },
   { value: "hamming", label: "Hamming" },
   { value: "blackman", label: "Blackman" },
-  { value: "rectangular", label: "Rectangular" },
+  { value: "rectangular", label: "矩形" },
 ] as const;
 
 // Performance tuning constants for painting

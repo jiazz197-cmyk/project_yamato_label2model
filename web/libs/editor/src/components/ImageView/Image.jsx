@@ -76,7 +76,7 @@ export const Image = observer(
 const ImageProgress = observer(({ downloading, progress, error, src, usedValue }) => {
   return downloading ? (
     <div className={cn("image-progress").toClassName()}>
-      <div className={cn("image-progress").elem("message").toClassName()}>Downloading image</div>
+      <div className={cn("image-progress").elem("message").toClassName()}>正在下载图像</div>
       <progress
         className={cn("image-progress").elem("bar").toClassName()}
         value={progress}

@@ -1,21 +1,21 @@
-title: Image Captioning
+title: 图像描述
 type: community
-group: Computer Vision
+group: 计算机视觉
 image: /static/templates/image-captioning.png
 details: |
-  <h1>Write text describing the image</h1>
+  <h1>写出描述图像的文本</h1>
   <dl>
-    <dt>Industry Applications</dt>
+    <dt>行业应用</dt>
     <dd>accessibility tools, visual search engines, content management systems, social media automation, e-commerce product descriptions, news media, digital asset management, museum cataloging, educational content, medical imaging reports, surveillance systems, autonomous systems</dd>
-    <dt>Associated Models</dt>
+    <dt>相关模型</dt>
     <dd>BLIP, Show and Tell, Attention-based models, Vision Transformer, CLIP, GPT-4V</dd>
-    <dt>Domain Terminology</dt>
+    <dt>领域术语</dt>
     <dd>visual-to-text, image-to-text, visual storytelling, scene understanding, visual description</dd>
   </dl>
 config: |
   <View>
     <Image name="image" value="$captioning"/>
-    <Header value="Describe the image:"/>
+    <Header value="描述图像："/>
     <TextArea name="caption" toName="image" placeholder="Enter description here..."
               rows="5" maxSubmissions="1"/>
   </View>

@@ -171,7 +171,7 @@ export const TextArea: FC<TextAreaProps> = ({
       rows={autoGrowRef.current.rows}
       onChange={onChange}
       onInput={onInput}
-      aria-label="TextArea Input"
+      aria-label="文本区域输入"
       data-testid="textarea-input"
       {...props}
     />

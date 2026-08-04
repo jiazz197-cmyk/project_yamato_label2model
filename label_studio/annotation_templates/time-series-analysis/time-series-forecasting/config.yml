@@ -1,23 +1,23 @@
-title: Time Series Forecasting
+title: 时间序列预测
 type: community
-group: Time Series Analysis
+group: 时间序列分析
 image: /static/templates/time-series-forecasting.png
 details: |
-  <h1>Prepare training data for time series forecasting models</h1>
+  <h1>为时间序列预测模型准备训练数据</h1>
   <dl>
-    <dt>Industry Applications</dt>
+    <dt>行业应用</dt>
     <dd>stock prediction, financial markets, trading algorithms, price prediction, cryptocurrency, forex, market trends, algorithmic trading, IoT sensors, sensor data, predictive maintenance, equipment monitoring, energy consumption, smart grid, temperature monitoring, demand forecasting, sales prediction, inventory management, supply chain, resource planning, capacity planning, budget forecasting</dd>
-    <dt>Associated Models</dt>
+    <dt>相关模型</dt>
     <dd>ARIMA, LSTM, Prophet, seasonal decomposition, trend analysis</dd>
-    <dt>Domain Terminology</dt>
+    <dt>领域术语</dt>
     <dd>CSV, Excel, XLS, Sheet, forecasting, time series analysis, trend analysis, seasonality, stationarity, autocorrelation, moving averages, regression analysis, predictive modeling, temporal patterns, data preprocessing</dd>
   </dl>
 config: |
   <View>
       <!-- Control tag for region labels -->
-      <Header value="Select predictable region spans in time series:"/>
+      <Header value="选择时间序列中可预测的区域："/>
       <TimeSeriesLabels name="predictable" toName="stock">
-          <Label value="Regions" background="red" />
+          <Label value="区域" background="red" />
       </TimeSeriesLabels>
 
       <!-- Object tag for time series data source -->
@@ -33,10 +33,10 @@ config: |
                    strokeColor="#1f77b4"
                    legend="Stock Value"/>
       </TimeSeries>
-      <Header value="Forecast next trend:"/>
+      <Header value="预测下一趋势："/>
       <Choices name="trend_forecast" toName="stock">
-          <Choice value="Up"/>
-          <Choice value="Down"/>
-          <Choice value="Steady"/>
+          <Choice value="上升"/>
+          <Choice value="下降"/>
+          <Choice value="平稳"/>
       </Choices>
   </View>

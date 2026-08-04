@@ -415,9 +415,9 @@ const HtxTextArea = observer(({ item }) => {
         >
           <Form.Item style={itemStyle}>
             {rows === 1 ? (
-              <Input {...props} aria-label="TextArea Input" data-testid="textarea-input" />
+              <Input {...props} aria-label="文本区域输入" data-testid="textarea-input" />
             ) : (
-              <TextArea {...props} aria-label="TextArea Input" data-testid="textarea-input" />
+              <TextArea {...props} aria-label="文本区域输入" data-testid="textarea-input" />
             )}
             {showAddButton && (
               <div
@@ -468,7 +468,7 @@ const HtxTextArea = observer(({ item }) => {
                       className="text-neutral-content-subtler italic"
                       data-testid="textarea-instruction"
                     >
-                      Press Shift + Enter to Add
+                      按 Shift + Enter 添加
                     </Typography>
                   )}
 
@@ -483,7 +483,7 @@ const HtxTextArea = observer(({ item }) => {
                       htmlType="submit"
                       data-testid="textarea-add-button"
                     >
-                      Add
+                      添加
                     </Button>
                   </Form.Item>
                 </div>

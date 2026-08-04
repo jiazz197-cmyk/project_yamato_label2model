@@ -159,13 +159,13 @@ export const VideoConfigControl: FC<VideoConfigControlProps> = ({
         style={{ opacity: 0, position: "fixed" }}
       >
         <div className={styles.scrollContent}>
-          <div className={styles.sectionHeader}>Playback Settings</div>
+          <div className={styles.sectionHeader}>播放设置</div>
           <Slider
             min={minSpeed}
             max={MAX_SPEED}
             step={0.05}
             value={speed}
-            description={"Playback speed"}
+            description={"播放速度"}
             info={"Increase or decrease the playback speed"}
             onChange={handleChangePlaybackSpeed}
           />

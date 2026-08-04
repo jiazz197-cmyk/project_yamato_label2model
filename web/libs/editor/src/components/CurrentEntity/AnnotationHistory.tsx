@@ -138,7 +138,7 @@ const AnnotationHistoryComponent: FC<any> = ({
     <EmptyState
       icon={<IconHistoryRewind width={24} height={24} />}
       header="View annotation activity"
-      description={<>See a log of user actions for this annotation</>}
+      description={<>查看此标注的用户操作日志</>}
     />
   );
 
@@ -358,7 +358,7 @@ const HistoryComment: FC<{
             setCollapsed((v) => !v);
           }}
         >
-          {collapsed ? "Show more" : "Show less"}
+          {collapsed ? "显示更多" : "显示更少"}
         </div>
       )}
     </div>

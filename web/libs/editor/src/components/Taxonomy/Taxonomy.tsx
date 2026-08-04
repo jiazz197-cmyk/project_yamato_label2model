@@ -288,11 +288,11 @@ const Item: React.FC<RowProps> = ({ style, item, dimensionCallback, maxWidth, is
                                 addChild(id);
                               }}
                             >
-                              Add Inside
+                              添加为子项
                             </Menu.Item>
                             {item.row.origin === "session" && (
                               <Menu.Item key="delete" className={styles.taxonomy__action} onClick={onDelete}>
-                                Delete
+                                删除
                               </Menu.Item>
                             )}
                           </Menu>
@@ -443,7 +443,7 @@ const TaxonomyDropdown = ({ show, flatten, items, dropdownRef, isEditable }: Tax
                 onClick={addInside}
                 aria-label="Add new label"
               >
-                Add
+                添加
               </Button>
             </div>
           ) : null}
@@ -572,7 +572,7 @@ const Taxonomy = ({
         <SelectedList isEditable={isEditable} flatItems={flatten} />
         <div className={["htx-taxonomy", styles.taxonomy, isOpenClassName].join(" ")} ref={taxonomyRef}>
           <span onClick={() => setOpen((val) => !val)}>
-            {options.placeholder || "Click to add..."}
+            {options.placeholder || "点击添加…"}
             <IconChevron stroke="#09f" />
           </span>
           <TaxonomyDropdown

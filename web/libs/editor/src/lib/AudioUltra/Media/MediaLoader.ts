@@ -102,7 +102,7 @@ export class MediaLoader extends Destructable {
 
     // Get the audio data from the url src
     const req = await this.performRequest(this.options.src).catch((err: any) => {
-      console.error("An audio loading error occurred", err);
+      console.error("音频加载出错", err);
       return null;
     });
 
@@ -197,7 +197,7 @@ export class MediaLoader extends Destructable {
       this.wf.setError(
         `An error occurred while loading the audio file. Please select another file or try again. ${err.message}`,
       );
-      console.error("An audio loading error occurred", err);
+      console.error("音频加载出错", err);
       return null;
     }
   }

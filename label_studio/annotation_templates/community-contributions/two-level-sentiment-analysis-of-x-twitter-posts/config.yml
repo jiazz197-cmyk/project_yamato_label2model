@@ -1,6 +1,6 @@
-title: Two-Level Sentiment Analysis of X / Twitter posts
+title: X / Twitter 帖子两级情感分析
 type: community
-group: Community Contributions
+group: 社区贡献
 image: /static/templates/community-contributions/two-level-sentiment-analysis-of-x-twitter-posts.jpg
 details: <h1>Two-Level Sentiment Analysis of X / Twitter posts</h1>
 source_repo: https://github.com/humanSignal/awesome-label-studio-config/tree/main/label-configs/two-level-sentiment-analysis-of-x-twitter-posts
@@ -39,7 +39,7 @@ config: |
             background-size: cover;
           "
         ></View>
-        <Header name="username" value="John Doe" />
+        <Header name="username" value="张三" />
         <Text name="handle" value="@johndoe" style="color:gray;" />
         <Text name="timestamp" value="· 2 hrs ago" style="color:gray;" />
       </View>
@@ -64,9 +64,9 @@ config: |
     </View>
   
     <Choices name="sentiment" toName="tweet" choice="single">
-      <Choice value="Positive" hint="Click on it if it says something nice or good" />
-      <Choice value="Neutral" hint="Click on it if overall it doesn't express any sentiment" />
-      <Choice value="Negative" hint="Click on if it says something bad or unpleasant" />
+      <Choice value="正面" hint="Click on it if it says something nice or good" />
+      <Choice value="中性" hint="Click on it if overall it doesn't express any sentiment" />
+      <Choice value="负面" hint="Click on if it says something bad or unpleasant" />
     </Choices>
     
     <Choices name="other-props" toName="tweet"
@@ -74,13 +74,13 @@ config: |
              visibleWhen="choice-selected"
              whenTagName="sentiment">
       <View style="width:100%">
-        <Header value="Other properties of the post" />
+        <Header value="帖子的其他属性" />
       </View>
-      <Choice value="Descriptive" />
-      <Choice value="Emotional" hint="Click on it if it shows moderate to strong sentiment" />
-      <Choice value="Mixed" hint="Click on it if multiple conflicting sentiments are present"/>
-      <Choice value="Ambigous" hint="Click on it if it is irrelevant or unclear"/>
-      <Choice value="Sarcams" hint="Click on it if it shows ironic or sarcastic content"/>
+      <Choice value="描述性" />
+      <Choice value="情感性" hint="Click on it if it shows moderate to strong sentiment" />
+      <Choice value="混合" hint="Click on it if multiple conflicting sentiments are present"/>
+      <Choice value="模糊" hint="Click on it if it is irrelevant or unclear"/>
+      <Choice value="讽刺" hint="Click on it if it shows ironic or sarcastic content"/>
     </Choices>
   </View>
   

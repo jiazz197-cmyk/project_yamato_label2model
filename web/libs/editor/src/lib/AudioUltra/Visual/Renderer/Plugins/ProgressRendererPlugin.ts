@@ -64,7 +64,7 @@ export class ProgressRendererPlugin implements RendererPlugin<ProgressRendererPl
   private barHeight = 12;
   private barRadius = 2;
   private barShadow = "0 1px 4px rgba(0,0,0,0.18)";
-  private ariaLabel = "Spectrogram progress overlay";
+  private ariaLabel = "频谱图进度覆盖层";
   private labels: {
     view: string;
     precache: string;
@@ -146,7 +146,7 @@ export class ProgressRendererPlugin implements RendererPlugin<ProgressRendererPl
     overlay.style.display = "block";
     overlay.setAttribute("role", "status");
     overlay.setAttribute("aria-live", "polite");
-    overlay.setAttribute("aria-label", this.ariaLabel || "Spectrogram progress overlay");
+    overlay.setAttribute("aria-label", this.ariaLabel || "频谱图进度覆盖层");
 
     // Aggregate progress data
     const { cachingTotal, cachingProcessed } = this._aggregateProgress(progress);

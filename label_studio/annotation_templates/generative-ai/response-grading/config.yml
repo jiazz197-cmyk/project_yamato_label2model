@@ -1,16 +1,16 @@
-title: LLM Response Grading
+title: LLM 回复评分
 type: community
-group: Generative AI
+group: 生成式 AI
 order: 6
 image: /static/templates/response-grading.png
 details: |
-  <h1>Assign a grade to LLM responses based on how well it meets your internal guidelines</h1>
+  <h1>根据 LLM 回复符合内部准则的程度为其评分</h1>
   <dl>
-    <dt>Industry Applications</dt>
+    <dt>行业应用</dt>
     <dd>model evaluation, content quality assessment, educational assessment, AI tutoring systems, automated grading, writing assessment, customer service evaluation, chatbot quality control, academic writing, student response evaluation, content moderation, LLM benchmarking, AI evaluation</dd>
-    <dt>Associated Models</dt>
+    <dt>相关模型</dt>
     <dd>human evaluation, quality metrics, response scoring, rubric-based assessment</dd>
-    <dt>Domain Terminology</dt>
+    <dt>领域术语</dt>
     <dd>gen AI, response quality, content grading, automated assessment, performance rating</dd>
   </dl>
 config: |
@@ -58,18 +58,18 @@ config: |
     <View className="root">
       <View className="container">
         <View className="block long-document scrollable">
-          <Header value="Long Document"/>
+          <Header value="长文档"/>
           <Text name="document" value="$document"/>
         </View>
 
        <View className="block short-summary">
-         <Header value="Short Summary"/>
+         <Header value="短摘要"/>
          <Text name="summary" value="$summary"/>
        </View>
       </View>
 
       <View className="summary-rating">
-        <Header value="Rate the Document Summary:"/>
+        <Header value="为文档摘要评分："/>
         <Rating name="rating" toName="summary" required="true"/>
       </View>
     </View>

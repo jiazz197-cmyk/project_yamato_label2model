@@ -35,7 +35,7 @@ const TagAttrs = types.model({
 
   cleanup: types.optional(types.boolean, true),
 
-  placeholder: types.optional(types.string, "Quick Filter"),
+  placeholder: types.optional(types.string, "快速筛选"),
   minlength: types.optional(types.string, "3"),
   hotkey: types.maybeNull(types.string),
 });

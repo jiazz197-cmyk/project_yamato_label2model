@@ -1,21 +1,21 @@
-title: Automatic Speech Recognition
+title: 自动语音识别
 type: community
-group: Audio/Speech Processing
+group: 音频/语音处理
 image: /static/templates/automatic-speech-recognition.png
 details: |
-  <h1>Transcribe the audio</h1>
+  <h1>转写音频</h1>
   <dl>
-    <dt>Industry Applications</dt>
+    <dt>行业应用</dt>
     <dd>podcast transcription, meeting notes, call center, customer service, accessibility, closed captions, subtitles, voice assistants, dictation, medical dictation, legal transcription</dd>
-    <dt>Associated Models</dt>
+    <dt>相关模型</dt>
     <dd>Whisper, Wav2Vec, DeepSpeech, transformer, CTC</dd>
-    <dt>Domain Terminology</dt>
+    <dt>领域术语</dt>
     <dd>ASR, STT, speech-to-text, voice-to-text, transcription, voice recognition, speech processing, audio transcription</dd>
   </dl>
 config: |
   <View>
     <Audio name="audio" value="$audio" zoom="true" hotkey="ctrl+enter" />
-    <Header value="Transcribe the audio" />
+    <Header value="转写音频" />
     <TextArea name="transcription" toName="audio"
               rows="4" editable="true" maxSubmissions="1" />
   </View>

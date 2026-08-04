@@ -91,10 +91,10 @@ const renderCommentIcon = (ent: any) => {
 
 const renderCommentTooltip = (ent: any) => {
   if (ent.unresolved_comment_count > 0) {
-    return "Unresolved Comments";
+    return "未解决的评论";
   }
   if (ent.comment_count > 0) {
-    return "All Comments Resolved";
+    return "所有评论已解决";
   }
 
   return "";
@@ -238,14 +238,14 @@ function AnnotationButtonTooltip({
 
     // Add Annotation ID first if available
     if (annotationId) {
-      rows.push({ label: "Annotation ID", value: String(annotationId) });
+      rows.push({ label: "标注 ID", value: String(annotationId) });
     }
 
     // Add Type for all annotations/predictions
     if (isPrediction) {
       rows.push({ label: "Type", value: "Prediction" });
       if (isDefined(predictionScore)) {
-        rows.push({ label: "Prediction Score", value: `${(predictionScore * 100).toFixed(2)}%` });
+        rows.push({ label: "预测得分", value: `${(predictionScore * 100).toFixed(2)}%` });
       }
     } else {
       rows.push({ label: "Type", value: "Annotation" });
@@ -255,7 +255,7 @@ function AnnotationButtonTooltip({
     if (lastUpdated) {
       const formattedDate = formatDate(lastUpdated);
       if (formattedDate) {
-        rows.push({ label: "Last Updated", value: formattedDate });
+        rows.push({ label: "最近更新", value: formattedDate });
       }
     }
 
@@ -266,7 +266,7 @@ function AnnotationButtonTooltip({
     const badges: Array<{ label: string; variant: "primary" | "positive" | "negative" | "warning" }> = [];
     if (statusBadge) badges.push(statusBadge);
     if (isSkipped) badges.push({ label: "Skipped", variant: "negative" });
-    if (isGroundTruth) badges.push({ label: "Ground Truth", variant: "warning" });
+    if (isGroundTruth) badges.push({ label: "基准答案", variant: "warning" });
     return badges;
   }, [statusBadge, isSkipped, isGroundTruth]);
 
@@ -380,7 +380,7 @@ const AnnotationButtonContextMenu = injector(
         copyLink();
         dropdown?.close();
         toast?.show({
-          message: "Annotation link copied to clipboard",
+          message: "标注链接已复制到剪贴板",
           type: ToastType.info,
         });
       }, [copyLink, toast, dropdown]);
@@ -389,13 +389,13 @@ const AnnotationButtonContextMenu = injector(
         copyAnnotationId();
         dropdown?.close();
         toast?.show({
-          message: "Annotation ID copied to clipboard",
+          message: "标注 ID 已复制到剪贴板",
           type: ToastType.info,
         });
       }, [copyAnnotationId, toast, dropdown]);
       const openPerformanceDashboard = useCallback<MenuActionOnClick>(() => {
         // Only available in LSE
-        const isLSE = (window as any).APP_SETTINGS?.version?.edition === "Enterprise";
+        const isLSE = (window as any).APP_SETTINGS?.version?.edition === "企业版";
         if (!isLSE) return;
 
         const url = new URL(window.location.origin);
@@ -428,16 +428,16 @@ const AnnotationButtonContextMenu = injector(
       const deleteAnnotation = useCallback(() => {
         clickHandler();
         confirm({
-          title: "Delete annotation?",
+          title: "删除标注？",
           body: (
             <>
-              This will <strong>delete all existing regions</strong>. Are you sure you want to delete them?
+              这将 <strong>删除所有现有区域</strong>. Are you sure you want to delete them?
               <br />
-              This action cannot be undone.
+              此操作无法撤销。
             </>
           ),
           buttonLook: "negative",
-          okText: "Delete",
+          okText: "删除",
           onOk: () => {
             entity.list.deleteAnnotation(entity);
           },
@@ -447,7 +447,7 @@ const AnnotationButtonContextMenu = injector(
       const isDraft = !isDefined(entity.pk);
       const showGroundTruth = capabilities.groundTruthEnabled && !isPrediction && !isDraft;
       const showDuplicateAnnotation = capabilities.enableCreateAnnotation && !isDraft;
-      const isLSE = (window as any).APP_SETTINGS?.version?.edition === "Enterprise";
+      const isLSE = (window as any).APP_SETTINGS?.version?.edition === "企业版";
 
       // Check if project ID is available (from store or URL)
       const hasProjectId = !!window.location.pathname.match(/\/projects\/(\d+)/);
@@ -455,7 +455,7 @@ const AnnotationButtonContextMenu = injector(
       const actions = useMemo<ContextMenuAction[]>(
         () => [
           {
-            label: "Copy Annotation ID",
+            label: "复制标注 ID",
             onClick: copyAnnotationIdHandler,
             icon: <IconClipboardCheck width={20} height={20} />,
             enabled: !isDraft,
@@ -471,31 +471,31 @@ const AnnotationButtonContextMenu = injector(
             enabled: showGroundTruth,
           },
           {
-            label: "Duplicate Annotation",
+            label: "复制标注",
             onClick: duplicateAnnotation,
             icon: <IconDuplicate width={20} height={20} />,
             enabled: showDuplicateAnnotation,
           },
           {
-            label: "Copy Annotation Link",
+            label: "复制标注链接",
             onClick: linkAnnotation,
             icon: <IconLink />,
             enabled: !isDraft && store.hasInterface("annotations:copy-link"),
           },
           {
-            label: "Open Performance Dashboard",
+            label: "打开性能看板",
             onClick: openPerformanceDashboard,
             icon: <IconAnalytics width={20} height={20} />,
             enabled: isLSE && hasProjectId && !isDraft && !isPrediction,
           },
           {
-            label: "Show Other Annotations",
+            label: "显示其他标注",
             onClick: showOtherAnnotations,
             icon: <IconViewAll width={20} height={20} />,
             enabled: true,
           },
           {
-            label: "Delete Annotation",
+            label: "删除标注",
             onClick: deleteAnnotation,
             icon: <IconTrashRect />,
             separator: true,
@@ -852,7 +852,7 @@ export const AnnotationButton = observer(
     // so we match by finding the annotation's position in the backend's annotation list
     const getReviewStatus = useCallback(() => {
       // Only available in LSE for non-predictions
-      const isLSE = (window as any).APP_SETTINGS?.version?.edition === "Enterprise";
+      const isLSE = (window as any).APP_SETTINGS?.version?.edition === "企业版";
       if (!isLSE || !entityIsAlive || isPrediction) {
         return null;
       }

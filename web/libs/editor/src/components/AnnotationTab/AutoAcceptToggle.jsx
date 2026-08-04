@@ -55,7 +55,7 @@ export const AutoAcceptToggle = injector(
                 <Toggle
                   checked={store.autoAcceptSuggestions}
                   onChange={(e) => store.setAutoAcceptSuggestions(e.target.checked)}
-                  label="Auto-Accept Suggestions"
+                  label="自动接受建议"
                   data-testid="bottombar-auto-accept-toggle"
                 />
               )}

@@ -9,7 +9,7 @@ const wrapper = (_type, value, title) => {
   switch (_type) {
     case "error":
       custom.type = Modal.error;
-      custom.title = "Error";
+      custom.title = "错误";
       break;
     case "warning":
       custom.type = Modal.warning;

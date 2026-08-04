@@ -99,7 +99,7 @@ const TaskSummary = ({ annotations: all, store: annotationStore }: TaskSummaryPr
       info: "Number of submitted annotations. Table shows only submitted results, not current drafts.",
     },
     {
-      title: "Predictions",
+      title: "预测",
       value: annotations.filter((a) => a.type === "prediction").length,
       info: "Number of predictions. They are not included in the agreement calculation.",
     },
@@ -108,7 +108,7 @@ const TaskSummary = ({ annotations: all, store: annotationStore }: TaskSummaryPr
   return (
     <div>
       <div className="mb-base">
-        <h2 className="mt-base text-headline-small font-semibold text-neutral-content">Task Summary</h2>
+        <h2 className="mt-base text-headline-small font-semibold text-neutral-content">任务摘要</h2>
         <NumbersSummary values={values} />
       </div>
       <div className="mb-relaxed">
@@ -121,7 +121,7 @@ const TaskSummary = ({ annotations: all, store: annotationStore }: TaskSummaryPr
         />
       </div>
       <div className="mb-relaxed">
-        <h2 className="mb-base text-headline-small font-semibold text-neutral-content">Task Data</h2>
+        <h2 className="mb-base text-headline-small font-semibold text-neutral-content">任务数据</h2>
         <DataSummary data_types={dataTypes} />
       </div>
     </div>

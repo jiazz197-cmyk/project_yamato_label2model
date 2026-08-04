@@ -1,6 +1,6 @@
-title: Breast Cancer Mammogram Classification
+title: 乳腺癌钼靶分类
 type: community
-group: Community Contributions
+group: 社区贡献
 image: /static/templates/community-contributions/breast-cancer-mammogram-classification.jpg
 details: <h1>Breast Cancer Mammogram Classification</h1>
 source_repo: https://github.com/humanSignal/awesome-label-studio-config/tree/main/label-configs/breast-cancer-mammogram-classification
@@ -114,7 +114,7 @@ config: |
   
     <!-- Instructions -->
     <View className="instructions">
-      <Header value="Please review the standard mammographic views (CC and MLO) of both breasts. Compare corresponding views (e.g., L-CC with R-CC). Label each breast individually, and report any findings." style="font-size: 16px; margin-bottom: 10px; height:auto;" />
+      <Header value="请查看双乳标准钼靶影像（CC 和 MLO）。比较对应视图（如 L-CC 与 R-CC），分别标注每个乳房并报告发现。" style="font-size: 16px; margin-bottom: 10px; height:auto;" />
       <View className="birads-legend">
         <Text name="birads_legend" value="BI-RADS: 0 = Incomplete, 1 = Negative, 2 = Benign, 3 = Probably Benign, 4 = Suspicious, 5 = Highly Suggestive of Malignancy, 6 = Known Cancer" />
       </View>
@@ -125,25 +125,25 @@ config: |
       <View className="mammogram-grid">
         <!-- Left CC -->
         <View className="mammogram-view left-cc">
-          <Header value="Left CC" className="view-header" />
+          <Header value="左侧 CC" className="view-header" />
           <Image name="left_cc" value="$img1" className="mammogram-image" />
         </View>
         
         <!-- Right CC -->
         <View className="mammogram-view right-cc">
-          <Header value="Right CC" className="view-header" />
+          <Header value="右侧 CC" className="view-header" />
           <Image name="right_cc" value="$img3" className="mammogram-image" />
         </View>
         
         <!-- Left MLO -->
         <View className="mammogram-view left-mlo">
-          <Header value="Left MLO" className="view-header" />
+          <Header value="左侧 MLO" className="view-header" />
           <Image name="left_mlo" value="$img2" className="mammogram-image" />
         </View>
         
         <!-- Right MLO -->
         <View className="mammogram-view right-mlo">
-          <Header value="Right MLO" className="view-header" />
+          <Header value="右侧 MLO" className="view-header" />
           <Image name="right_mlo" value="$img4" className="mammogram-image" />
         </View>
       </View>
@@ -151,69 +151,69 @@ config: |
   
     <!-- Left Breast Classification -->
     <View className="classification-section">
-      <Header value="Left Breast: BI-RADS Classification" style="font-size: var(--font-size-20); color: var(--color-neutral-content); margin-bottom: var(--spacing-400);" />
+      <Header value="左乳：BI-RADS 分类" style="font-size: var(--font-size-20); color: var(--color-neutral-content); margin-bottom: var(--spacing-400);" />
       <Choices name="birads_left" toName="left_cc,right_cc,left_mlo,right_mlo" choice="single" required="true">
-        <Choice value="0 - Incomplete" />
-        <Choice value="1 - Negative" />
-        <Choice value="2 - Benign" />
-        <Choice value="3 - Probably Benign" />
-        <Choice value="4 - Suspicious Abnormality" />
-        <Choice value="5 - Highly Suggestive of Malignancy" />
-        <Choice value="6 - Known Biopsy-Proven Malignancy" />
+        <Choice value="0 - 不完整" />
+        <Choice value="1 - 阴性" />
+        <Choice value="2 - 良性" />
+        <Choice value="3 - 可能良性" />
+        <Choice value="4 - 可疑异常" />
+        <Choice value="5 - 高度提示恶性" />
+        <Choice value="6 - 已证实恶性" />
       </Choices>
   
-      <Header value="Left Breast: Density" style="font-size: var(--font-size-16); color: var(--color-neutral-content-subtle); margin: var(--spacing-500) 0 var(--spacing-200) 0;" />
+      <Header value="左乳：密度" style="font-size: var(--font-size-16); color: var(--color-neutral-content-subtle); margin: var(--spacing-500) 0 var(--spacing-200) 0;" />
       <Choices name="density_left" toName="left_cc,right_cc,left_mlo,right_mlo" choice="single">
-        <Choice value="A - Almost entirely fatty" />
-        <Choice value="B - Scattered fibroglandular densities" />
-        <Choice value="C - Heterogeneously dense" />
-        <Choice value="D - Extremely dense" />
+        <Choice value="A - 几乎全部为脂肪" />
+        <Choice value="B - 散在纤维腺体密度" />
+        <Choice value="C - 不均匀致密" />
+        <Choice value="D - 极度致密" />
       </Choices>
   
-      <Header value="Left Breast: Findings (Optional)" style="font-size: var(--font-size-16); color: var(--color-neutral-content-subtle); margin: var(--spacing-500) 0 var(--spacing-200) 0;" />
+      <Header value="左乳：发现（可选）" style="font-size: var(--font-size-16); color: var(--color-neutral-content-subtle); margin: var(--spacing-500) 0 var(--spacing-200) 0;" />
       <Choices name="findings_left" toName="left_cc,right_cc,left_mlo,right_mlo" choice="multiple">
-        <Choice value="Mass" />
-        <Choice value="Calcifications" />
-        <Choice value="Architectural Distortion" />
-        <Choice value="Asymmetry" />
-        <Choice value="Skin/Nipple Retraction" />
+        <Choice value="肿块" />
+        <Choice value="钙化" />
+        <Choice value="结构扭曲" />
+        <Choice value="不对称" />
+        <Choice value="皮肤/乳头凹陷" />
       </Choices>
     </View>
   
     <!-- Right Breast Classification -->
     <View className="classification-section">
-      <Header value="Right Breast: BI-RADS Classification" style="font-size: var(--font-size-20); color: var(--color-neutral-content); margin-bottom: var(--spacing-400);" />
+      <Header value="右乳：BI-RADS 分类" style="font-size: var(--font-size-20); color: var(--color-neutral-content); margin-bottom: var(--spacing-400);" />
       <Choices name="birads_right" toName="left_cc,right_cc,left_mlo,right_mlo" choice="single" required="true">
-        <Choice value="0 - Incomplete" />
-        <Choice value="1 - Negative" />
-        <Choice value="2 - Benign" />
-        <Choice value="3 - Probably Benign" />
-        <Choice value="4 - Suspicious Abnormality" />
-        <Choice value="5 - Highly Suggestive of Malignancy" />
-        <Choice value="6 - Known Biopsy-Proven Malignancy" />
+        <Choice value="0 - 不完整" />
+        <Choice value="1 - 阴性" />
+        <Choice value="2 - 良性" />
+        <Choice value="3 - 可能良性" />
+        <Choice value="4 - 可疑异常" />
+        <Choice value="5 - 高度提示恶性" />
+        <Choice value="6 - 已证实恶性" />
       </Choices>
   
-      <Header value="Right Breast: Density" style="font-size: var(--font-size-16); color: var(--color-neutral-content-subtle); margin: var(--spacing-500) 0 var(--spacing-200) 0;" />
+      <Header value="右乳：密度" style="font-size: var(--font-size-16); color: var(--color-neutral-content-subtle); margin: var(--spacing-500) 0 var(--spacing-200) 0;" />
       <Choices name="density_right" toName="left_cc,right_cc,left_mlo,right_mlo" choice="single">
-        <Choice value="A - Almost entirely fatty" />
-        <Choice value="B - Scattered fibroglandular densities" />
-        <Choice value="C - Heterogeneously dense" />
-        <Choice value="D - Extremely dense" />
+        <Choice value="A - 几乎全部为脂肪" />
+        <Choice value="B - 散在纤维腺体密度" />
+        <Choice value="C - 不均匀致密" />
+        <Choice value="D - 极度致密" />
       </Choices>
   
-      <Header value="Right Breast: Findings (Optional)" style="font-size: var(--font-size-16); color: var(--color-neutral-content-subtle); margin: var(--spacing-500) 0 var(--spacing-200) 0;" />
+      <Header value="右乳：发现（可选）" style="font-size: var(--font-size-16); color: var(--color-neutral-content-subtle); margin: var(--spacing-500) 0 var(--spacing-200) 0;" />
       <Choices name="findings_right" toName="left_cc,right_cc,left_mlo,right_mlo" choice="multiple">
-        <Choice value="Mass" />
-        <Choice value="Calcifications" />
-        <Choice value="Architectural Distortion" />
-        <Choice value="Asymmetry" />
-        <Choice value="Skin/Nipple Retraction" />
+        <Choice value="肿块" />
+        <Choice value="钙化" />
+        <Choice value="结构扭曲" />
+        <Choice value="不对称" />
+        <Choice value="皮肤/乳头凹陷" />
       </Choices>
     </View>
   
     <!-- Additional Observations -->
     <View className="classification-section">
-      <Header value="Additional Observations / Notes (Optional)" style="font-size: var(--font-size-20); color: var(--color-neutral-content); margin-bottom: var(--spacing-400);" />
+      <Header value="补充观察/备注（可选）" style="font-size: var(--font-size-20); color: var(--color-neutral-content); margin-bottom: var(--spacing-400);" />
       <TextArea
         name="notes"
         toName="left_cc,right_cc,left_mlo,right_mlo"

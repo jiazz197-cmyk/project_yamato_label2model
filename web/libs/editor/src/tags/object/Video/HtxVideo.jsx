@@ -451,7 +451,7 @@ const HtxVideoView = ({ item, store }) => {
             region.removeKeypoint(data.frame);
             break;
           default:
-            console.warn("unknown action");
+            console.warn("未知操作");
         }
       });
     },
@@ -526,7 +526,7 @@ const HtxVideoView = ({ item, store }) => {
   const regions = item.regs.map((reg) => {
     const color = reg.style?.fillcolor ?? reg.tag?.fillcolor ?? defaultStyle.fillcolor;
     const label = reg.labels.join(", ") || "Empty";
-    const timeline = reg.type.includes("timeline");
+    const timeline = reg.type.includes("时间轴");
     const sequence = reg.sequence;
 
     return {
@@ -623,7 +623,7 @@ const HtxVideoView = ({ item, store }) => {
 
         {loaded && (
           <Timeline
-            className={cn("video-segmentation").elem("timeline").toClassName()}
+            className={cn("video-segmentation").elem("时间轴").toClassName()}
             playing={isSyncedBuffering && item.isBuffering ? item.wasPlayingBeforeBuffering : playing}
             buffering={isSyncedBuffering ? item.isBuffering : false}
             length={videoLength}
@@ -650,10 +650,10 @@ const HtxVideoView = ({ item, store }) => {
                         inline={isFullScreen}
                         content={
                           <Menu size="auto" closeDropdownOnItemClick={false}>
-                            <Menu.Item onClick={zoomIn}>Zoom In</Menu.Item>
-                            <Menu.Item onClick={zoomOut}>Zoom Out</Menu.Item>
-                            <Menu.Item onClick={zoomToFit}>Zoom To Fit</Menu.Item>
-                            <Menu.Item onClick={zoomReset}>Zoom 100%</Menu.Item>
+                            <Menu.Item onClick={zoomIn}>放大</Menu.Item>
+                            <Menu.Item onClick={zoomOut}>缩小</Menu.Item>
+                            <Menu.Item onClick={zoomToFit}>适应窗口</Menu.Item>
+                            <Menu.Item onClick={zoomReset}>缩放 100%</Menu.Item>
                           </Menu>
                         }
                       >

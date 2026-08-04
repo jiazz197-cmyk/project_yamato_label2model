@@ -30,7 +30,7 @@ export const LinkState: FC<LinkStateProps> = ({ linking, region, result, onUnlin
       <div className={cn("link-state").elem("prefix").toClassName()}>
         <IconCommentLinkTo />
       </div>
-      {mod?.action && "Select an object to link it to this comment."}
+      {mod?.action && "选择一个目标将其关联到此评论。"}
       {mod?.display && <LinkedRegion region={region} result={result} onUnlink={onUnlink} interactive={interactive} />}
     </div>
   );
@@ -111,7 +111,7 @@ const LinkedRegion: FC<LinkedRegionProps> = observer(({ region, result, interact
             look="string"
             leading={<IconClose />}
             onClick={onUnlink}
-            aria-label="Unlink comment"
+            aria-label="取消关联评论"
           />
         </div>
       )}

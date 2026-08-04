@@ -1,30 +1,30 @@
-title: Content-based Image Retrieval
+title: 基于内容的图像检索
 type: community
-group: Ranking & Scoring
+group: 排序与评分
 image: /static/templates/content-based-image-search.png
 details: |
-  <h1>Select images related to the query image</h1>
+  <h1>选择与查询图像相关的图像</h1>
   <dl>
-    <dt>Industry Applications</dt>
+    <dt>行业应用</dt>
     <dd>e-commerce search, stock photo platforms, medical imaging, forensic analysis, art history research, fashion search, reverse image search, copyright detection, product discovery, visual shopping, museum collections, digital asset management</dd>
-    <dt>Associated Models</dt>
+    <dt>相关模型</dt>
     <dd>convolutional neural networks, CLIP, ResNet features</dd>
-    <dt>Domain Terminology</dt>
+    <dt>领域术语</dt>
     <dd>visual similarity, feature extraction, visual search, image similarity, perceptual hashing, visual features, image embeddings</dd>
   </dl>
 config: |
   <View>
     <Image name="query" value="$query_image" />
-    <Header value="Choose similar images:" />
+    <Header value="选择相似的图像：" />
     <View style="display: grid; column-gap: 8px; grid-template: auto/1fr 1fr 1fr">
       <Image name="image1" value="$image1" />
       <Image name="image2" value="$image2" />
       <Image name="image3" value="$image3" />
     </View>
     <Choices name="similar" toName="query" required="true" choice="multiple">
-      <Choice value="One" />
-      <Choice value="Two" />
-      <Choice value="Three" />
+      <Choice value="一个" />
+      <Choice value="两个" />
+      <Choice value="三个" />
     </Choices>
     <Style>
       [dataneedsupdate]~div form {display: flex}

@@ -65,7 +65,7 @@ export class Timeline {
 
     this.visualizer.reserveSpace({ height: this.height });
 
-    this.layer = this.visualizer.createLayer({ name: "timeline", offscreen: true, zIndex: 103 });
+    this.layer = this.visualizer.createLayer({ name: "时间轴", offscreen: true, zIndex: 103 });
     this.visualizer.on("initialized", () => {
       this.visualizer.on("draw", () => this.render());
     });

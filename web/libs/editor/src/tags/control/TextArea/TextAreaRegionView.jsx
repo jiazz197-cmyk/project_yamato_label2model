@@ -82,7 +82,7 @@ const HtxTextAreaResultLine = forwardRef(
             className={cn("textarea-tag").elem("action").toClassName()}
             size="small"
             look="string"
-            aria-label="Delete Region"
+            aria-label="删除区域"
             data-testid="textarea-region-delete"
             leading={<IconTrash />}
             onClick={() => {

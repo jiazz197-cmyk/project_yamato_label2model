@@ -1,6 +1,6 @@
-title: Pairwise regression
+title: 成对回归
 type: community
-group: Ranking & Scoring
+group: 排序与评分
 image: /static/templates/pairwise-regression.png
 details: <h1>Select how likely it is that two items occur together</h1>
 config: |

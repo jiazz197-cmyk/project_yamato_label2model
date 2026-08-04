@@ -10,7 +10,7 @@ import Registry from "../core/Registry";
 import { AreaMixin } from "../mixins/AreaMixin";
 import { AnnotationMixin } from "../mixins/AnnotationMixin";
 
-const hotkeys = Hotkey("TimeSeries", "Time Series Segmentation");
+const hotkeys = Hotkey("TimeSeries", "时间序列分割");
 
 const Model = types
   .model("TimeSeriesRegionModel", {

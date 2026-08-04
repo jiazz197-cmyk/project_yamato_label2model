@@ -28,7 +28,7 @@ import {
 import { CommentStore } from "./Comment/CommentStore";
 import { CustomButton } from "./CustomButton";
 
-const hotkeys = Hotkey("AppStore", "Global Hotkeys");
+const hotkeys = Hotkey("AppStore", "全局快捷键");
 
 export default types
   .model("AppStore", {
@@ -136,7 +136,7 @@ export default types
      */
     overlapReachedMessage: types.optional(
       types.string,
-      "Annotation overlap has been reached for this task. Your draft is preserved but cannot be submitted.",
+      "此任务已达到标注重叠上限。你的草稿已保留，但无法提交。",
     ),
     /**
      * Finish of labeling
@@ -603,7 +603,7 @@ export default types
     // Set `isSubmitting` flag to block [Submit] and related buttons during request
     // to prevent from sending duplicating requests.
     // Better to return request's Promise from SDK to make this work perfect.
-    function handleSubmittingFlag(fn, defaultMessage = "Error during submit") {
+    function handleSubmittingFlag(fn, defaultMessage = "提交时出错") {
       if (self.isSubmitting) return;
       self.setFlags({ isSubmitting: true });
       const res = fn();
@@ -697,20 +697,20 @@ export default types
       const hasForceSkipPermission = MANAGER_ROLES.includes(userRole);
       const canSkip = !skipDisabled || hasForceSkipPermission;
       if (!canSkip) {
-        console.warn("Task cannot be skipped: allow_skip is false and user lacks manager role");
+        console.warn("无法跳过此任务：allow_skip 为 false 且用户没有管理员角色");
         return;
       }
       handleSubmittingFlag(() => {
         getEnv(self).events.invoke("skipTask", self, extraData);
         self.incrementQueuePosition();
-      }, "Error during skip, try again");
+      }, "跳过时出错，请重试");
     }
 
     function unskipTask() {
       if (self.isSubmitting) return;
       handleSubmittingFlag(() => {
         getEnv(self).events.invoke("unskipTask", self);
-      }, "Error during cancel skipping task, try again");
+      }, "取消跳过的任务时出错，请重试");
     }
 
     function acceptAnnotation() {
@@ -734,7 +734,7 @@ export default types
         entity.dropDraft();
         await getEnv(self).events.invoke("acceptAnnotation", self, { isDirty, entity });
         self.incrementQueuePosition();
-      }, "Error during accept, try again");
+      }, "接受时出错，请重试");
     }
 
     function rejectAnnotation({ comment = null }) {
@@ -757,7 +757,7 @@ export default types
         entity.dropDraft();
         await getEnv(self).events.invoke("rejectAnnotation", self, { isDirty, entity, comment });
         self.incrementQueuePosition(-1);
-      }, "Error during reject, try again");
+      }, "拒绝时出错，请重试");
     }
 
     function handleCustomButton(button) {

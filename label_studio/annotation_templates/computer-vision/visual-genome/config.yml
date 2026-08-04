@@ -1,30 +1,30 @@
-title: Visual Genome
+title: 视觉基因组
 type: community
-group: Computer Vision
+group: 计算机视觉
 image: /static/templates/visual-genome.png
 details: |
-  <h1>Label different described features</h1>
+  <h1>标注不同的描述特征</h1>
   <dl>
-    <dt>Industry Applications</dt>
+    <dt>行业应用</dt>
     <dd>scene understanding, visual reasoning, computer vision research, multimodal AI, robotics training, autonomous systems, visual question answering, image captioning, visual relationship detection, scene graph generation, complex scene analysis</dd>
-    <dt>Associated Models</dt>
+    <dt>相关模型</dt>
     <dd>region detection, attribute classification, relationship extraction, structured scene representation</dd>
-    <dt>Domain Terminology</dt>
+    <dt>领域术语</dt>
     <dd>scene graphs, visual knowledge, spatial relationships, object interactions, contextual understanding</dd>
   </dl>
 config: |
   <View>
     <View style="display: flex; flex-wrap: wrap;">
       <View className="label-column">
-        <Header value="Regions"/>
+        <Header value="区域"/>
         <RectangleLabels name="regions" toName="image" value="$regions"/>
     </View>
       <View className="label-column">
-        <Header value="Attributes"/>
+        <Header value="属性"/>
       <RectangleLabels name="attributes" toName="image" value="$attributes"/>
       </View>
       <View className="label-column">
-        <Header value="Relationships"/>
+        <Header value="关系"/>
       <RectangleLabels name="relationships" toName="image" value="$relationships"/>
       </View>
    

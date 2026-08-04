@@ -221,7 +221,7 @@ export const renderers: Record<string, RendererType> = {
               {truncate(key)}
             </Chip>
           ))}
-          {hiddenCount > 0 && <span className="text-neutral-content-subtle text-sm">+{hiddenCount} more</span>}
+          {hiddenCount > 0 && <span className="text-neutral-content-subtle text-sm">+{hiddenCount} 更多</span>}
         </span>
       );
     }
@@ -254,7 +254,7 @@ export const renderers: Record<string, RendererType> = {
             <Chip key={i}>{typeof item === "object" ? JSON.stringify(item) : String(item)}</Chip>
           ))}
           {extracted.length > 5 && (
-            <span className="text-neutral-content-subtle text-sm">+{extracted.length - 5} more</span>
+            <span className="text-neutral-content-subtle text-sm">+{extracted.length - 5} 更多</span>
           )}
         </span>
       );

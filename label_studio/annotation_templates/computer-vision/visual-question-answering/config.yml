@@ -1,52 +1,52 @@
-title: Visual Question Answering
+title: 视觉问答
 type: community
-group: Computer Vision
+group: 计算机视觉
 image: /static/templates/visual-question-answering.png
 details: |
-  <h1>Answer the questions related to what you see on the picture</h1>
+  <h1>回答与图片内容相关的问题</h1>
   <dl>
-    <dt>Industry Applications</dt>
+    <dt>行业应用</dt>
     <dd>accessibility tools, educational assessment, autonomous systems, robotics navigation, medical image analysis, surveillance intelligence, content moderation, e-commerce search, museum guide systems, smart home automation, industrial quality control, retail analytics</dd>
-    <dt>Associated Models</dt>
+    <dt>相关模型</dt>
     <dd>ViLBERT, LXMERT, VisualBERT, UNITER, BLIP, GPT-4V, Flamingo</dd>
-    <dt>Domain Terminology</dt>
+    <dt>领域术语</dt>
     <dd>multimodal reasoning, visual reasoning, scene understanding, visual intelligence, cross-modal fusion</dd>
   </dl>
 config: |
   <View>
     <Image name="image" value="$image"/>
     <Labels name="aspect" toName="q1">
-      <Label value="attribute identification" background="#F39C12"/>
-      <Label value="counting" background="#E74C3C"/>
-      <Label value="comparison" background="#3498DB"/>
-      <Label value="multiple attention" background="#2ECC71"/>
-      <Label value="logical operations" background="#8E44AD"/>
+      <Label value="属性识别" background="#F39C12"/>
+      <Label value="计数" background="#E74C3C"/>
+      <Label value="比较" background="#3498DB"/>
+      <Label value="多注意力" background="#2ECC71"/>
+      <Label value="逻辑运算" background="#8E44AD"/>
     </Labels>
-    <Header value="Please answer these questions:"/>
+    <Header value="请回答以下问题："/>
 
     <View style="display: grid; grid-template-columns: 1fr 10fr 1fr 3fr; column-gap: 1em">
-      <Header value="Q1:"/>
+      <Header value="问题1："/>
     <Text name="q1" value="$q1"/>
-     <Header value="A1:"/>
+     <Header value="回答1："/>
       <TextArea name="answer1" toName="q1" rows="1" maxSubmissions="1"/>
     </View>
 
     <View style="display: grid; grid-template-columns: 1fr 10fr 1fr 3fr; column-gap: 1em">
-      <Header value="Q2:"/>
+      <Header value="问题2："/>
     <Text name="q2" value="$q2"/>
-     <Header value="A2:"/>
+     <Header value="回答2："/>
       <TextArea name="answer2" toName="q2" rows="1" maxSubmissions="1"/>
     </View>
     <View style="display: grid; grid-template-columns: 1fr 10fr 1fr 3fr; column-gap: 1em">
-      <Header value="Q3:"/>
+      <Header value="问题3："/>
     <Text name="q3" value="$q3"/>
-     <Header value="A3:"/>
+     <Header value="回答3："/>
       <TextArea name="answer3" toName="q3" rows="1" maxSubmissions="1"/>
       </View>
     <View style="display: grid; grid-template-columns: 1fr 10fr 1fr 3fr; column-gap: 1em">
-      <Header value="Q4:"/>
+      <Header value="问题4："/>
     <Text name="q4" value="$q4"/>
-     <Header value="A4:"/>
+     <Header value="回答4："/>
       <TextArea name="answer4" toName="q4" rows="1" maxSubmissions="1"/>
       </View>
   </View>

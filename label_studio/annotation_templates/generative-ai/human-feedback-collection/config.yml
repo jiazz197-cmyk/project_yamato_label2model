@@ -1,16 +1,16 @@
 title: "Human Preference collection for RLHF"
 type: community
-group: Generative AI
+group: 生成式 AI
 order: 2
 image: /static/templates/generative-pairwise-human-preference.png
 details: |
-  <h1>Gather comparison data to establish human preferences for model-generated responses.</h1>
+  <h1>收集对比数据，建立对模型生成回复的人类偏好。</h1>
   <dl>
-    <dt>Industry Applications</dt>
+    <dt>行业应用</dt>
     <dd>AI alignment, chatbot optimization, conversational AI improvement, content generation fine-tuning, customer service AI, educational AI tutoring, creative writing AI, code assistant optimization, AI safety research, responsible AI development, LLM evaluation, human-AI collaboration</dd>
-    <dt>Associated Models</dt>
+    <dt>相关模型</dt>
     <dd>RLHF, reward modeling, preference learning, pairwise comparison, constitutional AI</dd>
-    <dt>Domain Terminology</dt>
+    <dt>领域术语</dt>
     <dd>gen AI, human feedback, preference elicitation, reward signal, alignment research, value learning</dd>
   </dl>
 config: |

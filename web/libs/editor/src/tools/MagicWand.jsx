@@ -68,7 +68,7 @@ import { Tool } from "../components/Toolbar/Tool";
 const ToolView = observer(({ item }) => {
   return (
     <Tool
-      label="Magic Wand"
+      label="魔棒"
       ariaLabel="magicwand"
       shortcut="tool:magic-wand"
       active={item.selected}
@@ -245,9 +245,9 @@ const _Tool = types
         let msg;
 
         if (self.rotation) {
-          msg = "The Magic Wand is not supported on rotated images";
+          msg = "旋转图像不支持魔棒工具";
         } else {
-          msg = "The Magic Wand is not supported if the crosshair is turned on";
+          msg = "开启十字准线时不支持魔棒工具";
         }
 
         alert(msg);

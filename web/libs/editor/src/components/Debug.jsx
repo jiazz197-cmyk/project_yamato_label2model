@@ -58,13 +58,13 @@ const DebugComponent = ({ store }) => {
       <br />
       <h2>Debug</h2>
       <div>
-        <Button size="small" onClick={serializeAll} aria-label="Serialize all">
+        <Button size="small" onClick={serializeAll} aria-label="序列化全部">
           Serialize All Annotations
         </Button>
-        <Button size="small" onClick={serializeCurrent} aria-label="Serialize current">
+        <Button size="small" onClick={serializeCurrent} aria-label="序列化当前">
           Serialize Current Annotation
         </Button>
-        <Button size="small" onClick={loadTask} aria-label="Load task">
+        <Button size="small" onClick={loadTask} aria-label="加载任务">
           Simulate Loading Task
         </Button>
       </div>
@@ -90,7 +90,7 @@ const DebugComponent = ({ store }) => {
             />
           </div>
           <div style={{ flexBasis: "50%" }}>
-            <p>Annotations</p>
+            <p>标注</p>
             <textarea
               style={{ width: "100%" }}
               ref={refAnnotations}

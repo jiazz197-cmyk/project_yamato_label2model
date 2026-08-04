@@ -251,7 +251,7 @@ export const Phrases = observer(({ item, playingId, activeRef, setIsInViewPort, 
         >
           {isFF(FF_NER_SELECT_ALL) && (
             <Tooltip
-              title={hasSelectedLabels ? "Label whole utterance" : "Select a label first to enable labeling"}
+              title={hasSelectedLabels ? "标注整个话语" : "请先选择标签以启用标注"}
               placement="top"
             >
               <span className={styles.selectAllBtnWrapper}>
@@ -261,7 +261,7 @@ export const Phrases = observer(({ item, playingId, activeRef, setIsInViewPort, 
                   variant="neutral"
                   disabled={!hasSelectedLabels}
                   className={styles.selectAllBtn}
-                  aria-label={hasSelectedLabels ? "Label whole utterance" : "Label whole utterance (disabled)"}
+                  aria-label={hasSelectedLabels ? "标注整个话语" : "标注整个话语（已禁用）"}
                   onClick={(e) => {
                     if (hasSelectedLabels) {
                       item.selectAndAnnotatePhrase?.(idx);

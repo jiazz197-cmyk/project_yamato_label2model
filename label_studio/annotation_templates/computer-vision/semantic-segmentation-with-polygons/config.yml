@@ -1,29 +1,29 @@
-title: Semantic Segmentation with Polygons
+title: 多边形语义分割
 type: community
-group: Computer Vision
+group: 计算机视觉
 order: 1
 image: /static/templates/semantic-segmentation-with-polygons.png
 details: |
-  <h1>Draw a polygon around object</h1>
+  <h1>在目标周围绘制多边形</h1>
   <dl>
-    <dt>Industry Applications</dt>
+    <dt>行业应用</dt>
     <dd>autonomous driving, medical image analysis, satellite imagery analysis, geospatial mapping, urban planning, precision agriculture, environmental monitoring, industrial inspection, pathology, radiology, aerial surveying, land cover classification</dd>
-    <dt>Associated Models</dt>
+    <dt>相关模型</dt>
     <dd>DeepLab, PSPNet, U-Net, SegNet, Mask R-CNN, FCN</dd>
-    <dt>Domain Terminology</dt>
+    <dt>领域术语</dt>
     <dd>polygon annotation, boundary detection, precise segmentation, vector annotation, contour detection</dd>
   </dl>
 config: |
   <View>
 
-    <Header value="Select label and click the image to start"/>
+    <Header value="选择标签后点击图像开始"/>
     <Image name="image" value="$image" zoom="true"/>
 
     <PolygonLabels name="label" toName="image"
                    strokeWidth="3" pointSize="small"
                    opacity="0.9">
-      <Label value="Airplane" background="red"/>
-      <Label value="Car" background="blue"/>
+      <Label value="飞机" background="red"/>
+      <Label value="汽车" background="blue"/>
     </PolygonLabels>
 
   </View>

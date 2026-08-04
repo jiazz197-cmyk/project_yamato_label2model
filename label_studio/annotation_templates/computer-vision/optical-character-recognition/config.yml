@@ -1,15 +1,15 @@
-title: Optical Character Recognition
+title: 光学字符识别
 type: community
-group: Computer Vision
+group: 计算机视觉
 image: /static/templates/optical-character-recognition.png
 details: |
-  <h1>Draw a bounding box or polygon around region and write down the text found inside</h1>
+  <h1>在区域周围绘制边界框或多边形，并写下其中的文本</h1>
   <dl>
-    <dt>Industry Applications</dt>
+    <dt>行业应用</dt>
     <dd>document digitization, invoice processing, receipt scanning, license plate recognition, banking automation, insurance claims, form processing, passport scanning, historical document preservation, library digitization, legal discovery, medical records</dd>
-    <dt>Associated Models</dt>
+    <dt>相关模型</dt>
     <dd>Tesseract, PaddleOCR, EasyOCR, TrOCR, CRAFT, DBNet</dd>
-    <dt>Domain Terminology</dt>
+    <dt>领域术语</dt>
     <dd>text detection, text recognition, handwriting recognition, document understanding</dd>
   </dl>
 config: |
@@ -17,8 +17,8 @@ config: |
     <Image name="image" value="$ocr"/>
 
     <Labels name="label" toName="image">
-      <Label value="Text" background="green"/>
-      <Label value="Handwriting" background="blue"/>
+      <Label value="文本" background="green"/>
+      <Label value="手写" background="blue"/>
     </Labels>
 
     <Rectangle name="bbox" toName="image" strokeWidth="3"/>

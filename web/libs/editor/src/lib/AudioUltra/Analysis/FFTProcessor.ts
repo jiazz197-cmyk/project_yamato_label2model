@@ -161,7 +161,7 @@ export class FFTProcessor {
       return null;
     }
     if (numberOfMelBands <= 0) {
-      console.warn("Number of Mel bands must be positive.");
+      console.warn("Mel 频带数量必须为正数。");
       return null;
     }
 

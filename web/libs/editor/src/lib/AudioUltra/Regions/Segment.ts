@@ -172,7 +172,7 @@ export class Segment extends Events<SegmentEvents> {
 
   get yStart() {
     const { timelinePlacement, timelineHeight } = this;
-    const timelineLayer = this.visualizer.getLayer("timeline");
+    const timelineLayer = this.visualizer.getLayer("时间轴");
     const timelineTop = timelinePlacement === defaults.timelinePlacement;
     const top = timelineLayer?.isVisible && timelineTop ? timelineHeight : 0;
 

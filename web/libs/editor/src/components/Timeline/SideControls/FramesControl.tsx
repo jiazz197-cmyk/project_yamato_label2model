@@ -39,7 +39,7 @@ interface FrameInputProps {
   onFinishEditing: () => void;
 }
 
-const allowedKeys = ["ArrowUp", "ArrowDown", "Backspace", "Delete", "Enter", /[0-9]/];
+const allowedKeys = ["ArrowUp", "ArrowDown", "Backspace", "删除", "Enter", /[0-9]/];
 
 const FrameInput: FC<FrameInputProps> = ({ length, position, onChange, onFinishEditing }) => {
   const input = useRef<HTMLInputElement>() as MutableRefObject<HTMLInputElement>;

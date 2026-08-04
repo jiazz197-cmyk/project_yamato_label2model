@@ -127,8 +127,8 @@ const RelationItem: FC<{ relation: any }> = observer(({ relation }) => {
                 variant="negative"
                 look="string"
                 size="small"
-                aria-label="Delete Relation"
-                tooltip="Delete Relation"
+                aria-label="删除关系"
+                tooltip="删除关系"
                 onClick={() => {
                   relation.node1.setHighlight(false);
                   relation.node2.setHighlight(false);

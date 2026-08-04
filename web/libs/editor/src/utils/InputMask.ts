@@ -216,7 +216,7 @@ export class MaskUtil {
       let _removingKey = null;
 
       if (key === "Backspace") _removingKey = 1;
-      else if (key === "Delete") _removingKey = 0;
+      else if (key === "删除") _removingKey = 0;
 
       if (_removingKey !== null) {
         /** If this is a delete event, replace the deleted element with the placeholder */
@@ -258,8 +258,8 @@ export class MaskUtil {
       /** If this input replaces multiple items, check its validity and format if possible */
       setTimeout(() => {
         let partialValue = event.target.value;
-        const newKey = key === "Backspace" || key === "Delete" ? this.proxyChar : key;
-        const selectionPosition = key === "Backspace" || key === "Delete" ? selectionStart : selectionStart + 1;
+        const newKey = key === "Backspace" || key === "删除" ? this.proxyChar : key;
+        const selectionPosition = key === "Backspace" || key === "删除" ? selectionStart : selectionStart + 1;
 
         for (let i = selectionStart; i < selectionEnd; i++) {
           if (partialValue[i] !== ":") {

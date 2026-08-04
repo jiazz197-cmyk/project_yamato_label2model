@@ -51,7 +51,7 @@ export type VisualizerOptions = Pick<
   | "amp"
   | "padding"
   | "playhead"
-  | "timeline"
+  | "时间轴"
   | "height"
   | "waveHeight"
   | "waveformHeight"
@@ -334,7 +334,7 @@ export class Visualizer extends Events<VisualizerEvents> {
     this.createComposer();
 
     // Listen for timeline visibility changes to regenerate playhead
-    const timelineLayer = this.getLayer("timeline");
+    const timelineLayer = this.getLayer("时间轴");
     if (timelineLayer) {
       timelineLayer.on("layerUpdated", this.playhead.onInit.bind(this.playhead));
     }
@@ -362,7 +362,7 @@ export class Visualizer extends Events<VisualizerEvents> {
 
   private createComposer() {
     const regionsM = LayerM.lift(this.layers.get("regions")!);
-    const timelineM = LayerM.lift(this.layers.get("timeline")!);
+    const timelineM = LayerM.lift(this.layers.get("时间轴")!);
 
     const waveform = LayerM.overlay([
       LayerM.lift(this.layers.get("background")!),
@@ -613,7 +613,7 @@ export class Visualizer extends Events<VisualizerEvents> {
 
   get height() {
     let height = 0;
-    const timelineLayer = this.getLayer("timeline");
+    const timelineLayer = this.getLayer("时间轴");
     const waveformLayer = this.getLayer("waveform");
     const spectrogramLayer = this.getLayer("spectrogram");
 
@@ -1296,7 +1296,7 @@ export class Visualizer extends Events<VisualizerEvents> {
 
     if (!componentName) return null;
 
-    const timelineLayer = this.getLayer("timeline");
+    const timelineLayer = this.getLayer("时间轴");
     const waveformLayer = this.getLayer("waveform");
     const spectrogramLayer = this.getLayer("spectrogram");
 

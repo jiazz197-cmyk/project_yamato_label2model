@@ -23,7 +23,7 @@ const _Tool = types
         };
       },
       get viewTooltip() {
-        return "Ellipse region";
+        return "椭圆区域";
       },
       get iconComponent() {
         return self.dynamic ? NodeViews.EllipseRegionModel.altIcon : NodeViews.EllipseRegionModel.icon;

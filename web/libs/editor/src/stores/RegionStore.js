@@ -585,7 +585,7 @@ export default types
 
       // this is added just for the reference to show up in the
       // settings page
-      hotkeys.addKey("alt+shift+$n", () => {}, "Select a region");
+      hotkeys.addKey("alt+shift+$n", () => {}, "选择一个区域");
     },
 
     /**

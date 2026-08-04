@@ -1,23 +1,23 @@
-title: Keypoint Labeling
+title: 关键点标注
 type: community
-group: Computer Vision
+group: 计算机视觉
 order: 10000
 image: /static/templates/keypoints.png
 details: |
-  <h1>Add labeled keypoints</h1>
+  <h1>添加带标签的关键点</h1>
   <dl>
-    <dt>Industry Applications</dt>
+    <dt>行业应用</dt>
     <dd>human pose estimation, facial landmark detection, sports performance analysis, medical diagnosis, augmented reality, motion capture, fitness tracking, gesture recognition, automotive safety, driver monitoring, biometric authentication, animation industry</dd>
-    <dt>Associated Models</dt>
+    <dt>相关模型</dt>
     <dd>OpenPose, MediaPipe, PoseNet, DensePose, Face++, Dlib</dd>
-    <dt>Domain Terminology</dt>
+    <dt>领域术语</dt>
     <dd>anatomical landmarks, joint detection, skeletal tracking, facial keypoints, body pose analysis</dd>
   </dl>
 config: |
   <View>
     <KeyPointLabels name="kp-1" toName="img-1">
-      <Label value="Face" background="red" />
-      <Label value="Nose" background="green" />
+      <Label value="面部" background="red" />
+      <Label value="鼻子" background="green" />
     </KeyPointLabels>
     <Image name="img-1" value="$img" />
   </View>

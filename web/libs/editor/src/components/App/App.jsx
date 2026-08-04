@@ -88,7 +88,7 @@ class App extends Component {
           variant="positive"
           icon={<IconCheck />}
           title={messages.DONE}
-          description="Your annotation has been submitted."
+          description="你的标注已提交。"
         />
       </div>
     );
@@ -102,7 +102,7 @@ class App extends Component {
           variant="positive"
           icon={<IconCheck />}
           title={messages.NO_COMP_LEFT}
-          description="You've viewed all annotations for this task."
+          description="你已查看此任务的全部标注。"
         />
       </div>
     );
@@ -125,16 +125,16 @@ class App extends Component {
           variant="positive"
           icon={<IconCheck />}
           title={messages.NO_NEXT_TASK}
-          description="All tasks in the queue have been completed"
+          description="队列中的全部任务都已完成"
           actions={
             store.taskHistory.length > 0 ? (
               <Button
                 onClick={(e) => store.prevTask(e, true)}
                 variant="primary"
-                aria-label="Previous task"
+                aria-label="上一个任务"
                 data-testid="editor-empty-queue-previous-task"
               >
-                Go to Previous Task
+                上一个任务
               </Button>
             ) : undefined
           }
@@ -277,7 +277,7 @@ class App extends Component {
               <InstructionsModal
                 visible={store.showingDescription}
                 onCancel={() => store.toggleDescription()}
-                title={store.hasInterface("review") ? "Review Instructions" : "Labeling Instructions"}
+                title={store.hasInterface("review") ? "查看说明" : "标注说明"}
               >
                 {store.description}
               </InstructionsModal>

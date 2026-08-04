@@ -1,23 +1,23 @@
-title: Object Detection with Bounding Boxes
+title: 边界框目标检测
 type: community
-group: Computer Vision
+group: 计算机视觉
 order: 3
 image: /static/templates/object-detection-with-bounding-boxes.png
 details: |
-  <h1>Draw a bounding box around the object</h1>
+  <h1>在目标周围绘制边界框</h1>
   <dl>
-    <dt>Industry Applications</dt>
+    <dt>行业应用</dt>
     <dd>autonomous driving, self driving cars, traffic monitoring, aviation, flight tracking, airport security, surveillance, security cameras, retail analytics, inventory management, warehouse automation, logistics, fleet management, pedestrian detection, obstacle detection, license plate detection, baggage screening, quality control, defect detection, medical imaging</dd>
-    <dt>Associated Models</dt>
+    <dt>相关模型</dt>
     <dd>YOLO, R-CNN, SSD, Faster R-CNN, RetinaNet, FCOS</dd>
-    <dt>Domain Terminology</dt>
+    <dt>领域术语</dt>
     <dd>bbox</dd>
   </dl>
 config: |
   <View>
     <Image name="image" value="$image"/>
     <RectangleLabels name="label" toName="image">
-      <Label value="Airplane" background="green"/>
-      <Label value="Car" background="blue"/>
+      <Label value="飞机" background="green"/>
+      <Label value="汽车" background="blue"/>
     </RectangleLabels>
   </View>

@@ -44,7 +44,7 @@ const WINDOWING_OPTIONS = [
   { value: "hamming", label: "Hamming" },
   { value: "blackman", label: "Blackman" },
   { value: "sine", label: "Sine" },
-  { value: "rectangular", label: "Rectangular" },
+  { value: "rectangular", label: "矩形" },
 ];
 
 // Colormap Helper functions
@@ -453,7 +453,7 @@ export const SpectrogramControl: FC<SpectrogramControlProps> = ({ waveform }) =>
         />
         <div className={cn("spectrogram-controls").elem("control").toClassName()}>
           <div className={cn("spectrogram-controls").elem("info").toClassName()}>
-            FFT Samples
+            FFT 采样数
             <Tooltip title={fftInfoText}>
               <IconInfoConfig />
             </Tooltip>
@@ -468,7 +468,7 @@ export const SpectrogramControl: FC<SpectrogramControlProps> = ({ waveform }) =>
       </div>
       <div className={cn("spectrogram-controls").elem("spectrogram-controls").toClassName()}>
         <div className={cn("spectrogram-controls").elem("info").toClassName()}>
-          Scale
+          缩放
           <Tooltip title="Determines the frequency scale mapping: Linear, Logarithmic, or Mel (perceptual).">
             <IconInfoConfig />
           </Tooltip>
@@ -502,7 +502,7 @@ export const SpectrogramControl: FC<SpectrogramControlProps> = ({ waveform }) =>
         />
         <div className={cn("spectrogram-controls").elem("control").toClassName()}>
           <div className={cn("spectrogram-controls").elem("info").toClassName()}>
-            Spectogram dB
+            频谱图 dB
             <Tooltip title="Controls the range of decibel values shown in the spectrogram. Lower values show quieter sounds.">
               <IconInfoConfig />
             </Tooltip>
@@ -539,7 +539,7 @@ export const SpectrogramControl: FC<SpectrogramControlProps> = ({ waveform }) =>
         </div>
       </div>
       <div className={cn("spectrogram-controls").elem("spectrogram-controls").toClassName()}>
-        <div className={cn("spectrogram-controls").elem("label").toClassName()}>Windowing Function</div>
+        <div className={cn("spectrogram-controls").elem("label").toClassName()}>窗口函数</div>
         <Select
           value={displayWindowFunc}
           onChange={handleChangeWindowingFunction}
@@ -548,7 +548,7 @@ export const SpectrogramControl: FC<SpectrogramControlProps> = ({ waveform }) =>
         />
       </div>
       <div className={cn("spectrogram-controls").elem("spectrogram-controls").toClassName()}>
-        <div className={cn("spectrogram-controls").elem("label").toClassName()}>Color Scheme</div>
+        <div className={cn("spectrogram-controls").elem("label").toClassName()}>配色方案</div>
         <Select
           value={displayColorScheme}
           onChange={handleChangeColorScheme}

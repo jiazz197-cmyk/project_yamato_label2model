@@ -1,6 +1,6 @@
-title: Freeform Metadata
+title: 自由格式元数据
 type: community
-group: Structured Data Parsing
+group: 结构化数据解析
 image: /static/templates/freeform-metadata.png
 details: <h1>Specify your own metadata in table</h1>
 config: |

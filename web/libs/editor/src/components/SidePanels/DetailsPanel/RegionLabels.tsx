@@ -7,7 +7,7 @@ export const RegionLabels: FC<{ region: LSFRegion }> = observer(({ region }) => 
   const labelsInResults = region.labelings.map((result: any) => result.selectedLabels || []);
   const labels: any[] = [].concat(...labelsInResults);
 
-  if (!labels.length) return <div className={cn("labels-list").toClassName()}>{region.noLabelView || "No label"}</div>;
+  if (!labels.length) return <div className={cn("labels-list").toClassName()}>{region.noLabelView || "无标签"}</div>;
 
   return (
     <div className={cn("labels-list").toClassName()}>

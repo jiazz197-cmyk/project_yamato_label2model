@@ -91,10 +91,10 @@ const RelationsTab: FC<any> = inject("store")(
               <EmptyState
                 icon={<IconRelationLink width={24} height={24} />}
                 header="Create relations between regions"
-                description={<>Link regions to define relationships between them</>}
+                description={<>关联区域以定义它们之间的关系</>}
                 learnMore={{
                   href: getDocsUrl("guide/labeling#Add-relations-between-annotations"),
-                  text: "Learn more",
+                  text: "了解更多",
                   testId: "relations-panel-learn-more",
                 }}
               />
@@ -119,7 +119,7 @@ const HistoryTab: FC<any> = inject("store")(
               enabled={showAnnotationHistory}
               sectionHeader={
                 <>
-                  Annotation History
+                  标注历史
                   <span>#{currentEntity.pk ?? currentEntity.id}</span>
                 </>
               }
@@ -180,7 +180,7 @@ const GeneralPanel: FC<any> = inject("store")(
             enabled={showAnnotationHistory}
             sectionHeader={
               <>
-                Annotation History
+                标注历史
                 <span>#{currentEntity.pk ?? currentEntity.id}</span>
               </>
             }
@@ -197,7 +197,7 @@ const GeneralPanel: FC<any> = inject("store")(
         </div>
         {store.hasInterface("annotations:comments") && store.commentStore.isCommentable && (
           <div className={cn("details").elem("section").toClassName()}>
-            <div className={cn("details").elem("section-head").toClassName()}>Comments</div>
+            <div className={cn("details").elem("section-head").toClassName()}>评论</div>
             <div className={cn("details").elem("section-content").toClassName()}>
               <CommentsComponent
                 annotationStore={store.annotationStore}

@@ -159,7 +159,7 @@ const Result = types
     },
 
     get editable() {
-      throw new Error("Not implemented");
+      throw new Error("未实现");
     },
 
     isReadOnly() {

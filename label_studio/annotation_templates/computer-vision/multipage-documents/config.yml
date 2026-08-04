@@ -1,25 +1,25 @@
-title: Multi-page document annotation
+title: 多页文档标注
 type: community
-group: Computer Vision
+group: 计算机视觉
 image: /static/templates/multipage.png
 details: |
-  <h1>Annotate PDF documents</h1>
+  <h1>标注 PDF 文档</h1>
   <dl>
-    <dt>Industry Applications</dt>
+    <dt>行业应用</dt>
     <dd>legal document processing, contract analysis, financial document review, insurance claims processing, regulatory compliance, tax document processing, medical record analysis, audit documentation, due diligence, patent analysis, academic paper processing, government document digitization</dd>
-    <dt>Associated Models</dt>
+    <dt>相关模型</dt>
     <dd>document understanding, layout analysis, form extraction, table detection</dd>
-    <dt>Domain Terminology</dt>
+    <dt>领域术语</dt>
     <dd>multi-page annotation, document intelligence, structured document extraction, PDF processing</dd>
   </dl>
 config: |
   <View>
     <RectangleLabels name="rectangles" toName="pdf" showInline="true">
-      <Label value="Title" background="green" />
-      <Label value="Date" background="blue" />
-      <Label value="Author" background="gold"/>
-      <Label value="Organization" background="pink"/>
-      <Label value="Amount" background="red"/>
+      <Label value="标题" background="green" />
+      <Label value="日期" background="blue" />
+      <Label value="作者" background="gold"/>
+      <Label value="组织" background="pink"/>
+      <Label value="金额" background="red"/>
     </RectangleLabels>
     <Image valueList="$pages" name="pdf"/>
   </View>

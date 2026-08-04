@@ -1,16 +1,16 @@
-title: OCR Labeling for PDFs
+title: PDF 的 OCR 标注
 type: enterprise
-group: Computer Vision
+group: 计算机视觉
 order: 10
 image: /static/templates/pdf-ocr.png
 details: |
-  <h1>Perform region-level OCR directly on native PDFs</h1>
+  <h1>直接在原生 PDF 上执行区域级 OCR</h1>
   <dl>
-    <dt>Industry Applications</dt>
+    <dt>行业应用</dt>
     <dd>document intelligence, invoice processing, form extraction, contract analysis, receipt digitization, document QA, structured data capture, automated data entry, compliance document review, financial document processing</dd>
-    <dt>Associated Models</dt>
+    <dt>相关模型</dt>
     <dd>OCR text detection, bounding box detection, document classification, text recognition</dd>
-    <dt>Domain Terminology</dt>
+    <dt>领域术语</dt>
     <dd>PDF text extraction, region-based OCR, bounding boxes, text correction, document parsing, normalized coordinates, multi-page documents</dd>
   </dl>
 config: |
@@ -18,11 +18,11 @@ config: |
     <Style>
       .htx-pdf { calc(100vh - 250px); }
     </Style>
-    <Header value="Select text to correct" size="4"/>
+    <Header value="选择要纠正的文本" size="4"/>
     <OcrLabels name="ocr" toName="pdf">
-      <Label value="Typo" />
-      <Label value="Incorrect Amount" />
-      <Label value="Incorrect Name" />
+      <Label value="拼写错误" />
+      <Label value="金额错误" />
+      <Label value="名称错误" />
     </OcrLabels>
     <Pdf name="pdf" value="$pdf"/>
   </View>

@@ -201,7 +201,7 @@ const panelViews = [
   },
   {
     name: "comments",
-    title: "Comments",
+    title: "评论",
     component: panelComponents.comments as FC<PanelProps>,
     active: false,
   },

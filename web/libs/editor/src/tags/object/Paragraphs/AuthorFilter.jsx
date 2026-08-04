@@ -9,7 +9,7 @@ const AuthorTag = ({ name, selected }) => {
   const itemStyle = { border: `2px solid ${Utils.Colors.convertToRGBA(ColorScheme.make_color({ seed: name })[0])}` };
 
   if (name === "all") {
-    return <>Show all authors</>;
+    return <>显示所有作者</>;
   }
 
   return (
@@ -35,7 +35,7 @@ const renderMultipleSelected = (selected) => {
 };
 
 export const AuthorFilter = observer(({ item, onChange }) => {
-  const placeholder = useMemo(() => <span className={styles.authorFilter__placeholder}>Show all authors</span>, []);
+  const placeholder = useMemo(() => <span className={styles.authorFilter__placeholder}>显示所有作者</span>, []);
   const initialValue = "all";
   const options = useMemo(() => {
     const authorOptions = item._value

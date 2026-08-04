@@ -1,16 +1,16 @@
-title: Named Entity Recognition
+title: 命名实体识别
 type: community
-group: Natural Language Processing
+group: 自然语言处理
 order: 3
 image: /static/templates/named-entity-recognition.png
 details: |
-  <h1>Extract named entities from text</h1>
+  <h1>从文本中提取命名实体</h1>
   <dl>
-    <dt>Industry Applications</dt>
+    <dt>行业应用</dt>
     <dd>legal documents, contracts, medical records, clinical notes, news articles, journalism, financial documents, compliance, regulatory, due diligence, document processing, text mining, knowledge extraction, structured data extraction</dd>
-    <dt>Associated Models</dt>
+    <dt>相关模型</dt>
     <dd>BERT, spaCy, Stanford NER, Flair, transformer models</dd>
-    <dt>Domain Terminology</dt>
+    <dt>领域术语</dt>
     <dd>NLP, NER, information extraction, entity extraction, entity linking</dd>
   </dl>
 config: |

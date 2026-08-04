@@ -1,15 +1,15 @@
-title: Inventory Tracking
+title: 库存跟踪
 type: community
-group: Computer Vision
+group: 计算机视觉
 image: /static/templates/inventory-tracking.png
 details: |
-  <h1>Label exact products on the shelves</h1>
+  <h1>标注货架上的具体商品</h1>
   <dl>
-    <dt>Industry Applications</dt>
+    <dt>行业应用</dt>
     <dd>retail automation, shelf monitoring, stock management, grocery stores, convenience stores, warehouse management, supply chain optimization, planogram compliance, out-of-stock detection, price compliance, visual merchandising, loss prevention, store auditing</dd>
-    <dt>Associated Models</dt>
+    <dt>相关模型</dt>
     <dd>product recognition, shelf detection, automated inventory, computer vision retail</dd>
-    <dt>Domain Terminology</dt>
+    <dt>领域术语</dt>
     <dd>SKU detection, planogram analysis, shelf analytics, merchandising compliance, retail intelligence</dd>
   </dl>
 config: |

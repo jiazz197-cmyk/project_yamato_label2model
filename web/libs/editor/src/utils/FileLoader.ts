@@ -14,7 +14,7 @@ export class FileLoader {
    * @description Progress event available to track download progress
    */
   download(url: string, onProgress?: OnProgressCallback) {
-    if (!url) throw new Error("No URL provided for download");
+    if (!url) throw new Error("未提供下载 URL");
 
     return new Promise((resolve, reject) => {
       if (this.fileCache.has(url)) {
@@ -59,7 +59,7 @@ export class FileLoader {
       });
 
       xhr.addEventListener("error", () => {
-        const error = new Error("Network error");
+        const error = new Error("网络错误");
 
         reject(error);
 

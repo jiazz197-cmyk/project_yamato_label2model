@@ -1,16 +1,16 @@
-title: Fine-Tune an Agent with an LLM
+title: 使用 LLM 微调智能体
 type: enterprise
-group: Chat
+group: 聊天
 order: 2
 image: /static/templates/chat-llm-eval.png
 details: |
-  <h1>Run live, interactive chats with any OpenAI-compatible LLM</h1>
+  <h1>与任何兼容 OpenAI 的 LLM 进行实时交互对话</h1>
   <dl>
-    <dt>Industry Applications</dt>
+    <dt>行业应用</dt>
     <dd>LLM fine-tuning, agent training, conversation collection, chatbot improvement, task specialization, context handling, behavior evaluation, real-world scenario testing, RLHF data collection, conversational AI development</dd>
-    <dt>Associated Models</dt>
+    <dt>相关模型</dt>
     <dd>OpenAI GPT models, fine-tuned LLMs, conversational agents, multi-turn dialogue systems</dd>
-    <dt>Domain Terminology</dt>
+    <dt>领域术语</dt>
     <dd>multi-turn conversations, LLM fine-tuning, agent specialization, context shifts, conversation-level evaluation, realistic dialogue</dd>
   </dl>
 config: |
@@ -69,29 +69,29 @@ config: |
 
       <!-- Right: conversation-level evaluation -->
       <View style="flex: 1;" className="evaluation">
-        <Header value="Chat evaluation" size="2"/>
+        <Header value="聊天评估" size="2"/>
 
-        <Header value="Did the agent answer the user's question(s)?"/>
+        <Header value="智能体是否回答了用户的问题？"/>
         <Choices name="answered_rating" toName="chat" choice="single" showInline="true" required="true">
-          <Choice value="5 - Yes - all of them were answered"/>
-          <Choice value="4 - Mostly yes - most of them were answered"/>
-          <Choice value="3 - Mixed - some yes, some no"/>
-          <Choice value="2 - Mostly no - very few were answered"/>
-          <Choice value="1 - No - none of them were answered"/>
+          <Choice value="5 - 是 - 全部回答"/>
+          <Choice value="4 - 大部分是 - 多数回答"/>
+          <Choice value="3 - 混合 - 部分回答部分没有"/>
+          <Choice value="2 - 大部分否 - 很少回答"/>
+          <Choice value="1 - 否 - 没有回答"/>
         </Choices>
 
-        <Header value="What types of questions were asked?"/>
+        <Header value="问了哪些类型的问题？"/>
         <Choices name="topics" toName="chat" choice="multiple" showInline="true">
-          <Choice value="Project Setup"/>
-          <Choice value="Billing"/>
-          <Choice value="Request Live Support"/>
-          <Choice value="Labeling Config"/>
-          <Choice value="Integrations/SDK"/>
-          <Choice value="Bug/Issue"/>
-          <Choice value="Other"/>
+          <Choice value="项目搭建"/>
+          <Choice value="计费"/>
+          <Choice value="请求实时支持"/>
+          <Choice value="标注配置"/>
+          <Choice value="集成/SDK"/>
+          <Choice value="缺陷/问题"/>
+          <Choice value="其他"/>
         </Choices>
 
-        <Header value="Comments (optional)"/>
+        <Header value="评论（可选）"/>
         <TextArea name="comments" toName="chat" rows="4" placeholder="Add any notes or edge cases..."/>
       </View>
     </View>

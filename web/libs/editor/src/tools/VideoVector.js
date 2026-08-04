@@ -26,7 +26,7 @@ const _Tool = types
     },
 
     get viewTooltip() {
-      return "Video vector region";
+      return "视频向量区域";
     },
 
     get iconComponent() {

@@ -153,8 +153,8 @@ const RegionAction: FC<any> = observer(({ region, annotation, editMode, onEditMo
             displayedHotkey="region:lock"
             variant="neutral"
             look="string"
-            aria-label="Unlock Region"
-            tooltip="Unlock Region"
+            aria-label="解锁区域"
+            tooltip="解锁区域"
           />
         )}
         {!region.incomplete && region.hideable && (
@@ -171,9 +171,9 @@ const RegionAction: FC<any> = observer(({ region, annotation, editMode, onEditMo
         <RegionActionButton
           variant="negative"
           look="string"
-          aria-label="Delete selected region"
+          aria-label="删除所选区域"
           disabled={region.isReadOnly()}
-          tooltip="Delete selected region"
+          tooltip="删除所选区域"
           onClick={() => annotation.deleteRegion(region)}
         >
           <IconTrash />

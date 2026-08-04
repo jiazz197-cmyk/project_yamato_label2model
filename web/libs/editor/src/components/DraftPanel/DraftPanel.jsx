@@ -16,13 +16,13 @@ export const DraftPanel = observer(({ item }) => {
     return <div className={panel}>draft{saved}</div>;
   }
   if (!item.versions.result || !item.versions.result.length) {
-    return <div className={panel}>{saved ? `draft${saved}` : "not submitted draft"}</div>;
+    return <div className={panel}>{saved ? `draft${saved}` : "未提交的草稿"}</div>;
   }
   return (
     <div className={panel}>
       <Tooltip
         alignment="top-left"
-        title={item.draftSelected ? "switch to original result" : "switch to current draft"}
+        title={item.draftSelected ? "switch to original result" : "切换到当前草稿"}
       >
         <Button
           type="button"

@@ -1,15 +1,15 @@
-title: Signal Quality
+title: 信号质量
 type: community
-group: Time Series Analysis
+group: 时间序列分析
 image: /static/templates/signal-quality.png
 details: |
-  <h1>Rate signal quality</h1>
+  <h1>评估信号质量</h1>
   <dl>
-    <dt>Industry Applications</dt>
+    <dt>行业应用</dt>
     <dd>Industrial equipment, medical device monitoring, telecommunications, audio signal processing, vibration analysis, environmental monitoring, power systems, automotive diagnostics, aerospace, manufacturing quality control, predictive maintenance, IoT sensor monitoring</dd>
-    <dt>Associated Models</dt>
+    <dt>相关模型</dt>
     <dd>signal-to-noise ratio, data quality assessment, sensor validation, signal integrity</dd>
-    <dt>Domain Terminology</dt>
+    <dt>领域术语</dt>
     <dd>CSV, Excel, XLS, Sheet, signal degradation, noise detection, data reliability, measurement quality, sensor calibration</dd>
   </dl>
 config: |
@@ -20,7 +20,7 @@ config: |
 
           <!-- Control tag for region labels -->
           <TimeSeriesLabels name="label" toName="ts">
-              <Label value="Region" background="#5b5"/>
+              <Label value="区域" background="#5b5"/>
           </TimeSeriesLabels>
       </View>
 
@@ -35,9 +35,9 @@ config: |
           <Choices name="choices" toName="ts"
                    showInline="true" required="true"
                    perRegion="true">
-              <Choice value="Good"/>
-              <Choice value="Medium"/>
-              <Choice value="Poor"/>
+              <Choice value="好"/>
+              <Choice value="中等"/>
+              <Choice value="差"/>
           </Choices>
       </View>
 

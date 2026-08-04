@@ -1,16 +1,16 @@
-title: Fine-Tune an Agent without an LLM
+title: 无 LLM 的智能体微调
 type: enterprise
-group: Chat
+group: 聊天
 order: 3
 image: /static/templates/chat-eval.png
 details: |
-  <h1>Simulate multi-turn chats by playing both user and assistant</h1>
+  <h1>同时扮演用户和助手模拟多轮对话</h1>
   <dl>
-    <dt>Industry Applications</dt>
+    <dt>行业应用</dt>
     <dd>LLM fine-tuning, agent training, human-written dialogue collection, tone and persona development, chatbot improvement, conversational AI training, brand voice development, dialogue simulation, interaction pattern learning</dd>
-    <dt>Associated Models</dt>
+    <dt>相关模型</dt>
     <dd>LLM fine-tuning, conversational agents, dialogue models, persona-based systems</dd>
-    <dt>Domain Terminology</dt>
+    <dt>领域术语</dt>
     <dd>multi-turn conversations, human-written dialogs, tone and style, persona development, dialogue simulation, agent voice, brand alignment</dd>
   </dl>
 config: |

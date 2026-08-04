@@ -121,7 +121,7 @@ export const ConfigControl: FC<ConfigControlProps> = ({
   useEffect(() => {
     if (layerVisibility) {
       const defaultDisplay = true;
-      setTimeline(layerVisibility?.get?.("timeline") ?? defaultDisplay);
+      setTimeline(layerVisibility?.get?.("时间轴") ?? defaultDisplay);
       setAudioWave(layerVisibility?.get?.("waveform") ?? defaultDisplay);
       setSpectrogram(layerVisibility?.get?.("spectrogram") ?? false);
     }
@@ -129,7 +129,7 @@ export const ConfigControl: FC<ConfigControlProps> = ({
 
   const handleSetTimeline = () => {
     setTimeline(!isTimeline);
-    toggleVisibility?.("timeline", !isTimeline);
+    toggleVisibility?.("时间轴", !isTimeline);
   };
 
   const handleSetAudioWave = () => {
@@ -158,10 +158,10 @@ export const ConfigControl: FC<ConfigControlProps> = ({
     return (
       <div className={cn("audio-config").elem("buttons").toClassName()}>
         <div className={cn("audio-config").elem("menu-button").toClassName()} onClick={handleSetTimeline}>
-          {isTimeline ? "Hide" : "Show"} timeline
+          {isTimeline ? "Hide" : "Show"} 时间轴
         </div>
         <div className={cn("audio-config").elem("menu-button").toClassName()} onClick={handleSetAudioWave}>
-          {isAudioWave ? "Hide" : "Show"} audio wave
+          {isAudioWave ? "Hide" : "Show"} 音频波形
         </div>
         {isFF(FF_AUDIO_SPECTROGRAMS) && (
           <div className={cn("audio-config").elem("menu-button").toClassName()} onClick={handleSetSpectrogram}>
@@ -181,13 +181,13 @@ export const ConfigControl: FC<ConfigControlProps> = ({
         style={{ opacity: 0, position: "fixed" }}
       >
         <div className={cn("audio-config").elem("scroll-content").toClassName()}>
-          <div className={cn("audio-config").elem("section-header").toClassName()}>Playback Settings</div>
+          <div className={cn("audio-config").elem("section-header").toClassName()}>播放设置</div>
           <Slider
             min={MIN_SPEED}
             max={MAX_SPEED}
             step={0.1}
             value={speed}
-            description={"Playback speed"}
+            description={"播放速度"}
             info={"Increase or decrease the playback speed"}
             onChange={handleChangePlaybackSpeed}
           />
@@ -196,7 +196,7 @@ export const ConfigControl: FC<ConfigControlProps> = ({
             max={MAX_ZOOM}
             step={0.1}
             value={amp}
-            description={"Audio zoom y-axis"}
+            description={"音频 Y 轴缩放"}
             info={"Increase or decrease the appearance of amplitude"}
             onChange={handleChangeAmp}
           />
@@ -204,7 +204,7 @@ export const ConfigControl: FC<ConfigControlProps> = ({
             <Toggle
               checked={settings?.loopRegion}
               onChange={(e) => changeSetting?.("loopRegion", e.target.checked)}
-              label="Loop Regions"
+              label="循环区域"
               labelProps={{ size: "small" }}
             />
           </div>
@@ -212,14 +212,14 @@ export const ConfigControl: FC<ConfigControlProps> = ({
             <Toggle
               checked={settings?.autoPlayNewSegments}
               onChange={(e) => changeSetting?.("autoPlayNewSegments", e.target.checked)}
-              label="Auto-play New Regions"
+              label="自动播放新区域"
               labelProps={{ size: "small" }}
             />
           </div>
 
           {isFF(FF_AUDIO_SPECTROGRAMS) && (
             <>
-              <div className={cn("audio-config").elem("section-header").toClassName()}>Spectrogram Settings</div>
+              <div className={cn("audio-config").elem("section-header").toClassName()}>频谱图设置</div>
               <SpectrogramControl waveform={waveform} />
             </>
           )}

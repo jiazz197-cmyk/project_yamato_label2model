@@ -18,8 +18,8 @@ export const TimelineRegionEditor = observer(({ region }: { region: MSTTimelineR
 
   return (
     <div className={styles.container}>
-      <Field label="Start frame" value={start} onChange={changeStartTimeHandler} region={region} min={1} max={end} />
-      <Field label="End frame" value={end} onChange={changeEndTimeHandler} region={region} min={start} max={length} />
+      <Field label="起始帧" value={start} onChange={changeStartTimeHandler} region={region} min={1} max={end} />
+      <Field label="结束帧" value={end} onChange={changeEndTimeHandler} region={region} min={start} max={length} />
       <Field label="Duration" value={end - start + 1} region={region} />
     </div>
   );

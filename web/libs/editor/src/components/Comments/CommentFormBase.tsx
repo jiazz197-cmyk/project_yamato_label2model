@@ -49,7 +49,7 @@ export const CommentFormBase: FC<CommentFormProps> = observer(
         <TextArea
           actionRef={actionRef}
           name="comment"
-          placeholder="Add a comment"
+          placeholder="添加评论"
           value={value}
           rows={rows}
           maxRows={maxRows}

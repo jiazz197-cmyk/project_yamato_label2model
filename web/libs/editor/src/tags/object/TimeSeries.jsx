@@ -307,7 +307,7 @@ const Model = types
           `First wrong values: ${data[self.keyColumn].slice(0, 3).join(", ")}`,
           `<a href="${
             getEnv(self).messages.URL_TAGS_DOCS
-          }/timeseries.html#Parameters" target="_blank">Read Documentation</a> for details.`,
+          }/timeseries.html#Parameters" target="_blank">阅读文档</a> for details.`,
         ];
 
         throw new Error(message.join("<br/>"));
@@ -379,7 +379,7 @@ const Model = types
                 `First wrong values: ${nonSeqValues.join(", ")}`,
                 `<br/><a href="${
                   getEnv(self).messages.URL_TAGS_DOCS
-                }/timeseries.html" target="_blank">Read Documentation</a> for details.`,
+                }/timeseries.html" target="_blank">阅读文档</a> for details.`,
               ].join("<br/>"),
             );
           }
@@ -409,7 +409,7 @@ const Model = types
           message.push(
             `<br/><a href="${
               getEnv(self).messages.URL_TAGS_DOCS
-            }/timeseries.html#Parameters" target="_blank">Read Documentation</a> for details.`,
+            }/timeseries.html#Parameters" target="_blank">阅读文档</a> for details.`,
           );
           throw new Error(message.join("<br/>"));
         }

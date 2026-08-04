@@ -215,7 +215,7 @@ export const AnnotationsCarousel = observer(({ store, annotationStore }: Annotat
           <div className={cn("annotations-carousel").elem("carousel-controls").toClassName()}>
             <Button
               disabled={isLeftDisabled}
-              aria-label="Carousel left"
+              aria-label="轮播左移"
               size="small"
               variant="neutral"
               onClick={scrollLeft}
@@ -224,7 +224,7 @@ export const AnnotationsCarousel = observer(({ store, annotationStore }: Annotat
             </Button>
             <Button
               disabled={isRightDisabled}
-              aria-label="Carousel right"
+              aria-label="轮播右移"
               size="small"
               variant="neutral"
               onClick={scrollRight}
@@ -262,7 +262,7 @@ export const AnnotationsCarousel = observer(({ store, annotationStore }: Annotat
         <div className={cn("annotations-carousel").elem("carousel-controls").toClassName()}>
           <Button
             disabled={isLeftDisabledOriginal}
-            aria-label="Carousel left"
+            aria-label="轮播左移"
             size="small"
             variant="neutral"
             onClick={(e) => !isLeftDisabledOriginal && updatePosition(e, true)}
@@ -271,7 +271,7 @@ export const AnnotationsCarousel = observer(({ store, annotationStore }: Annotat
           </Button>
           <Button
             disabled={isRightDisabledOriginal}
-            aria-label="Carousel right"
+            aria-label="轮播右移"
             size="small"
             variant="neutral"
             onClick={(e) => !isRightDisabledOriginal && updatePosition(e, false)}

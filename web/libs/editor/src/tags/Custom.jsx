@@ -31,7 +31,7 @@ if (!APP_SETTINGS?.billing?.enterprise && !Registry.models.custominterface) {
         <EnterpriseBadge /> <Code>{item.type === "custominterface" ? "CustomInterface" : "React"}</Code> tag is only
         available in{" "}
         <a className="no-go" href={ENTERPRISE_URL} target="_blank" rel="noreferrer">
-          Enterprise
+          企业版
         </a>
         .
       </div>

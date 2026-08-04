@@ -124,7 +124,7 @@ const TimelineComponent: FC<TimelineProps> = ({
   }, [position, length]);
 
   const controls = (
-    <div className={cn("timeline").elem("topbar").toClassName()}>
+    <div className={cn("时间轴").elem("topbar").toClassName()}>
       <Controls
         length={length}
         position={currentPosition}
@@ -160,7 +160,7 @@ const TimelineComponent: FC<TimelineProps> = ({
             />
           ) : null
         }
-        mediaType="timeline"
+        mediaType="时间轴"
       />
 
       {allowSeek && (
@@ -182,7 +182,7 @@ const TimelineComponent: FC<TimelineProps> = ({
   regions.map((reg) => fixMobxObserve(reg.sequence));
 
   const view = !viewCollapsed && !disableView && (
-    <div className={cn("timeline").elem("view").toClassName()}>
+    <div className={cn("时间轴").elem("view").toClassName()}>
       <View.View
         step={step}
         length={length}
@@ -217,7 +217,7 @@ const TimelineComponent: FC<TimelineProps> = ({
 
   return (
     <TimelineContextProvider value={contextValue}>
-      <div className={cn("timeline").mix(className).toClassName()}>
+      <div className={cn("时间轴").mix(className).toClassName()}>
         {controlsOnTop ? (
           <>
             {controls}
