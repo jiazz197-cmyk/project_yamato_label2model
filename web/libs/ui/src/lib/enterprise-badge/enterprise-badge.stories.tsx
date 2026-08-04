@@ -29,28 +29,28 @@ export const Default: Story = {
 
 export const WithLabel: Story = {
   args: {
-    children: "企业版",
+    children: "Enterprise",
     style: "filled",
   },
 };
 
 export const Ghost: Story = {
   args: {
-    children: "企业版",
+    children: "Enterprise",
     style: "ghost",
   },
 };
 
 export const Outline: Story = {
   args: {
-    children: "企业版",
+    children: "Enterprise",
     style: "outline",
   },
 };
 
 export const Solid: Story = {
   args: {
-    children: "企业版",
+    children: "Enterprise",
     style: "solid",
   },
 };
@@ -64,7 +64,7 @@ export const IconOnlyAndGhost: Story = {
 
 export const Small: Story = {
   args: {
-    children: "企业版",
+    children: "Enterprise",
     size: "small",
   },
 };
@@ -78,7 +78,7 @@ export const IconOnlySmall: Story = {
 
 export const Rounded: Story = {
   args: {
-    children: "企业版",
+    children: "Enterprise",
     shape: "rounded",
   },
 };
@@ -93,10 +93,10 @@ export const CustomLabel: Story = {
 export const AllStyles: Story = {
   render: () => (
     <div className="flex flex-wrap gap-3 items-center">
-      <EnterpriseBadge>企业版</EnterpriseBadge>
-      <EnterpriseBadge style="outline">企业版</EnterpriseBadge>
-      <EnterpriseBadge style="ghost">企业版</EnterpriseBadge>
-      <EnterpriseBadge style="solid">企业版</EnterpriseBadge>
+      <EnterpriseBadge>Enterprise</EnterpriseBadge>
+      <EnterpriseBadge style="outline">Enterprise</EnterpriseBadge>
+      <EnterpriseBadge style="ghost">Enterprise</EnterpriseBadge>
+      <EnterpriseBadge style="solid">Enterprise</EnterpriseBadge>
     </div>
   ),
 };

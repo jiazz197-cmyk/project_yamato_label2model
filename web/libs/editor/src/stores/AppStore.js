@@ -776,7 +776,7 @@ export default types
         await getEnv(self).events.invoke("customButton", self, buttonName, { isDirty, entity, button });
         self.incrementQueuePosition();
         entity.dropDraft();
-      }, `Error during handling ${button} button, try again`);
+      }, `处理 ${button} 按钮时出错，请重试`);
     }
 
     /**

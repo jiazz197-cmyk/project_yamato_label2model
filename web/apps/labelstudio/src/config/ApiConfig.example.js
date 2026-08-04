@@ -72,7 +72,7 @@ export const API_CONFIG = {
               type: "Choices",
               inputs: [
                 {
-                  type: "文本",
+                  type: "Text",
                   value: "text",
                   valueType: null,
                 },

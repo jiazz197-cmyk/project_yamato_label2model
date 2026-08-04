@@ -639,7 +639,7 @@ const Configurator = ({
         }}
       >
         <div className="flex flex-col">
-          <h1>Labeling Interface{hasChanges ? " *" : ""}</h1>
+          <h1>标注界面{hasChanges ? " *" : ""}</h1>
           <header>
             <Button
               type="button"

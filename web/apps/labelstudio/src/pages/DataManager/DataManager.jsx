@@ -96,8 +96,8 @@ export const DataManagerPage = ({ ...props }) => {
 
     dataManager.on("crash", (details) => {
       const error = details?.error;
-      const isMissingTaskError = error?.startsWith("任务 ID：");
-      const isMissingProjectError = error?.startsWith("项目 ID：");
+      const isMissingTaskError = error?.startsWith("Task ID:");
+      const isMissingProjectError = error?.startsWith("Project ID:");
 
       if (isMissingTaskError || isMissingProjectError) {
         const message = `The ${

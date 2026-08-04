@@ -50,7 +50,7 @@ export const GridWidthButton = injector(({ view, isGrid, gridWidth, fitImagesToW
       content={
         <div className="p-tight min-w-wide space-y-base">
           <div className="grid grid-cols-[1fr_min-content] gap-base items-center">
-            <span>Columns: {width}</span>
+            <span>列数：{width}</span>
             <ButtonGroup collapsed={false}>
               <Button
                 onClick={() => setGridWidth(width - 1)}

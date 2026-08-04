@@ -34,7 +34,7 @@ export const Default: Story = {
       <TabsList>
         <TabsTrigger value="tab1">Account</TabsTrigger>
         <TabsTrigger value="tab2">Password</TabsTrigger>
-        <TabsTrigger value="tab3">设置</TabsTrigger>
+        <TabsTrigger value="tab3">Settings</TabsTrigger>
       </TabsList>
       <TabsContent value="tab1">
         <div className="p-wide border border-neutral-border rounded-smaller">
@@ -54,7 +54,7 @@ export const Default: Story = {
       </TabsContent>
       <TabsContent value="tab3">
         <div className="p-wide border border-neutral-border rounded-smaller">
-          <h3 className="text-heading-regular font-semibold mb-tight">设置</h3>
+          <h3 className="text-heading-regular font-semibold mb-tight">Settings</h3>
           <p className="text-body-regular text-neutral-content-subtle">
             Configure your application preferences and notifications.
           </p>

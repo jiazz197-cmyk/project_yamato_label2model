@@ -395,7 +395,7 @@ const AnnotationButtonContextMenu = injector(
       }, [copyAnnotationId, toast, dropdown]);
       const openPerformanceDashboard = useCallback<MenuActionOnClick>(() => {
         // Only available in LSE
-        const isLSE = (window as any).APP_SETTINGS?.version?.edition === "企业版";
+        const isLSE = (window as any).APP_SETTINGS?.version?.edition === "Enterprise";
         if (!isLSE) return;
 
         const url = new URL(window.location.origin);
@@ -447,7 +447,7 @@ const AnnotationButtonContextMenu = injector(
       const isDraft = !isDefined(entity.pk);
       const showGroundTruth = capabilities.groundTruthEnabled && !isPrediction && !isDraft;
       const showDuplicateAnnotation = capabilities.enableCreateAnnotation && !isDraft;
-      const isLSE = (window as any).APP_SETTINGS?.version?.edition === "企业版";
+      const isLSE = (window as any).APP_SETTINGS?.version?.edition === "Enterprise";
 
       // Check if project ID is available (from store or URL)
       const hasProjectId = !!window.location.pathname.match(/\/projects\/(\d+)/);
@@ -852,7 +852,7 @@ export const AnnotationButton = observer(
     // so we match by finding the annotation's position in the backend's annotation list
     const getReviewStatus = useCallback(() => {
       // Only available in LSE for non-predictions
-      const isLSE = (window as any).APP_SETTINGS?.version?.edition === "企业版";
+      const isLSE = (window as any).APP_SETTINGS?.version?.edition === "Enterprise";
       if (!isLSE || !entityIsAlive || isPrediction) {
         return null;
       }

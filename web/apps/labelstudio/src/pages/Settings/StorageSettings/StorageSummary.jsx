@@ -44,7 +44,7 @@ export const StorageSummary = ({ target, storage, className, storageTypes = [] }
 
   const handleButtonClick = () => {
     const msg =
-      `Error logs for ${target === "export" ? "export " : ""}${storage.type} ` +
+      `“${storage.type}”的错误日志 ` +
       `storage ${storage.id} in project ${storage.project} and job ${storage.last_sync_job}:\n\n` +
       `${getLastTraceback(storage.traceback)}\n\n` +
       `meta = ${JSON.stringify(storage.meta)}\n`;
@@ -109,7 +109,7 @@ export const StorageSummary = ({ target, storage, className, storageTypes = [] }
             "已完成：同步任务成功完成",
           ].join("\n")}
         >
-          {storageStatus === "Failed" || storageStatus === "已完成但有错误" ? (
+          {storageStatus === "Failed" || storageStatus === "Completed with errors" ? (
             <span
               className="cursor-pointer border-b border-dashed border-negative-border-subtle text-negative-content"
               onClick={handleButtonClick}

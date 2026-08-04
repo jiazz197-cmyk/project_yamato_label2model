@@ -388,7 +388,7 @@ class HtxParagraphsView extends Component {
           });
         }
       } catch (err) {
-        console.error("Can not get selection", err);
+        console.error("无法获取选区", err);
       }
     }
 
@@ -696,7 +696,7 @@ class HtxParagraphsView extends Component {
             const { index = 0 } = match || {};
 
             if (r.endOffset - r.startOffset !== r.text.length)
-              console.warn("Text length differs from region length; possible regions overlap");
+              console.warn("文本长度与区域长度不一致；可能存在区域重叠");
             startOffset = index;
             endOffset = startOffset + r.text.length;
 
@@ -808,7 +808,7 @@ class HtxParagraphsView extends Component {
 
       return !!(states && states.length > 0);
     } catch (error) {
-      console.warn("Error checking selected labels:", error);
+      console.warn("检查所选标签时出错：", error);
       return false;
     }
   }

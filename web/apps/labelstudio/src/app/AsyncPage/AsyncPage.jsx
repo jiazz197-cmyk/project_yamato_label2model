@@ -33,7 +33,7 @@ const loadAsyncPage = async (url) => {
       modal({
         body: () => (
           <ErrorWrapper
-            title={`Error ${response.status}: ${response.statusText}`}
+            title={`错误 ${response.status}：${response.statusText}`}
             errorId={response.status}
             stacktrace={`Cannot load url ${url}\n\n${html}`}
           />

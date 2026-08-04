@@ -8,7 +8,7 @@ export const create = (columns) => {
   const AnnotationModel = types.compose("AnnotationModel", AnnotationModelBase, DataStoreItem);
 
   return DataStore("AnnotationStore", {
-    apiMethod: "annotations",
+    apiMethod: "标注",
     listItemType: AnnotationModel,
   }).actions((self) => ({
     loadTask: flow(function* (annotationID) {

@@ -526,7 +526,7 @@ const HtxVideoView = ({ item, store }) => {
   const regions = item.regs.map((reg) => {
     const color = reg.style?.fillcolor ?? reg.tag?.fillcolor ?? defaultStyle.fillcolor;
     const label = reg.labels.join(", ") || "Empty";
-    const timeline = reg.type.includes("时间轴");
+    const timeline = reg.type.includes("Timeline");
     const sequence = reg.sequence;
 
     return {

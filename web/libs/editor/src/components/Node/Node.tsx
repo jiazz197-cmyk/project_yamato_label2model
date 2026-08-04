@@ -58,7 +58,7 @@ const NodeViews: Record<string, NodeViewProps> = {
   },
 
   AudioRegionModel: {
-    name: "音频",
+    name: "Audio",
     icon: AudioOutlined,
   },
 
@@ -89,14 +89,14 @@ const NodeViews: Record<string, NodeViewProps> = {
     name: "Video Rect",
     icon: IconRectangleTool,
     altIcon: IconRectangleToolSmart,
-    getContent: (node) => <span style={{ color: "#5a5a5a" }}>from {node.sequence[0]?.frame} frame</span>,
+    getContent: (node) => <span style={{ color: "#5a5a5a" }}>从第 {node.sequence[0]?.frame} 帧</span>,
   },
 
   VideoVectorRegionModel: {
     name: "Video Vector",
     icon: IconPolygonTool,
     altIcon: IconPolygonToolSmart,
-    getContent: (node) => <span style={{ color: "#5a5a5a" }}>from {node.sequence[0]?.frame} frame</span>,
+    getContent: (node) => <span style={{ color: "#5a5a5a" }}>从第 {node.sequence[0]?.frame} 帧</span>,
   },
 
   PolygonRegionModel: {

@@ -56,8 +56,8 @@ export default {
         <p>
           Error while loading audio. Check <code>{attr}</code> field in task.
         </p>
-        <p>Technical description: {error}</p>
-        <p>URL: {htmlEscape(url)}</p>
+        <p>技术说明：{error}</p>
+        <p>URL：{htmlEscape(url)}</p>
       </div>
     );
   },

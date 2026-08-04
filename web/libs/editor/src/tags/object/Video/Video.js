@@ -121,7 +121,7 @@ const Model = types
     },
 
     get timelineControl() {
-      return self.annotation.toNames.get(self.name)?.find((s) => s.type.includes("时间轴"));
+      return self.annotation.toNames.get(self.name)?.find((s) => s.type.includes("Timeline"));
     },
 
     get videoControl() {

@@ -396,7 +396,7 @@ export const InContext: Story = {
     const columns: ColumnDef<(typeof users)[number]>[] = [
       {
         id: "name",
-        header: "姓名",
+        header: "Name",
         accessorFn: (row) => row.name,
         cell: ({ row }) => (
           <div>

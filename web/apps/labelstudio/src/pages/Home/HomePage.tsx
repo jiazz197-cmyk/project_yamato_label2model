@@ -163,7 +163,7 @@ export const HomePage: Page = () => {
             title={
               data && data?.count > 0 ? (
                 <>
-                  Recent Projects{" "}
+                  最近项目{" "}
                   <a href="/projects" className="text-lg font-normal hover:underline">
                     查看全部
                   </a>

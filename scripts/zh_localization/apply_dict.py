@@ -17,6 +17,32 @@ TEXT_DICT = {**TEXT_DICT, **MORE_TEXT}
 DICT = {**DICT, **EDITOR_DICT}
 TEXT_DICT = {**TEXT_DICT, **EDITOR_TEXT}
 
+# 单字词可能是类型名/标识符/比较值，不在引号字符串层翻译，避免破坏代码逻辑
+RISKY_SINGLE = {
+    "Text", "Audio", "Video", "Image", "Images", "Label", "Labels", "Choice", "Choices",
+    "Task", "Tasks", "Project", "Projects", "Annotation", "Annotations", "Name", "Title",
+    "Date", "Amount", "Author", "Question", "Answer", "Segment", "Request", "Region",
+    "Regions", "Yes", "No", "Add", "Edit", "Delete", "Save", "Cancel", "Create", "Close",
+    "Settings", "Model", "Predictions", "Error", "Description", "Email", "PDF", "HTML",
+    "Markdown", "JSON", "CSV", "TSV", "Time", "Datetime", "HyperText", "TimeSeries",
+    "AudioPlus", "String", "Number", "Boolean", "List", "Unknown", "Comments", "Summary",
+    "Skip", "Submit", "Redo", "Reject", "Refresh", "Clear", "Reset", "Apply", "Scale",
+    "Mel", "Hann", "Hamming", "Blackman", "Rectangular", "Inferno", "Magma", "Viridis",
+    "Plasma", "Linear", "Logarithmic", "Min", "Max", "Default", "Global", "Performance",
+    "Import", "Export", "Workspace", "Enterprise", "Instruction", "Instructions",
+    "Timeline", "Filter", "Filters", "Actions", "Code", "Data", "Config", "Tags",
+    "Score", "Tone", "Outline", "Interactive", "Preview", "Sample", "Files", "timeline",
+    "Author", "Speaker", "Event", "Correct", "Incorrect", "Normal", "Other",
+}
+
+# 出现在比较/前缀判断中的短语，必须保留英文（与后端/库返回值一致）
+LOGIC_PHRASES = {
+    "Completed with errors",
+    "Task ID:",
+    "Project ID:",
+    "less than a minute ago",
+}
+
 JSX_RE = re.compile(r"(?:>|\})\s*([^<>{}\n]+?)\s*(?=<)")
 
 
@@ -267,7 +293,7 @@ def apply_file(path, dict_map, text_map, dry_run=False):
     for start, end in find_strings(text):
         content = text[start:end]
         key = decode_escapes(content).strip()
-        if key in dict_map:
+        if key in dict_map and key not in RISKY_SINGLE and key not in LOGIC_PHRASES:
             spans.append((start, end, dict_map[key]))
             replaced += 1
 

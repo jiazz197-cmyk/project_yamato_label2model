@@ -8,7 +8,7 @@ const VideoSettingsPure: Settings = ({ store }) => {
 };
 
 VideoSettingsPure.displayName = "VideoSettings";
-VideoSettingsPure.tagName = "视频";
+VideoSettingsPure.tagName = "Video";
 VideoSettingsPure.title = "视频";
 
 export const VideoSettings = observer(VideoSettingsPure);

@@ -131,7 +131,7 @@ export const RowContextMenu: FC<RowContextMenuProps> = ({
 
       const taskId = row.id ?? row.task_id;
       const columnName = column?.title || column?.alias || "content";
-      showToast(`Copied "${columnName}" for Task ${taskId} to clipboard`, "info");
+      showToast(`已将“${columnName}”（任务 ${taskId}）复制到剪贴板`, "info");
     } catch {
       showToast("复制到剪贴板失败", "error");
     }
@@ -150,7 +150,7 @@ export const RowContextMenu: FC<RowContextMenuProps> = ({
 
     try {
       await navigator.clipboard.writeText(String(taskId));
-      showToast(`Copied Task ID ${taskId} to clipboard`, "info");
+      showToast(`任务 ID ${taskId} 已复制到剪贴板`, "info");
     } catch {
       showToast("复制到剪贴板失败", "error");
     }

@@ -191,7 +191,7 @@ class App extends Component {
 
     return (
       <Space className={cn("main-view").elem("infobar").toClassName()} size="small">
-        <span>Task #{id}</span>
+        <span>任务 #{id}</span>
 
         {queue && <span>{queue}</span>}
       </Space>

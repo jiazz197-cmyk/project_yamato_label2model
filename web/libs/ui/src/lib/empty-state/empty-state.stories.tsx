@@ -82,7 +82,7 @@ export const Default: Story = {
     footer: (
       <Typography variant="label" size="small" className="text-primary-link">
         <a href="/docs/labeling-interface" className="inline-flex items-center gap-1 hover:underline">
-          了解更多
+          Learn more
           <IconExternal width={16} height={16} />
         </a>
       </Typography>
@@ -144,7 +144,7 @@ export const SizeComparison: Story = {
                   Connect Cloud Storage
                 </Button>
                 <Button variant="primary" look="outlined" className="flex-1">
-                  导入
+                  Import
                 </Button>
               </>
             }
@@ -163,7 +163,7 @@ export const SizeComparison: Story = {
             description="Import your data and set up the labeling interface to start annotating"
             actions={
               <Button variant="primary" look="filled">
-                创建项目
+                Create Project
               </Button>
             }
           />
@@ -182,7 +182,7 @@ export const SizeComparison: Story = {
             footer={
               <Typography variant="label" size="small" className="text-primary-link">
                 <a href="/docs/labeling-interface" className="inline-flex items-center gap-1 hover:underline">
-                  了解更多
+                  Learn more
                   <IconExternal width={16} height={16} />
                 </a>
               </Typography>
@@ -286,7 +286,7 @@ export const DataManagerImport: Story = {
             <IconCloudProviderAzure width={32} height={32} className="text-neutral-content-subtler" />
           </div>
         </Tooltip>
-        <Tooltip title="Redis 存储">
+        <Tooltip title="Redis Storage">
           <div className="flex items-center justify-center p-2">
             <IconCloudProviderRedis width={32} height={32} className="text-neutral-content-subtler" />
           </div>
@@ -299,7 +299,7 @@ export const DataManagerImport: Story = {
           Connect Cloud Storage
         </Button>
         <Button variant="primary" look="outlined" className="flex-1">
-          导入
+          Import
         </Button>
       </>
     ),

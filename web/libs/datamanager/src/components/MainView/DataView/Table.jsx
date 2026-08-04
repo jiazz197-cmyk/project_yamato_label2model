@@ -351,7 +351,7 @@ export const DataView = injector(
           style: { width: 240 },
         },
         {
-          resolver: (col) => ["音频", "AudioPlus"].includes(col.type),
+          resolver: (col) => ["Audio", "AudioPlus"].includes(col.type),
           style: { width: 150 },
         },
       ],

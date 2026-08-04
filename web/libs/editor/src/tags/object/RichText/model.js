@@ -24,7 +24,7 @@ const WARNING_MESSAGES = {
   dataTypeMistmatch: () => "Do not put text directly in task data if you use valueType=url.",
   badURL: (url) => `URL (${escapeHtml(url)}) is not valid.`,
   secureMode: () => 'In SECURE MODE valueType is set to "url" by default.',
-  loadingError: (url, error) => `Loading URL (${url}) unsuccessful: ${error}`,
+  loadingError: (url, error) => `加载 URL（${url}）失败：${error}`,
 };
 
 /**

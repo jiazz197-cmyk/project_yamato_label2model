@@ -131,7 +131,7 @@ export const StorageSet = forwardRef(
             disabled={loading}
             look="outlined"
             data-testid={`add-${target === "export" ? "target" : "source"}-storage-button`}
-            aria-label={`Add ${target === "export" ? "Target" : "Source"} Storage`}
+            aria-label={`添加${target === "export" ? "目标" : "源"}存储`}
           >
             {buttonLabel}
           </Button>

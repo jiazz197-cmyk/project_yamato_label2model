@@ -631,7 +631,7 @@ export const AudioModel = types.compose(
             }
           } catch (_err) {
             self._ws = null;
-            console.warn("Already destroyed");
+            console.warn("已被销毁");
           }
         },
         setWFFrame(frame) {

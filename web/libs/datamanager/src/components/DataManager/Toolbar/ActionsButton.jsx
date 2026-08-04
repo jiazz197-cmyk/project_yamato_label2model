@@ -168,7 +168,7 @@ const invokeAction = (action, destructive, store, formRef) => {
       // Extract object type from action ID and title
       const objectMap = {
         delete_tasks: "tasks",
-        delete_annotations: "annotations",
+        delete_annotations: "标注",
         delete_predictions: "predictions",
         delete_reviews: "reviews",
         delete_reviewers: "审核分配",
@@ -177,14 +177,14 @@ const invokeAction = (action, destructive, store, formRef) => {
       };
 
       const objectType = objectMap[action.id] || action.title.toLowerCase().replace("delete ", "");
-      dialogTitle = `Delete selected ${objectType}?`;
+      dialogTitle = `删除所选 ${objectType}？`;
 
       // Convert to title case for button text
       const titleCaseObject = objectType
         .split(" ")
         .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
         .join(" ");
-      okButtonText = `Delete ${titleCaseObject}`;
+      okButtonText = `删除 ${titleCaseObject}`;
     }
 
     if (destructive && !form) {

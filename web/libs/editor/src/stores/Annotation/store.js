@@ -297,7 +297,7 @@ const AnnotationStoreModel = types
       }
       const modelClass = Registry.getModelByTag(rootModel.type);
       // hacky way to get all the available object tag names
-      const objectTypes = Registry.objectTypes().map((type) => type.name.replace("模型", "").toLowerCase());
+      const objectTypes = Registry.objectTypes().map((type) => type.name.replace("Model", "").toLowerCase());
       const objects = [];
 
       self.validate(VALIDATORS.CONFIG, rootModel);

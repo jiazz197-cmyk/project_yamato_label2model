@@ -71,7 +71,7 @@ export const Actions = ({ store }) => {
       )}
 
       {!isViewAll && !isBulkMode && store.hasInterface("annotations:add-new") && saved && (
-        <Tooltip title={`Create copy of current ${entity.type}`}>
+        <Tooltip title={`创建当前 ${entity.type} 的副本`}>
           <Button
             icon={<IconCopy style={{ width: 36, height: 36 }} />}
             variant="neutral"

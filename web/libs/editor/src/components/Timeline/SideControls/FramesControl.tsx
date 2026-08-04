@@ -25,7 +25,7 @@ export const FramesControl: FC<TimelineSideControlProps> = ({ position = 0, leng
         />
       ) : (
         <>
-          {clamp(Math.round(position + 1), 1, duration + 1)} <span>of {duration + 1}</span>
+          {clamp(Math.round(position + 1), 1, duration + 1)} <span>，共 {duration + 1} 帧</span>
         </>
       )}
     </div>

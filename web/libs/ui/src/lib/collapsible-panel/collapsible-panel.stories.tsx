@@ -225,7 +225,7 @@ export const MultiplePanels: Story = {
             <p className="text-sm">Filter options would go here</p>
           </div>
         </CollapsiblePanel>
-        <CollapsiblePanel variant="default" title="设置" defaultExpanded={false}>
+        <CollapsiblePanel variant="default" title="Settings" defaultExpanded={false}>
           <div className="p-base">
             <p className="text-sm">Settings options would go here</p>
           </div>

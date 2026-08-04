@@ -86,7 +86,7 @@ export const Neutral: Story = {
 export const Negative: Story = {
   args: {
     variant: "negative",
-    title: "错误",
+    title: "Error",
     children: "An error occurred while processing your request. Please try again.",
   },
 };

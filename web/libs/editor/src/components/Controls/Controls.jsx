@@ -32,7 +32,7 @@ export default inject("store")(
     const updateButtonClassName = cn("update-btn").toClassName();
 
     if (store.task) {
-      taskInformation = <h4 className={`${styles.task} ${taskInfoClassName}`}>Task ID: {store.task.id}</h4>;
+      taskInformation = <h4 className={`${styles.task} ${taskInfoClassName}`}>任务 ID：{store.task.id}</h4>;
     }
 
     /**

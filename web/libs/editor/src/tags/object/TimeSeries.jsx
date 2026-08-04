@@ -811,7 +811,7 @@ const Model = types
         self.setColumnNames(headers);
         yield self.updateValue(store);
       } catch (e) {
-        const message = `Problems with parsing CSV: ${e?.message || e}<br>URL: ${url}`;
+        const message = `解析 CSV 时出现问题：${e?.message || e}<br>URL：${url}`;
 
         store.annotationStore.addErrors([errorBuilder.generalError(message)]);
       }
@@ -1519,7 +1519,7 @@ const HtxTimeSeriesViewRTS = ({ item }) => {
   React.useEffect(() => {
     if (!item?.brushRange?.length) return;
 
-    const hotkeys = Hotkey("TimeSeries Navigation", "Time Series Navigation");
+    const hotkeys = Hotkey("时间序列导航", "时间序列导航");
 
     hotkeys.addNamed("ts:pan-left", () => item.panView(-PAN_SMALL));
     hotkeys.addNamed("ts:pan-right", () => item.panView(PAN_SMALL));

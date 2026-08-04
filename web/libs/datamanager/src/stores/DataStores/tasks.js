@@ -111,7 +111,7 @@ export const create = (columns) => {
       },
 
       loadAnnotations: flow(function* () {
-        const annotations = yield Promise.all([getRoot(self).apiCall("annotations", { taskID: self.id })]);
+        const annotations = yield Promise.all([getRoot(self).apiCall("标注", { taskID: self.id })]);
 
         self.annotations = annotations[0];
       }),

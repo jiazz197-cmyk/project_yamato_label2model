@@ -177,7 +177,7 @@ export const WithFilters: Story = {
       },
       {
         id: "predictions",
-        label: "预测",
+        label: "Predictions",
         filterFn: (nodeData) => {
           const path = nodeData.path;
           return path && path.includes("predictions");

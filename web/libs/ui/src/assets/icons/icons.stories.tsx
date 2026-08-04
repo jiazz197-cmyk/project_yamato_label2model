@@ -26,7 +26,7 @@ const getFileNameFromIcon = (iconName: string): string => {
 const getIconCategory = (iconName: string): string => {
   const name = iconName.substring(4); // Remove 'Icon' prefix
 
-  if (["Models", "模型", "ModelVersion", "BoundingBox", "预测", "LsLabeling", "LsReview"].includes(name)) {
+  if (["Models", "Model", "ModelVersion", "BoundingBox", "Predictions", "LsLabeling", "LsReview"].includes(name)) {
     return "AI/ML";
   }
 
@@ -95,8 +95,8 @@ const getIconCategory = (iconName: string): string => {
   if (
     name.includes("Check") ||
     name.includes("Cross") ||
-    name.includes("关闭") ||
-    ["Remove", "删除"].includes(name)
+    name.includes("Close") ||
+    ["Remove", "Delete"].includes(name)
   ) {
     return "Check & Cross";
   }
@@ -149,7 +149,7 @@ const getIconCategory = (iconName: string): string => {
   }
 
   if (
-    ["Document", "文本", "Pencil"].includes(name) ||
+    ["Document", "Text", "Pencil"].includes(name) ||
     name.includes("File") ||
     name.includes("Copy") ||
     name.includes("Undo") ||
@@ -159,8 +159,8 @@ const getIconCategory = (iconName: string): string => {
     name.includes("Duplicate") ||
     name.includes("Paste") ||
     name.includes("Cut") ||
-    name.includes("删除") ||
-    name.includes("编辑") ||
+    name.includes("Delete") ||
+    name.includes("Edit") ||
     name.includes("Trash") ||
     name.includes("Folder")
   ) {
@@ -176,7 +176,7 @@ const getIconCategory = (iconName: string): string => {
   }
 
   if (
-    ["Help", "QuestionOutline", "Warning", "WarningCircle", "WarningCircleFilled", "错误", "ErrorAlt"].includes(
+    ["Help", "QuestionOutline", "Warning", "WarningCircle", "WarningCircleFilled", "Error", "ErrorAlt"].includes(
       name,
     ) ||
     name.includes("Info")

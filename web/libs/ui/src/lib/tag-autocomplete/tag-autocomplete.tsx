@@ -178,7 +178,7 @@ export const TagAutocomplete = forwardRef(
             onKeyDown={handleKeyDown}
             data-testid={`tag-${option.value}`}
             data-tag="true"
-            aria-label={`${option.label}, press Delete or Backspace to remove`}
+            aria-label={`${option.label}，按 Delete 或 Backspace 移除`}
           >
             {option.label}
           </Badge>

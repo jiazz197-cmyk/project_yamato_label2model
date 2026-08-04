@@ -83,7 +83,7 @@ const CustomBackendForm = ({ action, backend, project, onSubmit }) => {
               <ErrorWrapper
                 error={{
                   response: {
-                    detail: `Failed to ${backend ? "save" : "新增"} ML backend.`,
+                    detail: `无法${backend ? "保存" : "新增"} ML 后端。`,
                     exc_info: response.error_message,
                   },
                 }}

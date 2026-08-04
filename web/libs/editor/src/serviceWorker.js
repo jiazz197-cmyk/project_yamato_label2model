@@ -41,7 +41,7 @@ export function register(config) {
         // service worker/PWA documentation.
         navigator.serviceWorker.ready.then(() => {
           console.log(
-            "This web app is being served cache-first by a service " +
+            "此 Web 应用由 Service Worker 以缓存优先方式提供，" +
               "了解更多请访问 http://bit.ly/CRA-PWA",
           );
         });
@@ -70,7 +70,7 @@ function registerValidSW(swUrl, config) {
               // but the previous service worker will still serve the older
               // content until all client tabs are closed.
               console.log(
-                "New content is available and will be used when all " +
+                "新内容可用，将在所有" +
                   "此页面的标签页都关闭后使用。参见 http://bit.ly/CRA-PWA。",
               );
 

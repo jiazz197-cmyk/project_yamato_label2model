@@ -26,7 +26,7 @@ const OBJECTS = {
     },
   },
   Text: {
-    type: "文本",
+    type: "Text",
     settings: {
       granularity: {
         title: "按词选择文本",
@@ -42,10 +42,10 @@ const OBJECTS = {
     type: "HyperText",
   },
   Audio: {
-    type: "音频",
+    type: "Audio",
   },
   AudioPlus: {
-    type: "音频",
+    type: "Audio",
   },
   List: {
     type: "List",
@@ -60,7 +60,7 @@ const OBJECTS = {
     type: "TimeSeries",
   },
   Video: {
-    type: "视频",
+    type: "Video",
   },
 };
 
@@ -71,7 +71,7 @@ const Labels = {
       title: "显示标签：",
       type: ["bottom", "left", "right", "top"],
       control: true,
-      when: ($tag) => $tag.$object.tagName !== "视频",
+      when: ($tag) => $tag.$object.tagName !== "Video",
       param: ($control, value) => {
         let $container = $control.parentNode;
         let $labels = $control;
