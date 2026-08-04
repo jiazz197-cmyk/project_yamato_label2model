@@ -60,9 +60,9 @@ const AppComponent: React.FC<AppComponentProps> = ({ app }) => {
               <div className={rootClassName}>
                 {app.crashed ? (
                   <div className={clsx(rootCN.toClassName(), rootClassName)}>
-                    <span className={rootCN.elem("header").toClassName()}>Oops...</span>
+                    <span className={rootCN.elem("header").toClassName()}>哎呀…</span>
                     <span className={rootCN.elem("description").toClassName()}>
-                      Project has been deleted or not yet created.
+                      项目已被删除或尚未创建。
                     </span>
                   </div>
                 ) : app.loading ? (

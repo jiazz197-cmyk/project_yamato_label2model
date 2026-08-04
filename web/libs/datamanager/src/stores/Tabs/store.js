@@ -62,7 +62,7 @@ const createNameCopy = (name) => {
 
       if (num) return `Copy (${Number(num) + 1})`;
 
-      return "Copy (2)";
+      return "复制（2）";
     });
   } else {
     newName += " Copy";
@@ -414,7 +414,7 @@ export const TabStore = types
         if (isDefined(column?.id)) {
           result.push(column.id);
         } else {
-          console.warn("Column or id is not defined", column);
+          console.warn("未定义列或 id", column);
           console.warn("Columns", columns);
         }
 

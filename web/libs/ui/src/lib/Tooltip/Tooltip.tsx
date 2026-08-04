@@ -219,7 +219,7 @@ export const Tooltip = forwardRef((props: TooltipProps, ref) => {
   if (!props.title) return child;
 
   if (!children || Array.isArray(children)) {
-    throw new Error("Tooltip does accept a single child only");
+    throw new Error("Tooltip 只接受单个子元素");
   }
 
   return <TooltipInner {...rest} children={child} ref={ref} />;

@@ -141,12 +141,12 @@ const SelectedItemsGroup = ({
             readOnly
             disabled={disabled || selectedOptions.length === 0}
             onClick={handleDeselectAllClick}
-            aria-label="Deselect all items"
+            aria-label="取消全选"
           />
 
           {/* Title with counter badge inline */}
           <div className={styles.selectedItemsTitle}>
-            <Typography variant="body">Selected items</Typography>
+            <Typography variant="body">已选条目</Typography>
             <Badge>{selectedOptions.length}</Badge>
           </div>
         </button>
@@ -157,11 +157,11 @@ const SelectedItemsGroup = ({
             type="button"
             onClick={handleSelectAllClick}
             disabled={disabled}
-            aria-label="Select all rendered items"
+            aria-label="全选当前渲染的条目"
             look="string"
             size="smaller"
           >
-            Select All
+            全选
           </Button>
         )}
       </div>
@@ -190,7 +190,7 @@ const SelectedItemsGroup = ({
               })}
             </CommandGroup>
           ) : (
-            <div className="px-base py-tight text-neutral-content-subtler text-center">No items selected</div>
+            <div className="px-base py-tight text-neutral-content-subtler text-center">未选择条目</div>
           )}
         </div>
       )}
@@ -627,7 +627,7 @@ export const Select = forwardRef(
         <PopoverContent align="start" data-testid="select-popup" className={cnm("min-w-full", contentClassName)}>
           {isLoading ? (
             <span className={styles.selectLoading} tabIndex={-1}>
-              Loading...
+              加载中…
             </span>
           ) : (
             <Command shouldFilter={false}>
@@ -641,7 +641,7 @@ export const Select = forwardRef(
                 />
               )}
               <CommandList
-                label="Select an option"
+                label="请选择选项"
                 className={cnm({
                   "shadow-inner shadow-neutral-surface-inset border-t border-neutral-border shadow-": searchable,
                   "max-h-none": footer !== undefined || isVirtualList,
@@ -665,7 +665,7 @@ export const Select = forwardRef(
                   />
                 )}
 
-                <CommandEmpty>{searchable ? "No results found." : ""}</CommandEmpty>
+                <CommandEmpty>{searchable ? "未找到结果。" : ""}</CommandEmpty>
 
                 <CommandGroup>
                   {props.header ? props.header : null}

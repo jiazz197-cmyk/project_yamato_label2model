@@ -41,13 +41,13 @@ export const ReaderViewModal: FC<ReaderViewModalProps> = ({ content, isOpen, onC
     switch (format) {
       case "plain":
         return (
-          <pre className={styles.plainText} aria-label="Plain text content">
+          <pre className={styles.plainText} aria-label="纯文本内容">
             {content}
           </pre>
         );
       case "markdown":
         return (
-          <div className={styles.markdownContent} aria-label="Markdown content">
+          <div className={styles.markdownContent} aria-label="Markdown 内容">
             <Markdown text={content} allowHtml={true} />
           </div>
         );
@@ -55,7 +55,7 @@ export const ReaderViewModal: FC<ReaderViewModalProps> = ({ content, isOpen, onC
         return (
           <div
             className={styles.htmlContent}
-            aria-label="HTML content"
+            aria-label="HTML 内容"
             dangerouslySetInnerHTML={{ __html: sanitizedHtml }}
           />
         );
@@ -67,7 +67,7 @@ export const ReaderViewModal: FC<ReaderViewModalProps> = ({ content, isOpen, onC
   const headerContent = (
     <Tabs value={format} onValueChange={(v) => setFormat(v as ContentFormat)} variant="default">
       <TabsList>
-        <TabsTrigger value="plain">Plain Text</TabsTrigger>
+        <TabsTrigger value="plain">纯文本</TabsTrigger>
         <TabsTrigger value="markdown">Markdown</TabsTrigger>
         <TabsTrigger value="html">HTML</TabsTrigger>
       </TabsList>
@@ -80,7 +80,7 @@ export const ReaderViewModal: FC<ReaderViewModalProps> = ({ content, isOpen, onC
       visible={isOpen}
       onHide={onClose}
       fullscreen={true}
-      title="Reader View"
+      title="阅读视图"
       header={headerContent}
       allowClose={true}
       closeOnClickOutside={false}

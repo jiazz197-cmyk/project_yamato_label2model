@@ -38,13 +38,13 @@ export const ReaderViewButton: FC<ReaderViewButtonProps> = ({ nodeData, threshol
 
   return (
     <>
-      <Tooltip title="Open Reader View">
+      <Tooltip title="打开阅读视图">
         <Button
           look="string"
           onClick={handleClick}
           className="jer-edit-button"
           size="small"
-          aria-label="Open Reader View"
+          aria-label="打开阅读视图"
           leading={<IconBookOpenText width={20} height={20} />}
         />
       </Tooltip>

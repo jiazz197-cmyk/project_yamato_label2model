@@ -231,14 +231,14 @@ export const JsonViewer: FC<JsonViewerProps> = ({
                   <IconSearch className={styles.searchIcon} />
                   <input
                     type="text"
-                    placeholder="Search keys or values"
+                    placeholder="搜索键或值"
                     value={searchText}
                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchText(e.target.value)}
                     className={styles.searchInput}
-                    aria-label="Search JSON"
+                    aria-label="搜索 JSON"
                   />
                   {searchText && (
-                    <Tooltip title="Clear Search">
+                    <Tooltip title="清除搜索">
                       <Button
                         look="string"
                         variant="primary"
@@ -246,7 +246,7 @@ export const JsonViewer: FC<JsonViewerProps> = ({
                         onClick={() => setSearchText("")}
                         className={styles.searchClear}
                         leading={<IconClose width={20} height={20} />}
-                        aria-label="Clear Search"
+                        aria-label="清除搜索"
                       />
                     </Tooltip>
                   )}
@@ -266,7 +266,7 @@ export const JsonViewer: FC<JsonViewerProps> = ({
                     </Button>
                   ))}
                   {activeFilter && (
-                    <Tooltip title="Reset filters">
+                    <Tooltip title="重置筛选">
                       <Button
                         look="outlined"
                         variant="neutral"
@@ -284,7 +284,7 @@ export const JsonViewer: FC<JsonViewerProps> = ({
         )}
         <div className={clsx(styles.jsonEditorContainer, inset && styles.inset)} style={{ minHeight, maxHeight }}>
           {showCopyButton && (
-            <Tooltip title={copied ? "Copied!" : "Copy JSON"}>
+            <Tooltip title={copied ? "已复制！" : "复制 JSON"}>
               <Button
                 look="outlined"
                 variant="neutral"

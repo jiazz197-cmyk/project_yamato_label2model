@@ -82,12 +82,12 @@ const sampleData: User[] = [
 const baseColumns: ColumnDef<User>[] = [
   {
     accessorKey: "name",
-    header: "Name",
+    header: "姓名",
     enableSorting: true,
   },
   {
     accessorKey: "email",
-    header: "Email",
+    header: "邮箱",
     enableSorting: true,
   },
   {
@@ -262,7 +262,7 @@ export const WithActions: Story = {
       ...baseColumns,
       {
         id: "actions",
-        header: "Actions",
+        header: "操作",
         cell: ({ row }) => (
           <div className="flex gap-2">
             <Button
@@ -272,7 +272,7 @@ export const WithActions: Story = {
               leading={<IconEdit />}
               onClick={() => alert(`Edit ${row.original.name}`)}
             >
-              Edit
+              编辑
             </Button>
             <Button
               size="small"
@@ -281,7 +281,7 @@ export const WithActions: Story = {
               leading={<IconTrash />}
               onClick={() => alert(`Delete ${row.original.name}`)}
             >
-              Delete
+              删除
             </Button>
           </div>
         ),
@@ -449,7 +449,7 @@ export const FullFeatured: Story = {
       ...baseColumns,
       {
         id: "actions",
-        header: "Actions",
+        header: "操作",
         cell: ({ row }) => (
           <div className="flex gap-2">
             <Button
@@ -462,7 +462,7 @@ export const FullFeatured: Story = {
                 alert(`Edit ${row.original.name}`);
               }}
             >
-              Edit
+              编辑
             </Button>
           </div>
         ),
@@ -639,7 +639,7 @@ export const WithManualSorting: Story = {
         {
           id: "label",
           accessorKey: "label",
-          header: "Label",
+          header: "标注",
           size: 180,
           enableSorting: true,
         },
@@ -732,12 +732,12 @@ export const WithCustomHeaders: Story = {
     const columnsWithCustomHeaders: ColumnDef<User>[] = [
       {
         accessorKey: "name",
-        header: "Name",
+        header: "姓名",
         enableSorting: true,
       },
       {
         accessorKey: "email",
-        header: "Email",
+        header: "邮箱",
         enableSorting: true,
       },
       {

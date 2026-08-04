@@ -8,7 +8,7 @@ import { useValueTracker } from "../../Utils";
 import { default as Label } from "../Label/Label";
 import "./Counter.prefix.css";
 
-const allowedKeys = ["ArrowUp", "ArrowDown", "Backspace", "Delete", /[0-9]/];
+const allowedKeys = ["ArrowUp", "ArrowDown", "Backspace", "删除", /[0-9]/];
 
 const CounterContext = createContext(null);
 

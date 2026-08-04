@@ -23,12 +23,12 @@ export const FiltersSidebar = sidebarInjector(({ viewsStore, sidebarEnabled, sid
           <Button
             look="string"
             onClick={() => viewsStore.collapseFilters()}
-            tooltip="Unpin filters"
-            aria-label="Unpin filters"
+            tooltip="取消固定筛选"
+            aria-label="取消固定筛选"
           >
             <IconChevronLeft width={24} height={24} />
           </Button>
-          <div className={cn("filters-sidebar").elem("title").toClassName()}>Filters</div>
+          <div className={cn("filters-sidebar").elem("title").toClassName()}>筛选</div>
         </div>
       </div>
       <Filters sidebar={true} />

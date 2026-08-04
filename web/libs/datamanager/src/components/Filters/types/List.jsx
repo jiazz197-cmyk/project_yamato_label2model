@@ -34,7 +34,7 @@ export const VariantSelect = observer(({ filter, schema, onChange, multiple, val
       }
       searchFilter={filter.cellView?.searchFilter}
       onChange={(value) => onChange(value)}
-      placeholder={placeholder ?? "Select value"}
+      placeholder={placeholder ?? "选择值"}
       disabled={disabled}
     />
   );
@@ -49,7 +49,7 @@ export const ListFilter = [
   },
   {
     key: "not_contains",
-    label: "not contains",
+    label: "不包含",
     valueType: "single",
     input: (props) => <VariantSelect {...props} multiple={props.schema?.multiple} />,
   },

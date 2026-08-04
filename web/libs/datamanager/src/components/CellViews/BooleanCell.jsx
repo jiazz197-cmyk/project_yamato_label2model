@@ -11,10 +11,10 @@ export const BooleanCell = (column) => {
   const boolValue = parseBoolean(column.value);
 
   if (boolValue === true) {
-    return <Badge variant="positive">True</Badge>;
+    return <Badge variant="positive">是</Badge>;
   }
   if (boolValue === false) {
-    return <Badge variant="negative">False</Badge>;
+    return <Badge variant="negative">否</Badge>;
   }
 
   return null;

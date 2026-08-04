@@ -160,8 +160,8 @@ export function useRecentFilters(
         };
         const allFieldsHeader: FilterGroupHeader = {
           value: "__all_fields_header__",
-          title: "All fields",
-          original: { _isHeader: true, field: { title: "All fields" } },
+          title: "所有字段",
+          original: { _isHeader: true, field: { title: "所有字段" } },
           disabled: true,
           height: 34,
         };

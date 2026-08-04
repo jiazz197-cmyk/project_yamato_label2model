@@ -48,7 +48,7 @@ export const CodeView: FC<CodeViewProps> = ({ data }) => {
 
   return (
     <div className={styles.codeView}>
-      <Tooltip title={copied ? "Copied!" : "Copy JSON"}>
+      <Tooltip title={copied ? "已复制！" : "复制 JSON"}>
         <Button
           look="outlined"
           variant="neutral"

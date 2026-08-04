@@ -17,7 +17,7 @@ export const RefreshButton = injector(({ store, needsDataFetch, projectFetch, si
       look={needsDataFetch ? "filled" : "outlined"}
       variant={needsDataFetch ? "primary" : "neutral"}
       waiting={projectFetch}
-      aria-label="Refresh data"
+      aria-label="刷新数据"
       onClick={async () => {
         await store.fetchProject({ force: true, interaction: "refresh" });
         await store.currentView?.reload();

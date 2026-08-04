@@ -144,7 +144,7 @@ Annotators.customOperators = [
   },
   {
     key: "not_contains",
-    label: "not contains",
+    label: "不包含",
     valueType: "list",
     input: (props) => (isFilterMembers ? <UserSelect {...props} /> : <VariantSelect {...props} />),
   },

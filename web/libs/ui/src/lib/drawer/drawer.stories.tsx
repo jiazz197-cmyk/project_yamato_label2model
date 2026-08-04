@@ -66,7 +66,7 @@ export const WithFooter: Story = {
           footer={
             <div className="flex gap-2 w-full">
               <Button variant="neutral" look="outlined" onClick={() => setOpen(false)} className="flex-1">
-                Cancel
+                取消
               </Button>
               <Button variant="primary" onClick={() => setOpen(false)} className="flex-1">
                 Confirm
@@ -106,11 +106,11 @@ export const FromLeft: Story = {
               </Button>
               <Button variant="neutral" look="string" align="left" className="justify-start">
                 <IconSettings className="mr-2" />
-                Settings
+                设置
               </Button>
               <Button variant="neutral" look="string" align="left" className="justify-start">
                 <IconTrash className="mr-2" />
-                Delete
+                删除
               </Button>
             </nav>
           </div>
@@ -174,7 +174,7 @@ export const FromBottom: Story = {
               </Button>
               <Button variant="neutral" look="outlined" className="h-20 flex-col">
                 <IconSettings className="mb-2" />
-                Settings
+                设置
               </Button>
             </div>
           </div>
@@ -270,7 +270,7 @@ export const WithTrigger: Story = {
           footer={
             <DrawerClose asChild>
               <Button variant="primary" className="w-full">
-                Close
+                关闭
               </Button>
             </DrawerClose>
           }

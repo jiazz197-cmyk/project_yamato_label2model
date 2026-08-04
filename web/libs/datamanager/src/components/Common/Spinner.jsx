@@ -45,7 +45,7 @@ export const Spinner = injector(({ SDK, visible = true, ...props }) => {
           {ExternalSpinner ? (
             <ExternalSpinner size={size} />
           ) : (
-            <img src={imgSrc} srcSet={imgSrcSet} style={imgStyles} alt="opossum loader" />
+            <img src={imgSrc} srcSet={imgSrcSet} style={imgStyles} alt="加载中" />
           )}
         </div>
       }

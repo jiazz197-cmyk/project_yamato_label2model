@@ -279,7 +279,7 @@ export const TagAutocomplete = forwardRef(
                 focusInput();
               }}
             >
-              <div ref={tagsContainerRef} className={styles.tagsContainer} aria-label="Selected tags">
+              <div ref={tagsContainerRef} className={styles.tagsContainer} aria-label="已选标签">
                 {selectedOptions.map((option, index) => renderTagItem(option, index))}
 
                 <input
@@ -295,7 +295,7 @@ export const TagAutocomplete = forwardRef(
                   }}
                   disabled={disabled}
                   placeholder={placeholder}
-                  aria-label={placeholder || "Search tags"}
+                  aria-label={placeholder || "搜索标签"}
                   aria-autocomplete="list"
                   aria-expanded={isOpen}
                   aria-controls="tag-autocomplete-listbox"
@@ -325,7 +325,7 @@ export const TagAutocomplete = forwardRef(
               id="tag-autocomplete-listbox"
               // biome-ignore lint/a11y/useSemanticElements: This is a combobox pattern, not a traditional select
               role="listbox"
-              aria-label="Available options"
+              aria-label="可用选项"
               className="bg-neutral-background rounded-md"
             >
               {isLoading ? (
@@ -334,7 +334,7 @@ export const TagAutocomplete = forwardRef(
                 </div>
               ) : (
                 <>
-                  {filteredOptions.length === 0 && !showCreateOption && <CommandEmpty>No options found.</CommandEmpty>}
+                  {filteredOptions.length === 0 && !showCreateOption && <CommandEmpty>未找到选项。</CommandEmpty>}
 
                   <CommandGroup>{filteredOptions.map((option, index) => renderOptionItem(option, index))}</CommandGroup>
 

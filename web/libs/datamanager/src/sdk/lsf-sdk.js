@@ -279,7 +279,7 @@ export class LSFWrapper {
 
       this.datamanager.invoke("lsfInit", this, this.lsfInstance);
     } catch (err) {
-      console.error("Failed to initialize LabelStudio", settings);
+      console.error("初始化 LabelStudio 失败", settings);
       console.error(err);
     }
   }
@@ -301,7 +301,7 @@ export class LSFWrapper {
 
       if (noData) {
         Modal.modal({
-          title: "Can't find task",
+          title: "找不到任务",
           body,
         });
         return false;
@@ -319,7 +319,7 @@ export class LSFWrapper {
   /** @private */
   async loadTask(taskID, annotationID, fromHistory = false) {
     if (!this.lsf) {
-      return console.error("Make sure that LSF was properly initialized");
+      return console.error("请确保 LSF 已正确初始化");
     }
 
     const nextAction = async () => {
@@ -351,12 +351,12 @@ export class LSFWrapper {
 
     if (isFF(FF_DEV_2887) && this.lsf?.commentStore?.hasUnsaved) {
       Modal.confirm({
-        title: "You have unsaved changes",
-        body: "There are comments which are not persisted. Please submit the annotation. Continuing will discard these comments.",
+        title: "你有未保存的更改",
+        body: "存在尚未保存的评论。请先提交标注，继续将丢弃这些评论。",
         onOk() {
           nextAction();
         },
-        okText: "Discard and continue",
+        okText: "放弃并继续",
       });
       return;
     }
@@ -442,7 +442,7 @@ export class LSFWrapper {
         this.overlapReached = overlapReached;
         this.overlapReachedMessage =
           this.task.overlap_reached_message ||
-          "Annotation overlap has been reached for this task. Your draft is preserved but cannot be submitted.";
+          "此任务已达到标注重叠上限。你的草稿已保留，但无法提交。";
 
         this.lsf.setFlags({
           overlapReached,
@@ -488,7 +488,7 @@ export class LSFWrapper {
             size="small"
             look="outlined"
           >
-            Next Task
+            下一个任务
           </Button>
         </div>
       ),
@@ -793,7 +793,7 @@ export class LSFWrapper {
           this.overlapReached = true;
           this.overlapReachedMessage =
             result?.response?.detail ||
-            "Annotation overlap has been reached for this task. Your draft is preserved but cannot be submitted.";
+            "此任务已达到标注重叠上限。你的草稿已保留，但无法提交。";
           // Set overlap state on LSF store - this will disable buttons with tooltips
           this.lsf.setFlags({
             overlapReached: true,
@@ -817,7 +817,7 @@ export class LSFWrapper {
               style={{ color: "inherit", textDecoration: "underline" }}
               onClick={(e) => e.stopPropagation()}
             >
-              contact our team
+              联系我们的团队
             </a>{" "}
             if it doesn't help.
           </span>
@@ -853,7 +853,7 @@ export class LSFWrapper {
     );
     const status = result?.$meta?.status;
 
-    this.showOperationToast(status, "Annotation saved successfully", "Annotation is not saved", result);
+    this.showOperationToast(status, "标注保存成功", "标注未保存", result);
 
     // FIT-720: Invalidate caches after successful submit
     if (status < 400) {
@@ -894,7 +894,7 @@ export class LSFWrapper {
     });
     const status = result?.$meta?.status;
 
-    this.showOperationToast(status, "Annotation updated successfully", "Annotation is not updated", result);
+    this.showOperationToast(status, "标注更新成功", "标注未更新", result);
 
     this.datamanager.invoke("updateAnnotation", ls, annotation, result);
 
@@ -963,7 +963,7 @@ export class LSFWrapper {
   };
 
   draftToast = (status, result = null) => {
-    this.showOperationToast(status, "Draft saved successfully", "Draft is not saved", result);
+    this.showOperationToast(status, "草稿保存成功", "草稿未保存", result);
   };
 
   needsDraftSave = (annotation) => {
@@ -1047,9 +1047,9 @@ export class LSFWrapper {
     const hasForceSkipPermission = MANAGER_ROLES.includes(userRole);
     const canSkip = !skipDisabled || hasForceSkipPermission;
     if (!canSkip) {
-      console.warn("Task cannot be skipped: allow_skip is false and user lacks manager role");
-      this.showOperationToast(400, null, "This task cannot be skipped", {
-        error: "Task cannot be skipped",
+      console.warn("无法跳过此任务：allow_skip 为 false 且用户没有管理员角色");
+      this.showOperationToast(400, null, "此任务无法跳过", {
+        error: "无法跳过此任务",
       });
       return;
     }
@@ -1076,14 +1076,14 @@ export class LSFWrapper {
     );
     const status = result?.$meta?.status;
 
-    this.showOperationToast(status, "Task skipped successfully", "Task is not skipped", result);
+    this.showOperationToast(status, "任务已跳过", "任务未跳过", result);
   };
 
   onUnskipTask = async () => {
     const { task, currentAnnotation } = this;
 
     if (!isDefined(currentAnnotation) && !isDefined(currentAnnotation.pk)) {
-      console.error("Annotation must be on unskip");
+      console.error("取消跳过后必须提交标注");
       return;
     }
 

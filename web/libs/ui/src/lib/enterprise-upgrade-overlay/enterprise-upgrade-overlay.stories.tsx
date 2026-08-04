@@ -59,7 +59,7 @@ export const SSOAndSecurity: Story = {
     description: "Enable Single Sign-On, advanced security features, and compliance tools with our Enterprise plan.",
     feature: "SSO & Security Features",
     learnMoreUrl: "https://docs.humansignal.com/guide/security.html",
-    secondaryButtonLabel: "Learn more",
+    secondaryButtonLabel: "了解更多",
   },
 };
 
@@ -111,7 +111,7 @@ export const Closable: Story = {
     title: "Agreement configuration is available in Label Studio Enterprise",
     description: "Configure agreement metrics and calculation methods on the Enterprise plan.",
     learnMoreUrl: "https://docs.humansignal.com/guide/stats",
-    secondaryButtonLabel: "Learn more",
+    secondaryButtonLabel: "了解更多",
     onClose: () => {},
   },
 };

@@ -23,7 +23,7 @@ const LabelingHeader = ({ SDK, onClick, isExplorerMode }) => {
             onClick={onClick}
             style={{ fontSize: 18, padding: 0, color: "black" }}
           >
-            Back
+            返回
           </Button>
         )}
 

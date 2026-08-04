@@ -27,7 +27,7 @@ export const OrderButton = injector(
             columnFilter={orderableFilter}
             value={ordering?.field ?? null}
             onChange={(key) => view.setOrdering(key)}
-            placeholder="Order by"
+            placeholder="排序方式"
             triggerProps={{
               style: {
                 padding: "var(--spacing-tight)",
@@ -41,7 +41,7 @@ export const OrderButton = injector(
             variant="neutral"
             disabled={!ordering}
             onClick={() => view.setOrdering(ordering?.field)}
-            aria-label={ordering?.desc ? "Sort ascending" : "Sort descending"}
+            aria-label={ordering?.desc ? "升序排序" : "降序排序"}
           >
             {ordering?.desc ? <IconSortUp /> : <IconSortDown />}
           </Button>

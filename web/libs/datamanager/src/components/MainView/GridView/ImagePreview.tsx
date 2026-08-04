@@ -217,7 +217,7 @@ const ImagePreview = observer(({ task, field }: ImagePreviewProps) => {
         <img
           ref={imageRef}
           src={src}
-          alt="Task Preview"
+          alt="任务预览"
           loading="lazy"
           style={imageStyle}
           className={styles.image}

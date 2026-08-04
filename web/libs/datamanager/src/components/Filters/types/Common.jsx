@@ -3,7 +3,7 @@ import { FilterDropdown } from "../FilterDropdown";
 export const Common = [
   {
     key: "empty",
-    label: "is empty",
+    label: "为空",
     input: (props) => (
       <FilterDropdown
         value={props.value ?? false}

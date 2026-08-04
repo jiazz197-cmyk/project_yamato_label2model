@@ -85,7 +85,7 @@ export const DateRangePickerTrigger = ({
     </div>
   ) : (
     <Typography variant="body" size="small" className="text-neutral-content-subtler">
-      Any time
+      任意时间
     </Typography>
   );
 

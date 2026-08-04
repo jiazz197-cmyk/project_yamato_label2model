@@ -92,7 +92,7 @@ export const RowContextMenu: FC<RowContextMenuProps> = ({
   // 2. Copy cell content
   const handleCopyCellContent = useCallback(async () => {
     if (!cellValue) {
-      showToast("No content to copy", "error");
+      showToast("没有可复制的内容", "error");
       onClose();
       return;
     }
@@ -122,7 +122,7 @@ export const RowContextMenu: FC<RowContextMenuProps> = ({
               textToCopy = `[${results.join(", ")}]`;
             }
           } catch (error) {
-            console.warn("[RowContextMenu] Failed to fetch full task data:", error);
+            console.warn("【RowContextMenu】获取完整任务数据失败：", error);
           }
         }
       }
@@ -133,7 +133,7 @@ export const RowContextMenu: FC<RowContextMenuProps> = ({
       const columnName = column?.title || column?.alias || "content";
       showToast(`Copied "${columnName}" for Task ${taskId} to clipboard`, "info");
     } catch {
-      showToast("Failed to copy to clipboard", "error");
+      showToast("复制到剪贴板失败", "error");
     }
     onClose();
   }, [cellValue, column, row, onClose, showToast, view]);
@@ -143,7 +143,7 @@ export const RowContextMenu: FC<RowContextMenuProps> = ({
     const taskId = row.id ?? row.task_id;
 
     if (!taskId) {
-      showToast("Task ID not found", "error");
+      showToast("未找到任务 ID", "error");
       onClose();
       return;
     }
@@ -152,7 +152,7 @@ export const RowContextMenu: FC<RowContextMenuProps> = ({
       await navigator.clipboard.writeText(String(taskId));
       showToast(`Copied Task ID ${taskId} to clipboard`, "info");
     } catch {
-      showToast("Failed to copy to clipboard", "error");
+      showToast("复制到剪贴板失败", "error");
     }
     onClose();
   }, [row, onClose, showToast]);
@@ -247,30 +247,30 @@ export const RowContextMenu: FC<RowContextMenuProps> = ({
             data-testid="menu-item-compare-annotations"
             icon={<IconViewAll />}
           >
-            Compare All Annotations
+            比较所有标注
           </Menu.Item>
 
           <Menu.Divider />
 
           {canCopyCellContent && (
             <Menu.Item onClick={handleCopyCellContent} data-testid="menu-item-copy-cell" icon={<IconCopyOutline />}>
-              Copy Cell Contents
+              复制单元格内容
             </Menu.Item>
           )}
 
           <Menu.Item onClick={handleCopyTaskId} data-testid="menu-item-copy-task-id" icon={<IconCopyOutline />}>
-            Copy Task ID
+            复制任务 ID
           </Menu.Item>
 
           <Menu.Item onClick={handleViewTaskSource} data-testid="menu-item-view-source" icon={<IconBraces />}>
-            View Task Source
+            查看任务来源
           </Menu.Item>
 
           {onViewAnalytics && hasAnnotators && (
             <>
               <Menu.Divider />
               <Menu.Item onClick={handleViewAnalytics} data-testid="menu-item-view-analytics" icon={<IconUserStats />}>
-                View {annotatorLabel} Performance
+                View {annotatorLabel} 性能
               </Menu.Item>
             </>
           )}

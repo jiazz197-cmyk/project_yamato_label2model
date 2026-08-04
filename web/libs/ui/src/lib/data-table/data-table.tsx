@@ -142,7 +142,7 @@ export const DataTable = <T extends DataShape>(props: DataTableProps<T>) => {
 
       return columnSizing;
     } catch (error) {
-      console.warn("Failed to restore column sizes from localStorage:", error);
+      console.warn("从 localStorage 恢复列宽失败：", error);
       return {};
     }
   }, [props.cellSizesStorageKey]);
@@ -264,7 +264,7 @@ export const DataTable = <T extends DataShape>(props: DataTableProps<T>) => {
                 // Update selection state in one go
                 table.setRowSelection(newSelection);
               }}
-              ariaLabel={isAllSelected ? "Unselect all rows" : "Select all rows"}
+              ariaLabel={isAllSelected ? "取消全选行" : "全选行"}
               data-testid="data-table-select-all"
             />
           </label>
@@ -289,7 +289,7 @@ export const DataTable = <T extends DataShape>(props: DataTableProps<T>) => {
                 e.stopPropagation();
                 row.toggleSelected(e.target.checked);
               }}
-              ariaLabel={row.getIsSelected() ? "Unselect row" : "Select row"}
+              ariaLabel={row.getIsSelected() ? "取消选择行" : "选择行"}
               data-testid={`data-table-row-${row.id}-select`}
             />
           </label>
@@ -413,9 +413,9 @@ export const DataTable = <T extends DataShape>(props: DataTableProps<T>) => {
             size="small"
             variant="warning"
             icon={props.emptyState?.icon ?? <IconSearch />}
-            title={props.emptyState?.title ?? "No items found"}
+            title={props.emptyState?.title ?? "未找到条目"}
             description={
-              props.emptyState?.description ?? "Try adjusting your search or clearing the filters to see more results."
+              props.emptyState?.description ?? "尝试调整搜索或清除筛选条件以查看更多结果。"
             }
             actions={props.emptyState?.actions}
           />

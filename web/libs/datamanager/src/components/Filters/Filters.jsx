@@ -32,7 +32,7 @@ export const Filters = injector(({ store, views, currentView, filters, projectId
       setCopyFeedback(true);
       setTimeout(() => setCopyFeedback(false), 1500);
     } catch (e) {
-      console.warn("Failed to copy filters:", e);
+      console.warn("复制筛选失败：", e);
     }
   }, [currentView]);
 
@@ -56,7 +56,7 @@ export const Filters = injector(({ store, views, currentView, filters, projectId
     try {
       snapshot = JSON.parse(text);
     } catch {
-      showToast("Clipboard does not contain valid JSON.");
+      showToast("剪贴板中不包含有效的 JSON。");
       return;
     }
 
@@ -69,7 +69,7 @@ export const Filters = injector(({ store, views, currentView, filters, projectId
 
     const result = currentView.importFilters(snapshot);
     if (result === false) {
-      showToast("No matching filter columns found in this project. Filters may be from a different project.");
+      showToast("此项目中未找到匹配的筛选列，筛选条件可能来自其他项目。");
       return;
     }
 
@@ -105,7 +105,7 @@ export const Filters = injector(({ store, views, currentView, filters, projectId
             />
           ))
         ) : (
-          <div className={cn("filters").elem("empty").toClassName()}>No filters applied</div>
+          <div className={cn("filters").elem("empty").toClassName()}>未应用筛选</div>
         )}
       </div>
       <div className={cn("filters").elem("actions").toClassName()}>
@@ -115,7 +115,7 @@ export const Filters = injector(({ store, views, currentView, filters, projectId
           onClick={() => currentView.createFilter()}
           leading={<IconPlus className="!h-3 !w-3" />}
         >
-          Add {filters.length ? "Another Filter" : "Filter"}
+          Add {filters.length ? "另一个筛选" : "Filter"}
         </Button>
 
         <div className={cn("filters").elem("actions-right").toClassName()}>
@@ -123,9 +123,9 @@ export const Filters = injector(({ store, views, currentView, filters, projectId
             <Button
               size="small"
               look="string"
-              tooltip={copyFeedback ? "Copied!" : "Copy filters to clipboard; Tip: Use it in Label Studio SDK"}
+              tooltip={copyFeedback ? "已复制！" : "将筛选复制到剪贴板；提示：可在 Label Studio SDK 中使用"}
               onClick={handleCopyFilters}
-              aria-label="Copy filters"
+              aria-label="复制筛选"
             >
               <IconCopyOutline className="!w-4 !h-4" />
             </Button>
@@ -134,9 +134,9 @@ export const Filters = injector(({ store, views, currentView, filters, projectId
           <Button
             size="small"
             look="string"
-            tooltip={pasteFeedback ? "Pasted!" : "Paste filters from clipboard"}
+            tooltip={pasteFeedback ? "已粘贴！" : "从剪贴板粘贴筛选"}
             onClick={handlePasteFilters}
-            aria-label="Paste filters"
+            aria-label="粘贴筛选"
           >
             <IconClipboardCheck className="!w-4 !h-4" />
           </Button>
@@ -145,9 +145,9 @@ export const Filters = injector(({ store, views, currentView, filters, projectId
             <Button
               size="small"
               look="string"
-              tooltip="Undo paste — restore previous filters"
+              tooltip="撤销粘贴——恢复之前的筛选"
               onClick={handleUndoPaste}
-              aria-label="Undo paste"
+              aria-label="撤销粘贴"
             >
               <IconUndo className="!w-4 !h-4" />
             </Button>
@@ -158,9 +158,9 @@ export const Filters = injector(({ store, views, currentView, filters, projectId
               look="string"
               type="link"
               size="small"
-              tooltip="Pin to sidebar"
+              tooltip="固定到侧边栏"
               onClick={() => views.expandFilters()}
-              aria-label="Pin filters to sidebar"
+              aria-label="将筛选固定到侧边栏"
             >
               <IconChevronRight className="!w-4 !h-4" />
             </Button>

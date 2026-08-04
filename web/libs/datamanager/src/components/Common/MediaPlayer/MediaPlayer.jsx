@@ -151,7 +151,7 @@ export const MediaPlayer = ({ src, video = false }) => {
     <div className={cn("player").mod({ video }).toClassName()} onClick={(e) => e.stopPropagation()}>
       {video && <MediaSource type="video" onClick={togglePlay} {...mediaProps} />}
       {showError ? (
-        <div className={cn("player").elem("loading").toClassName()}>Unable to play</div>
+        <div className={cn("player").elem("loading").toClassName()}>无法播放</div>
       ) : state.loaded ? (
         <div className={cn("player").elem("playback").toClassName()}>
           <Space className={cn("player").elem("controls").toClassName()} spread>
@@ -200,7 +200,7 @@ export const MediaPlayer = ({ src, video = false }) => {
           <div className={cn("player").elem("play").toClassName()}>
             <IconTimelinePlay />
           </div>
-          <div className={cn("player").elem("track").toClassName()}>Click to load</div>
+          <div className={cn("player").elem("track").toClassName()}>点击加载</div>
         </Space>
         <Space className={cn("player").elem("time").toClassName()} size="small" />
       </Space>

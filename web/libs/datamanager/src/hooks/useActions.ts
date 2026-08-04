@@ -62,13 +62,13 @@ export const useActions = (options: UseActionsOptions = {}) => {
       const store = window?.DM?.store || window?.DM;
 
       if (!store) {
-        throw new Error("DataManager store not available");
+        throw new Error("数据管理器存储不可用");
       }
 
       const response = await store.apiCall?.("actions");
 
       if (!response) {
-        throw new Error("No actions found in response or response is invalid");
+        throw new Error("响应中未找到操作或响应无效");
       }
 
       return response as Action[];

@@ -294,9 +294,9 @@ export const getNumberOfDaysBetweenDates = (dates: Selected) => {
 
 export const getNumberOfDaysBetweenDatesToDisplay = (dates: Selected) => {
   const numberOfDays = getNumberOfDaysBetweenDates(dates);
-  const display = { value: numberOfDays, text: "days selected" };
+  const display = { value: numberOfDays, text: "天已选择" };
 
-  if (numberOfDays === 1) display.text = "day selected";
+  if (numberOfDays === 1) display.text = "天已选择";
 
   return display;
 };

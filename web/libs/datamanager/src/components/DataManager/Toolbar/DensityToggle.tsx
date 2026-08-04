@@ -56,20 +56,20 @@ export const DensityToggle = densityInjector(
         style={{ "--button-padding": "0 var(--spacing-tighter)" } as React.CSSProperties}
         data-testid="density-toggle"
       >
-        <Tooltip title="Comfortable density">
+        <Tooltip title="舒适密度">
           <div>
             <RadioGroup.Button
               value={DENSITY_COMFORTABLE}
-              aria-label="Comfortable density"
+              aria-label="舒适密度"
               data-testid="density-comfortable"
             >
               <IconRows3 />
             </RadioGroup.Button>
           </div>
         </Tooltip>
-        <Tooltip title="Compact density">
+        <Tooltip title="紧凑密度">
           <div>
-            <RadioGroup.Button value={DENSITY_COMPACT} aria-label="Compact density" data-testid="density-compact">
+            <RadioGroup.Button value={DENSITY_COMPACT} aria-label="紧凑密度" data-testid="density-compact">
               <IconRows4 />
             </RadioGroup.Button>
           </div>

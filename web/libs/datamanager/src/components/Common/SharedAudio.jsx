@@ -78,7 +78,7 @@ export class SharedAudio extends Component {
         </Button>
 
         {this.state.error ? (
-          <div>Unable to play</div>
+          <div>无法播放</div>
         ) : this.audio ? (
           <div style={{ display: "flex", flex: 1, alignItems: "center" }}>
             <PlaybackControl

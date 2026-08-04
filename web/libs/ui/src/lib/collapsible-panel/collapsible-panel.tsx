@@ -99,7 +99,7 @@ export const CollapsiblePanel = ({
             disableToggle && "opacity-40 cursor-not-allowed pointer-events-none",
           )}
           disabled={disableToggle}
-          aria-label={isExpanded ? "Collapse panel" : "Expand panel"}
+          aria-label={isExpanded ? "收起面板" : "展开面板"}
           aria-expanded={isExpanded}
           data-testid="collapsible-panel-toggle"
         >

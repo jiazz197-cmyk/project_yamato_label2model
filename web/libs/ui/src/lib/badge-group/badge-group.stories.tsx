@@ -190,7 +190,7 @@ export const InTableCell: Story = {
     const columns = [
       {
         id: "name",
-        header: "Name",
+        header: "姓名",
         accessorKey: "name",
         cell: ({ row }: any) => <Typography variant="body">{row.original.name}</Typography>,
       },

@@ -70,7 +70,7 @@ export const Toast: FC<ToastProps> = ({
         {action}
         {closeable && (
           <ToastPrimitive.Close asChild>
-            <div className={clsx(styles.toast__close)} aria-label="Close">
+            <div className={clsx(styles.toast__close)} aria-label="关闭">
               <span aria-hidden>
                 <IconCross />
               </span>
@@ -112,7 +112,7 @@ export const useToast = () => {
   // Avoid throwing error in test environment
   // Otherwise every test that uses useToast will throw an error and be forced to wrap the component in a ToastProvider even if it's not needed
   if (!context && process.env.NODE_ENV !== "test") {
-    throw new Error("useToast must be used within a ToastProvider");
+    throw new Error("useToast 必须在 ToastProvider 内使用");
   }
   return context;
 };

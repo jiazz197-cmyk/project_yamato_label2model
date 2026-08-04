@@ -72,7 +72,7 @@ Agreement.HeaderCell = ({ agreementFilters, onSave, children }) => {
       look="outlined"
       variant="neutral"
       size="small"
-      tooltip="Adjust calculation and display of all agreement columns"
+      tooltip="调整所有一致性列的计算与显示"
       onClick={() => sdk.invoke("AgreementHeaderClick", { agreementFilters, onSave })}
       className="flex items-center justify-between gap-tight w-full cursor-pointer overflow-hidden"
     >

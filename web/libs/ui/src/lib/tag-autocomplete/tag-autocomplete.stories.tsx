@@ -115,7 +115,7 @@ export const Default: Story = {
               • <kbd className="px-tight bg-neutral-surface-bold rounded">Backspace</kbd> Remove tag or focus last tag
             </li>
             <li>
-              • <kbd className="px-tight bg-neutral-surface-bold rounded">Delete</kbd> Remove focused tag
+              • <kbd className="px-tight bg-neutral-surface-bold rounded">删除</kbd> Remove focused tag
             </li>
             <li>
               • <kbd className="px-tight bg-neutral-surface-bold rounded">Esc</kbd> Close dropdown
@@ -470,7 +470,7 @@ export const InFormContext: Story = {
               />
             </div>
             <Button type="submit" variant="primary" disabled={skills.length === 0}>
-              Add
+              添加
             </Button>
           </form>
         </div>

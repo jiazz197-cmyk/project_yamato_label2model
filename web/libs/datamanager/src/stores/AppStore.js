@@ -154,7 +154,7 @@ export const AppStore = types
     },
 
     setActions(actions) {
-      if (!Array.isArray(actions)) throw new Error("Actions must be an array");
+      if (!Array.isArray(actions)) throw new Error("操作必须是数组");
       self.availableActions = actions;
     },
 
@@ -277,7 +277,7 @@ export const AppStore = types
             // Don't set the tab - let it use whatever was last selected
           }
         } else {
-          console.error("LSF not initialized properly");
+          console.error("LSF 未正确初始化");
         }
 
         self.setLoadingData(false);
@@ -333,12 +333,12 @@ export const AppStore = types
 
       if (isFF(FF_DEV_2887) && self.LSF?.lsf?.annotationStore?.selected?.commentStore?.hasUnsaved) {
         Modal.confirm({
-          title: "You have unsaved changes",
-          body: "There are comments which are not persisted. Please submit the annotation. Continuing will discard these comments.",
+          title: "你有未保存的更改",
+          body: "存在尚未保存的评论。请先提交标注，继续将丢弃这些评论。",
           onOk() {
             nextAction();
           },
-          okText: "Discard and continue",
+          okText: "放弃并继续",
         });
         return;
       }
@@ -379,12 +379,12 @@ export const AppStore = types
 
       if (isFF(FF_DEV_2887) && self.LSF?.lsf?.annotationStore?.selected?.commentStore?.hasUnsaved) {
         Modal.confirm({
-          title: "You have unsaved changes",
-          body: "There are comments which are not persisted. Please submit the annotation. Continuing will discard these comments.",
+          title: "你有未保存的更改",
+          body: "存在尚未保存的评论。请先提交标注，继续将丢弃这些评论。",
           onOk() {
             nextAction();
           },
-          okText: "Discard and continue",
+          okText: "放弃并继续",
         });
         return;
       }
@@ -395,12 +395,12 @@ export const AppStore = types
     confirmLabelingConfigured() {
       if (!self.labelingIsConfigured) {
         Modal.confirm({
-          title: "You're almost there!",
-          body: "Before you can annotate the data, set up labeling configuration",
+          title: "马上就完成了！",
+          body: "在标注数据之前，请先配置标注界面",
           onOk() {
             self.SDK.invoke("settingsClicked");
           },
-          okText: "Go to setup",
+          okText: "前往配置",
         });
         return false;
       }
@@ -549,7 +549,7 @@ export const AppStore = types
 
         self.SDK.updateActions(actions);
       } catch (error) {
-        console.error("Error fetching actions:", error);
+        console.error("获取操作失败：", error);
       }
     }),
 
@@ -677,7 +677,7 @@ export const AppStore = types
         if (result.response) {
           try {
             self.serverError.set(methodName, {
-              error: "Something went wrong",
+              error: "出问题了",
               response: result.response,
             });
           } catch {
@@ -686,7 +686,7 @@ export const AppStore = types
         }
 
         console.warn({
-          message: "Error occurred when loading data",
+          message: "加载数据时出错",
           description: result?.response?.detail ?? result.error,
         });
 
@@ -775,7 +775,7 @@ export const AppStore = types
       });
 
       if (result.async) {
-        self.SDK.invoke("toast", { message: "Your action is being processed in the background.", type: "info" });
+        self.SDK.invoke("toast", { message: "你的操作正在后台处理中。", type: "info" });
       }
 
       if (result.reload) {

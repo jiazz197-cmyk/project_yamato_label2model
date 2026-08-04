@@ -372,7 +372,7 @@ export function useTagAutocomplete<T = string>(
           }
           break;
 
-        case "Delete":
+        case "删除":
           if (focusedTagIndex !== null) {
             const indexToRemove = focusedTagIndex;
             removeTag(indexToRemove);

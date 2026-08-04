@@ -101,11 +101,11 @@ export const LabelButton = injector(({ store, canLabel, size, target, selectedCo
             alignment="bottom-right"
             content={
               <Menu size="compact">
-                <Menu.Item onClick={onLabelVisible}>Label Tasks As Displayed</Menu.Item>
+                <Menu.Item onClick={onLabelVisible}>按显示标注任务</Menu.Item>
               </Menu>
             }
           >
-            <Button size={size} look="outlined" variant="primary" aria-label={"Toggle open"}>
+            <Button size={size} look="outlined" variant="primary" aria-label={"切换展开"}>
               <IconChevronDown />
             </Button>
           </Dropdown.Trigger>

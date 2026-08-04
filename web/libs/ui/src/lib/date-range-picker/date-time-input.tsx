@@ -244,12 +244,12 @@ export const DateTimeInput = ({
         />
         {invalidDateOutOfFocus && !bothInvalid && (
           <Typography variant="body" size="smaller" className={styles.errorText}>
-            Select or enter a valid {side} date.
+            Select or enter a valid {side} 日期。
           </Typography>
         )}
         {bothInvalid && (
           <Typography variant="body" size="smaller" className={styles.errorText}>
-            Select or enter a valid {side} date and time.
+            Select or enter a valid {side} 日期和时间。
           </Typography>
         )}
       </div>
@@ -266,7 +266,7 @@ export const DateTimeInput = ({
             />
             {invalidTimeOutOfFocus && !bothInvalid && (
               <Typography variant="body" size="smaller" className={styles.errorText}>
-                Enter a valid time.
+                请输入有效时间。
               </Typography>
             )}
           </div>

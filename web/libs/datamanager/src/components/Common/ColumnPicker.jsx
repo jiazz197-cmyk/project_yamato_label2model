@@ -284,7 +284,7 @@ export const ColumnPickerOptionContent = ({ option }) => {
       <div className="flex items-center gap-tight flex-shrink-0 pointer-events-none">
         {enterpriseBadge && (
           <Badge variant="gradient" style="ghost" icon={<IconSpark />}>
-            Enterprise
+            企业版
           </Badge>
         )}
         {badge}
@@ -365,7 +365,7 @@ export function ColumnPicker({
       onChange={handleChange}
       multiple={multiple}
       searchable
-      searchPlaceholder="Search columns"
+      searchPlaceholder="搜索列"
       searchFilter={searchFilterByLabel}
       groupBy="group"
       optionRenderer={ColumnPickerOptionContent}

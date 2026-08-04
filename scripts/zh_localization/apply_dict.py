@@ -9,6 +9,10 @@ import warnings
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from main_app_dict import DICT, TEXT_DICT  # noqa: E402
+from more_dict import DICT as MORE_DICT, TEXT as MORE_TEXT  # noqa: E402
+
+DICT = {**DICT, **MORE_DICT}
+TEXT_DICT = {**TEXT_DICT, **MORE_TEXT}
 
 JSX_RE = re.compile(r"(?:>|\})\s*([^<>{}\n]+?)\s*(?=<)")
 
@@ -301,6 +305,9 @@ def main():
             x for x in p.rglob("*")
             if x.suffix in (".jsx", ".tsx", ".js", ".ts")
             and "test" not in x.name.lower()
+            and ".spec." not in x.name.lower()
+            and ".stories." not in x.name.lower()
+            and "storybook" not in x.parts
             and not x.name.endswith(".d.ts")
             and "__tests__" not in x.parts
         )

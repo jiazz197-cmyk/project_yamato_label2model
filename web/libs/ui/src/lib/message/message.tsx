@@ -256,7 +256,7 @@ export const Message = forwardRef<HTMLDivElement, MessageProps>(
             className={cn("message__close", styles.close)}
             onClick={onClose}
             tooltip="Dismiss"
-            aria-label="Dismiss message"
+            aria-label="关闭消息"
             data-testid="message-dismiss-button"
             leading={<IconClose />}
           />

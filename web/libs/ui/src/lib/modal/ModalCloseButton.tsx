@@ -9,7 +9,7 @@ export const ModalCloseButton = () => {
       look="string"
       className="!p-0 [&_svg]:!w-6 [&_svg]:!h-6"
       leading={<IconClose />}
-      aria-label="Close modal"
+      aria-label="关闭弹窗"
       onClick={() => modal?.hide()}
     />
   );

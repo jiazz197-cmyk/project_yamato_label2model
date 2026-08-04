@@ -70,7 +70,7 @@ export const rangeSetters = (creationDate?: Date, includeTime = true): { [key: s
     },
     lastSeven: {
       id: "last_7_days",
-      name: "Last 7 days",
+      name: "最近 7 天",
       newRange: () => {
         const today = new Date();
         const todayValue = convertDateToNumbers(today);
@@ -94,7 +94,7 @@ export const rangeSetters = (creationDate?: Date, includeTime = true): { [key: s
     },
     lastThirty: {
       id: "last_30_days",
-      name: "Last 30 days",
+      name: "最近 30 天",
       newRange: () => {
         const today = new Date();
         const todayValue = convertDateToNumbers(today);
@@ -118,7 +118,7 @@ export const rangeSetters = (creationDate?: Date, includeTime = true): { [key: s
     },
     thisWeek: {
       id: "this_week",
-      name: "This week",
+      name: "本周",
       newRange: () => {
         const today = new Date();
         const day = today.getDay();
@@ -142,7 +142,7 @@ export const rangeSetters = (creationDate?: Date, includeTime = true): { [key: s
     },
     thisMonth: {
       id: "this_month",
-      name: "This month",
+      name: "本月",
       newRange: () => {
         const today = new Date();
         const firstOfTheMonth = convertDateToNumbers(
@@ -166,7 +166,7 @@ export const rangeSetters = (creationDate?: Date, includeTime = true): { [key: s
     },
     thisYear: {
       id: "this_year",
-      name: "This year",
+      name: "今年",
       newRange: () => {
         const today = new Date();
         const firstOfTheYear = convertDateToNumbers(
@@ -193,7 +193,7 @@ export const rangeSetters = (creationDate?: Date, includeTime = true): { [key: s
   if (creationDate)
     rangeList.allTime = {
       id: "all_time",
-      name: "All Time",
+      name: "全部时间",
       newRange: () => {
         const today = new Date();
         const todayByNumbers = convertDateToNumbers(today);

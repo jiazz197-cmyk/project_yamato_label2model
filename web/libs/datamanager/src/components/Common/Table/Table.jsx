@@ -204,7 +204,7 @@ export const Table = observer(
               });
             }}
             leading={<Icon icon={IconBraces} />}
-            tooltip="View Task Source"
+            tooltip="查看任务来源"
           />
         );
       },
@@ -288,7 +288,7 @@ export const Table = observer(
             multiSelect={true}
             title={"Columns"}
             size="small"
-            tooltip={"Customize Columns"}
+            tooltip={"自定义列"}
             data-testid="columns-picker-quickview"
           />
           <DensityToggle size="small" onChange={onDensityChange} data-testid="density-toggle-quickview" />

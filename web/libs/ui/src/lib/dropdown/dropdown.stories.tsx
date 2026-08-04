@@ -403,7 +403,7 @@ export const UserProfileMenu: Story = {
               className="flex items-center gap-tight w-full text-left px-base py-1 text-body-small text-neutral-content-subtle hover:bg-primary-emphasis-subtle hover:cursor-pointer rounded-base transition-all duration-150 ease-out outline-none focus-visible:bg-primary-emphasis-subtle"
             >
               <IconSettings className="w-4 h-4" />
-              Settings
+              设置
             </button>
             <button
               type="button"

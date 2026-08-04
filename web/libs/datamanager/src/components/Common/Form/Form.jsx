@@ -19,7 +19,7 @@ import { SDKContext } from "../../../providers/SDKProvider";
 import { isDefined } from "../../../utils/utils";
 import { MultiProvider } from "../../../providers/MultiProvider";
 
-const PASSWORD_PROTECTED_VALUE = "got ya, suspicious hacker!";
+const PASSWORD_PROTECTED_VALUE = "抓到你了，可疑的黑客！";
 
 export default class Form extends Component {
   state = {
@@ -538,7 +538,7 @@ Form.Builder = forwardRef(
         {props.autosubmit !== true && withActions === true && (
           <Form.Actions>
             <Button type="submit" style={{ width: 120 }}>
-              Save
+              保存
             </Button>
           </Form.Actions>
         )}
@@ -579,7 +579,7 @@ Form.ResponseParser = ({ children }) => {
   const callback = children;
 
   if (callback instanceof Function === false) {
-    throw new Error("Response Parser only accepts function as a child");
+    throw new Error("Response Parser 只接受函数作为子元素");
   }
 
   const response = useContext(FormResponseContext);

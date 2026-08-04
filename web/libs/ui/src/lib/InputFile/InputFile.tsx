@@ -29,7 +29,7 @@ export const InputFile = forwardRef(({ name, className, text, onChange, ...props
   return (
     <label className={clsx(styles.inputWrapper, className)} onKeyDown={wrapperKeyDownHandler}>
       <span className={styles.labelContent}>
-        <IconUpload className={styles.icon} /> {text ?? <>Upload Image</>}
+        <IconUpload className={styles.icon} /> {text ?? <>上传图像</>}
       </span>
       <input
         ref={ref}

@@ -266,10 +266,10 @@ export const WithButtonGroup: Story = {
           </Typography>
           <ButtonGroup collapsed={false}>
             <Button {...props} size="small" variant="primary" look="outlined">
-              Save
+              保存
             </Button>
             <Button {...props} size="small" variant="neutral" look="outlined">
-              Cancel
+              取消
             </Button>
           </ButtonGroup>
         </div>
@@ -302,10 +302,10 @@ export const WithButtonGroup: Story = {
 
             <ButtonGroup>
               <Button {...props} size="small" variant="neutral" look="outlined" leading={<IconAnnotationGroundTruth />}>
-                Edit
+                编辑
               </Button>
               <Button {...props} size="small" variant="neutral" look="outlined" leading={<IconCrossAlt />}>
-                Delete
+                删除
               </Button>
             </ButtonGroup>
           </div>

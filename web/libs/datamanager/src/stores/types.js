@@ -17,7 +17,7 @@ export const CustomJSON = types.custom({
     return typeof value === "object" || typeof value === "string";
   },
   getValidationMessage() {
-    return "Error parsing JSON";
+    return "解析 JSON 出错";
   },
 });
 
@@ -37,7 +37,7 @@ export const CustomCalback = types.custom({
     return typeof value === "function";
   },
   getValidationMessage() {
-    return "is not a function";
+    return "不是函数";
   },
 });
 
@@ -53,7 +53,7 @@ export const HtmlOrReact = types.custom({
     return isValidElement(value);
   },
   getValidationMessage() {
-    return "is not a valid element";
+    return "不是有效元素";
   },
 });
 

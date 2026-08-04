@@ -308,12 +308,12 @@ export const DateRangePicker = ({
           <div className={styles.timeToggle}>
             <Toggle data-testid="time-toggle" checked={timeMode} onChange={() => setTimeMode(!timeMode)} />
             <Typography variant="body" size="medium">
-              Include time
+              包含时间
             </Typography>
           </div>
           {onClear && (
             <Button
-              aria-label="Clear date selection"
+              aria-label="清除日期选择"
               variant="negative"
               look="outlined"
               className="clear"
@@ -323,11 +323,11 @@ export const DateRangePicker = ({
                 dropdown?.close();
               }}
             >
-              Clear
+              清除
             </Button>
           )}
           <Button
-            aria-label="Reset date"
+            aria-label="重置日期"
             variant="negative"
             look="outlined"
             className="reset"
@@ -341,18 +341,18 @@ export const DateRangePicker = ({
               }
             }}
           >
-            Reset
+            重置
           </Button>
-          <Button aria-label="Close date picker" look="outlined" className="cancel" onClick={() => dropdown?.close()}>
-            Cancel
+          <Button aria-label="关闭日期选择器" look="outlined" className="cancel" onClick={() => dropdown?.close()}>
+            取消
           </Button>
           <Button
-            aria-label="Apply date"
+            aria-label="应用日期"
             className="apply"
             disabled={!((dateChanged || timeModeChanged) && validDates)}
             onClick={handleApply}
           >
-            Apply Range
+            应用范围
           </Button>
         </Space>
       </div>

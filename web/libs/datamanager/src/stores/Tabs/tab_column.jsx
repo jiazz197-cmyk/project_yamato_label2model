@@ -21,10 +21,10 @@ export const ViewColumnType = types.enumeration([
   "Datetime",
   "List",
   "Image",
-  "Audio",
+  "音频",
   "AudioPlus",
-  "Video",
-  "Text",
+  "视频",
+  "文本",
   "HyperText",
   "TimeSeries",
   "Time",
@@ -54,14 +54,14 @@ const typeNameMap = {
   String: "String",
   Number: "Number",
   Boolean: "Boolean",
-  Datetime: "Date Time",
+  Datetime: "日期时间",
   Image: "Image",
-  Audio: "Audio",
-  AudioPlus: "Audio",
-  Video: "Video",
-  Text: "Text",
-  HyperText: "Hyper Text",
-  TimeSeries: "Time Series",
+  Audio: "音频",
+  AudioPlus: "音频",
+  Video: "视频",
+  Text: "文本",
+  HyperText: "超文本",
+  TimeSeries: "时间序列",
   Time: "Time",
 };
 
@@ -119,7 +119,7 @@ export const TabColumn = types
 
           return value ?? null;
         } catch {
-          console.log("Error generating accessor", {
+          console.log("生成访问器出错", {
             id: self.alias,
             parent: self.parent?.alias,
             data,

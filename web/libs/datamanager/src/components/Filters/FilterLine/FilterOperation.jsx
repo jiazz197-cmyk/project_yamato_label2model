@@ -67,11 +67,11 @@ export const FilterOperation = observer(({ filter, field, operator, value, disab
   const operators = operatorList.map(({ key, label }) => {
     if (filter.filter.field.isAnnotationResultsFilterColumn) {
       if (filter.schema?.multiple ?? false) {
-        if (key === "contains") label = "includes all";
-        if (key === "not_contains") label = "does not include all";
+        if (key === "contains") label = "包含全部";
+        if (key === "not_contains") label = "不包含全部";
       } else {
         if (key === "contains") label = "is";
-        if (key === "not_contains") label = "is not";
+        if (key === "not_contains") label = "不是";
       }
     }
     return { value: key, label };

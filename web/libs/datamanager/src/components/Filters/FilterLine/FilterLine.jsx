@@ -208,7 +208,7 @@ export const FilterLine = observer(
           {/* Main filter row */}
           <div className={cn("filterLine").elem("column").mix("conjunction").toClassName()}>
             {index === 0 ? (
-              <span style={{ fontSize: 12, paddingRight: 5 }}>Where</span>
+              <span style={{ fontSize: 12, paddingRight: 5 }}>位置</span>
             ) : (
               <Conjunction index={index} view={view} />
             )}
@@ -260,7 +260,7 @@ export const FilterLine = observer(
             <>
               {/* Conjunction */}
               <div className={cn("filterLine").elem("column").mix("conjunction").toClassName()}>
-                <span style={{ fontSize: 12, paddingRight: 5 }}>and</span>
+                <span style={{ fontSize: 12, paddingRight: 5 }}>和</span>
               </div>
 
               {/* Field — disabled, just shows the linked column name */}
@@ -307,7 +307,7 @@ export const FilterLine = observer(
       <div className={cn("filterLine").mod({ hasChild: !!childFilter }).toClassName()}>
         <div className={cn("filterLine").elem("column").mix("conjunction").toClassName()}>
           {index === 0 ? (
-            <span style={{ fontSize: 12, paddingRight: 5 }}>Where</span>
+            <span style={{ fontSize: 12, paddingRight: 5 }}>位置</span>
           ) : (
             <Conjunction index={index} view={view} />
           )}
@@ -354,7 +354,7 @@ export const FilterLine = observer(
             <div className={cn("filterLine").elem("remove").toClassName()} />
 
             <div className={cn("filterLine").elem("column").mix("conjunction").toClassName()}>
-              <span style={{ fontSize: 12, paddingRight: 5 }}>and</span>
+              <span style={{ fontSize: 12, paddingRight: 5 }}>和</span>
             </div>
 
             <div className={cn("filterLine").elem("column").mix("field child-field").toClassName()}>

@@ -251,7 +251,7 @@ export class DataManager {
   addAction(action, callback) {
     const { id } = action;
 
-    if (!id) throw new Error("Action must provide a unique ID");
+    if (!id) throw new Error("操作必须提供唯一 ID");
 
     this.actions.set(id, { action, callback });
 
@@ -280,7 +280,7 @@ export class DataManager {
 
     actions.forEach(([action, callback]) => {
       if (!isDefined(action.id)) {
-        throw new Error("Every action must provide a unique ID");
+        throw new Error("每个操作都必须提供唯一 ID");
       }
       this.addAction(action, callback);
     });

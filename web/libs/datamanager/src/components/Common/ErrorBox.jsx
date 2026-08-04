@@ -22,7 +22,7 @@ export const ErrorBox = injector(({ errors }) => {
   return errors?.size > 0 ? (
     <Dropdown.Trigger content={<Menu>{Array.from(errors.values()).map(ErrorRenderer)}</Menu>}>
       <Button type="text" leading={<IconInfo />}>
-        Errors occurred
+        发生错误
       </Button>
     </Dropdown.Trigger>
   ) : null;

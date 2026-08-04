@@ -171,9 +171,9 @@ const invokeAction = (action, destructive, store, formRef) => {
         delete_annotations: "annotations",
         delete_predictions: "predictions",
         delete_reviews: "reviews",
-        delete_reviewers: "review assignments",
-        delete_annotators: "annotator assignments",
-        delete_ground_truths: "ground truths",
+        delete_reviewers: "审核分配",
+        delete_annotators: "标注员分配",
+        delete_ground_truths: "基准答案",
       };
 
       const objectType = objectMap[action.id] || action.title.toLowerCase().replace("delete ", "");
@@ -189,12 +189,12 @@ const invokeAction = (action, destructive, store, formRef) => {
 
     if (destructive && !form) {
       // Use standardized warning message for simple delete actions
-      const objectType = dialogTitle ? dialogTitle.replace("Delete selected ", "").replace("?", "") : "items";
+      const objectType = dialogTitle ? dialogTitle.replace("删除所选", "").replace("?", "") : "items";
       dialogText = `You are about to delete the selected ${objectType}.\n\nThis can't be undone.`;
     }
 
     dialog({
-      title: dialogTitle ? dialogTitle : destructive ? "Destructive action" : "Confirm action",
+      title: dialogTitle ? dialogTitle : destructive ? "危险操作" : "确认操作",
       body: <DialogContent text={dialogText} form={form} formRef={formRef} store={store} action={action} />,
       buttonLook: destructive ? "negative" : "primary",
       okText: destructive ? okButtonText : undefined,
@@ -241,7 +241,7 @@ export const ActionsButton = injector(
           <Menu size="compact">
             {isLoading || isFetching ? (
               <Menu.Item data-testid="loading-actions" disabled>
-                Loading actions...
+                正在加载操作…
               </Menu.Item>
             ) : (
               actionButtons
@@ -258,10 +258,10 @@ export const ActionsButton = injector(
           look="outlined"
           disabled={!hasSelected}
           trailing={<IconChevronDown />}
-          aria-label="Tasks Actions"
+          aria-label="任务操作"
           {...rest}
         >
-          {selectedCount > 0 ? `${selectedCount} ${recordTypeLabel}${selectedCount > 1 ? "s" : ""}` : "Actions"}
+          {selectedCount > 0 ? `${selectedCount} ${recordTypeLabel}${selectedCount > 1 ? "s" : ""}` : "操作"}
         </Button>
       </Dropdown.Trigger>
     );

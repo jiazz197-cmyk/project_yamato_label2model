@@ -56,7 +56,7 @@ export const TaskStateFilter = [
   },
   {
     key: "not_contains",
-    label: "not contains",
+    label: "不包含",
     valueType: "list",
     input: (props) => <BaseInput {...props} />,
   },

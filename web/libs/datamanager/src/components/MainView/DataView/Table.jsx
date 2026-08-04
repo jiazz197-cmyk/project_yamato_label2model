@@ -200,9 +200,9 @@ export const DataView = injector(
         if (store.SDK.type === "DE" && ["canceled", "failed"].includes(datasetStatusID)) {
           return (
             <div className={cn("syncInProgress").toClassName()}>
-              <h3 className={cn("syncInProgress").elem("title").toClassName()}>Failed to sync data</h3>
+              <h3 className={cn("syncInProgress").elem("title").toClassName()}>数据同步失败</h3>
               <div className={cn("syncInProgress").elem("text").toClassName()}>
-                Check your storage settings. You may need to recreate this dataset
+                请检查存储设置，你可能需要重新创建此数据集
               </div>
             </div>
           );
@@ -214,9 +214,9 @@ export const DataView = injector(
         ) {
           return (
             <div className={cn("syncInProgress").toClassName()}>
-              <h3 className={cn("syncInProgress").elem("title").toClassName()}>Nothing found</h3>
+              <h3 className={cn("syncInProgress").elem("title").toClassName()}>未找到内容</h3>
               <div className={cn("syncInProgress").elem("text").toClassName()}>
-                Try adjusting the filter or similarity search parameters
+                尝试调整筛选或相似度搜索参数
               </div>
             </div>
           );
@@ -228,7 +228,7 @@ export const DataView = injector(
                 Hang tight! Records are syncing in the background
               </h3>
               <div className={cn("syncInProgress").elem("text").toClassName()}>
-                Press the button below to see any synced records
+                点击下方按钮查看已同步的记录
               </div>
               <Button
                 size="small"
@@ -241,7 +241,7 @@ export const DataView = injector(
                   await store.currentView?.reload();
                 }}
               >
-                Refresh
+                刷新
               </Button>
             </div>
           );
@@ -351,7 +351,7 @@ export const DataView = injector(
           style: { width: 240 },
         },
         {
-          resolver: (col) => ["Audio", "AudioPlus"].includes(col.type),
+          resolver: (col) => ["音频", "AudioPlus"].includes(col.type),
           style: { width: 150 },
         },
       ],

@@ -13,7 +13,7 @@ export type EnterpriseBadgeProps = Omit<BadgeProps, "variant" | "icon"> & {
  */
 export const EnterpriseBadge = forwardRef<HTMLDivElement, EnterpriseBadgeProps>(
   ({ icon = <IconSpark />, children, ...props }, ref) => {
-    const label = children === undefined ? "Enterprise" : children;
+    const label = children === undefined ? "企业版" : children;
     return (
       <Badge ref={ref} variant="gradient" icon={icon} {...props}>
         {label}

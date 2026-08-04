@@ -59,7 +59,7 @@ export const GridWidthButton = injector(({ view, isGrid, gridWidth, fitImagesToW
                 look="outlined"
                 leading={<IconMinus />}
                 size="small"
-                aria-label="Decrease columns number"
+                aria-label="减少列数"
               />
               <Button
                 onClick={() => setGridWidth(width + 1)}
@@ -68,20 +68,20 @@ export const GridWidthButton = injector(({ view, isGrid, gridWidth, fitImagesToW
                 look="outlined"
                 leading={<IconPlus />}
                 size="small"
-                aria-label="Increase columns number"
+                aria-label="增加列数"
               />
             </ButtonGroup>
           </div>
           {hasImage && (
             <div className="grid grid-cols-[1fr_min-content] gap-base items-center">
-              <span>Fit images to width</span>
+              <span>图像适应宽度</span>
               <Toggle checked={fitImagesToWidth} onChange={handleFitImagesToWidthToggle} />
             </div>
           )}
         </div>
       }
     >
-      <Button size={size} variant="neutral" look="outlined" aria-label="Grid settings">
+      <Button size={size} variant="neutral" look="outlined" aria-label="网格设置">
         <IconSettings />
       </Button>
     </Dropdown.Trigger>

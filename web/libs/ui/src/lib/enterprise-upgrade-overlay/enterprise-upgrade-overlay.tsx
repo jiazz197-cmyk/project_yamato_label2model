@@ -84,11 +84,11 @@ export interface EnterpriseUpgradeOverlayProps {
 export const EnterpriseUpgradeOverlay = forwardRef<HTMLDivElement, EnterpriseUpgradeOverlayProps>(
   (
     {
-      title = "Get access to Enterprise Features",
-      description = "This feature is available within the Enterprise plan. Contact our sales team to get access to this and more!",
+      title = "获取企业版功能",
+      description = "此功能属于企业版套餐。请联系销售团队获取该功能及更多内容！",
       learnMoreUrl = "https://docs.humansignal.com",
-      primaryButtonLabel = "Contact Sales",
-      secondaryButtonLabel = "Learn more",
+      primaryButtonLabel = "联系销售",
+      secondaryButtonLabel = "了解更多",
       showLearnMore = true,
       onContactSales,
       onLearnMore,
@@ -120,7 +120,7 @@ export const EnterpriseUpgradeOverlay = forwardRef<HTMLDivElement, EnterpriseUpg
               variant="neutral"
               size="small"
               onClick={onClose}
-              aria-label="Close"
+              aria-label="关闭"
             >
               <IconClose />
             </Button>

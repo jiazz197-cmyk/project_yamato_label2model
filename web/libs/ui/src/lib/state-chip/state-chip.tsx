@@ -84,7 +84,7 @@ export function StateChip({
         setOpen(!isOpen);
       }}
       type="button"
-      title="Click to view history"
+      title="点击查看历史"
     >
       <Badge variant={variant} shape="rounded">
         {label}

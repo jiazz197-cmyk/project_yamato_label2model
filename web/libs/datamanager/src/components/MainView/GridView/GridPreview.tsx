@@ -89,7 +89,7 @@ const TaskModal = observer(({ view, tasks, imageField, currentTaskId, setCurrent
 
   const tooltip = (
     <div className={styles.tooltip}>
-      <p>Preview of the task image to quickly navigate through the tasks and select the ones you want to work on.</p>
+      <p>任务图像预览，可快速浏览任务并选择要处理的任务。</p>
       <p>Use [arrow keys] to navigate.</p>
       <p>[Escape] to close the modal.</p>
       <p>[Space] to select/unselect the task.</p>
@@ -176,7 +176,7 @@ export const GridViewProvider: React.FC<GridViewProviderProps> = ({ children, da
     if (!modalRef.current) {
       modalRef.current = modal({
         bare: true,
-        title: "Task Preview",
+        title: "任务预览",
         style: { width: 800 },
         children,
         onHidden: onClose,

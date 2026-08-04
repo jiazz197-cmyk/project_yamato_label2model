@@ -75,7 +75,7 @@ export class CommentsSdk {
       try {
         this.lsf.store.enrichUsers(commentUsers);
       } catch (error) {
-        console.warn("Failed to enrich comment users:", error.message);
+        console.warn("补充评论用户信息失败：", error.message);
         return [];
       }
     }

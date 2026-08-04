@@ -49,7 +49,7 @@ export const useDataManagerUsers = (
         const store = window?.DM?.store || window?.DM;
 
         if (!store) {
-          throw new Error("DataManager store not available");
+          throw new Error("数据管理器存储不可用");
         }
 
         const params: any = {
@@ -65,7 +65,7 @@ export const useDataManagerUsers = (
         const response = await store.apiCall?.("users", params);
 
         if (!response) {
-          throw new Error("No users found in response or response is invalid");
+          throw new Error("响应中未找到用户或响应无效");
         }
         if (search && selectedValue && response.count) {
           const users: any = queryClient.getQueryData([

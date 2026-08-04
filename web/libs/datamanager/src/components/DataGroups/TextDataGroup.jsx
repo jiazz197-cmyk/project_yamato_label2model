@@ -12,7 +12,7 @@ export const valueToString = (value) => {
     /* JSON.stringify will handle JSON and non-strings, non-null, non-undefined */
     return JSON.stringify(value);
   } catch {
-    return "Error: Invalid JSON";
+    return "错误：JSON 无效";
   }
 };
 

@@ -14,7 +14,7 @@ export const StringFilter = [
   },
   {
     key: "not_contains",
-    label: "not contains",
+    label: "不包含",
     valueType: "single",
     input: (props) => <BaseInput {...props} />,
   },
@@ -32,7 +32,7 @@ export const StringFilter = [
   },
   {
     key: "not_equal",
-    label: "not equal",
+    label: "不等于",
     valueType: "single",
     input: (props) => <BaseInput {...props} />,
   },
