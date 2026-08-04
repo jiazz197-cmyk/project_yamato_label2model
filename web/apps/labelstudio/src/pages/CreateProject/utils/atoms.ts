@@ -22,11 +22,11 @@ export const sampleDatasetAtom = atomWithQuery((get) => {
       );
 
       if (!response?.$meta?.ok) {
-        return JSON.stringify({ error: "Can't prepare sample data." }, null, "  ");
+        return JSON.stringify({ error: "无法准备示例数据。" }, null, "  ");
       }
 
       if (!response?.sample_task) {
-        return JSON.stringify({ error: "No sample task data available." }, null, "  ");
+        return JSON.stringify({ error: "没有可用的示例任务数据。" }, null, "  ");
       }
 
       return JSON.stringify(response.sample_task, null, "  ");

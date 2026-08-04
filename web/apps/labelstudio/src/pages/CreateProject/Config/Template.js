@@ -105,7 +105,7 @@ export class Template {
     labels.forEach((label) => {
       if (existing.includes(label)) return;
       existing.push(label);
-      const $label = this.$root.createElement(isChoices ? "Choice" : "Label");
+      const $label = this.$root.createElement(isChoices ? "Choice" : "标注");
       $label.setAttribute("value", label);
       if (!isChoices) $label.setAttribute("background", this.palette.next().value);
       control.appendChild($label);

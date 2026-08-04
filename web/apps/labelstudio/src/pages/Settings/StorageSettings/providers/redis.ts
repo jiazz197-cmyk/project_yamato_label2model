@@ -4,14 +4,14 @@ import { IconCloudProviderRedis } from "@humansignal/icons";
 
 export const redisProvider: ProviderConfig = {
   name: "redis",
-  title: "Redis Storage",
-  description: "Configure your Redis storage connection with all required Label Studio settings",
+  title: "Redis 存储",
+  description: "使用所有必需的 Label Studio 设置配置 Redis 存储连接",
   icon: IconCloudProviderRedis,
   fields: [
     {
       name: "db",
       type: "text",
-      label: "Database Number (db)",
+      label: "数据库编号（db）",
       placeholder: "1",
       schema: z.string().default("1"),
     },
@@ -20,7 +20,7 @@ export const redisProvider: ProviderConfig = {
       type: "password",
       label: "Password",
       autoComplete: "new-password",
-      placeholder: "Your redis password",
+      placeholder: "你的 Redis 密码",
       schema: z.string().optional().default(""),
     },
     {
@@ -29,7 +29,7 @@ export const redisProvider: ProviderConfig = {
       label: "Host",
       required: true,
       placeholder: "redis://example.com",
-      schema: z.string().min(1, "Host is required"),
+      schema: z.string().min(1, "请填写主机地址"),
     },
     {
       name: "port",
@@ -41,7 +41,7 @@ export const redisProvider: ProviderConfig = {
     {
       name: "prefix",
       type: "text",
-      label: "Bucket prefix",
+      label: "存储桶前缀",
       placeholder: "path/to/files",
       schema: z.string().optional().default(""),
       target: "export",

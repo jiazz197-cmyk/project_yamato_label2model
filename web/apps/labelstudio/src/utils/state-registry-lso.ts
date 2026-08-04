@@ -34,16 +34,16 @@ stateRegistry.registerBatch({
     type: StateType.INITIAL,
     label: "Created",
     tooltips: {
-      project: "Project has been created and is ready for configuration",
+      project: "项目已创建，可以开始配置",
     },
   },
 
   ANNOTATION_IN_PROGRESS: {
     type: StateType.IN_PROGRESS,
-    label: "In Progress",
+    label: "进行中",
     tooltips: {
-      project: "Annotation work is in progress on this project",
-      task: "Task is being annotated",
+      project: "该项目正在进行标注工作",
+      task: "任务正在被标注",
     },
   },
 
@@ -51,8 +51,8 @@ stateRegistry.registerBatch({
     type: StateType.TERMINAL,
     label: "Completed",
     tooltips: {
-      project: "All work on this project is completed",
-      task: "Task has been completed",
+      project: "该项目的工作已全部完成",
+      task: "任务已完成",
     },
   },
 });

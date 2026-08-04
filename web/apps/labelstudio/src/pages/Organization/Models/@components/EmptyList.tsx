@@ -11,11 +11,11 @@ export const EmptyList: FC = () => {
         <div className={cn("empty-models-list").elem("heidy").toClassName()}>
           <HeidiAi />
         </div>
-        <div className={cn("empty-models-list").elem("title").toClassName()}>Create a Model</div>
+        <div className={cn("empty-models-list").elem("title").toClassName()}>创建模型</div>
         <div className={cn("empty-models-list").elem("caption").toClassName()}>
-          Build a high quality model to auto-label your data using LLMs
+          使用 LLM 构建高质量模型，自动标注你的数据
         </div>
-        <Button aria-label="Create new model">Create a Model</Button>
+        <Button aria-label="创建新模型">创建模型</Button>
       </div>
     </div>
   );

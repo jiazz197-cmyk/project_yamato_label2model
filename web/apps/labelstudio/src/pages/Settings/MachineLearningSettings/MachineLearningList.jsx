@@ -48,8 +48,8 @@ const BackendCard = ({ backend, onStartTrain, onEdit, onDelete, onTestRequest })
   const confirmDelete = useCallback(
     (backend) => {
       confirm({
-        title: "Delete ML Backend",
-        body: "This action cannot be undone. Are you sure?",
+        title: "删除 ML 后端",
+        body: "此操作无法撤销，确定继续吗？",
         buttonLook: "destructive",
         onOk() {
           onDelete?.(backend);
@@ -74,17 +74,17 @@ const BackendCard = ({ backend, onStartTrain, onEdit, onDelete, onTestRequest })
             align="right"
             content={
               <Menu size="medium" contextual>
-                <Menu.Item onClick={() => onEdit(backend)}>Edit</Menu.Item>
-                <Menu.Item onClick={() => onTestRequest(backend)}>Send Test Request</Menu.Item>
-                <Menu.Item onClick={() => onStartTrain(backend)}>Start Training</Menu.Item>
+                <Menu.Item onClick={() => onEdit(backend)}>编辑</Menu.Item>
+                <Menu.Item onClick={() => onTestRequest(backend)}>发送测试请求</Menu.Item>
+                <Menu.Item onClick={() => onStartTrain(backend)}>开始训练</Menu.Item>
                 <Menu.Divider />
                 <Menu.Item onClick={() => confirmDelete(backend)} isDangerous>
-                  Delete
+                  删除
                 </Menu.Item>
               </Menu>
             }
           >
-            <Button look="string" size="small" className="!p-0" aria-label="Machine learning model options">
+            <Button look="string" size="small" className="!p-0" aria-label="机器学习模型选项">
               <IconEllipsis />
             </Button>
           </Dropdown.Trigger>
@@ -115,11 +115,11 @@ const BackendState = ({ backend }) => {
     <div className={cn("ml").elem("status").toClassName()}>
       <span className={cn("ml").elem("indicator").mod({ state }).toClassName()} />
       <Oneof value={state} className={cn("ml").elem("status-label").toClassName()}>
-        <span case="DI">Disconnected</span>
-        <span case="CO">Connected</span>
-        <span case="ER">Error</span>
-        <span case="TR">Training</span>
-        <span case="PR">Predicting</span>
+        <span case="DI">未连接</span>
+        <span case="CO">已连接</span>
+        <span case="ER">错误</span>
+        <span case="TR">训练中</span>
+        <span case="PR">预测中</span>
       </Oneof>
     </div>
   );

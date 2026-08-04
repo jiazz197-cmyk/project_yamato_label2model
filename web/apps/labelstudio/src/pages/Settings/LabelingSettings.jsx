@@ -13,7 +13,7 @@ export const LabelingSettings = () => {
   const hasChanges = isFF(FF_UNSAVED_CHANGES) && config !== project.label_config;
   const api = useAPI();
 
-  useUpdatePageTitle(createTitleFromSegments([project?.title, "Labeling Interface Settings"]));
+  useUpdatePageTitle(createTitleFromSegments([project?.title, "标注界面设置"]));
 
   const saveConfig = useCallback(
     isFF(FF_UNSAVED_CHANGES)
@@ -91,5 +91,5 @@ export const LabelingSettings = () => {
   );
 };
 
-LabelingSettings.title = "Labeling Interface";
+LabelingSettings.title = "标注界面";
 LabelingSettings.path = "/labeling";

@@ -7,7 +7,7 @@ const gcsWifProvider: ProviderConfig = {
   name: "gcswif",
   title: "Google Cloud Storage\n(WIF Auth)",
   description:
-    "Configure your Google Cloud Storage connection with Workload Identity Federation authentication (proxy only)",
+    "使用工作负载身份联合认证配置 Google Cloud Storage 连接（仅代理模式）",
   icon: IconCloudProviderGCS,
   disabled: true,
   badge: <EnterpriseBadge />,
@@ -18,7 +18,7 @@ const gcsWifProvider: ProviderConfig = {
       content: (
         <Alert variant="gradient">
           <IconSpark />
-          <AlertTitle>Enterprise Feature</AlertTitle>
+          <AlertTitle>企业版功能</AlertTitle>
           <AlertDescription>
             Google Cloud Storage with Workload Identity Federation is available in Label Studio Enterprise.{" "}
             <a
@@ -27,7 +27,7 @@ const gcsWifProvider: ProviderConfig = {
               rel="noopener noreferrer"
               className="underline hover:no-underline"
             >
-              Learn more
+              了解更多
             </a>
           </AlertDescription>
         </Alert>

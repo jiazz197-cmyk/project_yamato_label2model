@@ -34,7 +34,7 @@ export const SelectedUser = ({ user, onClose }) => {
         look="string"
         onClick={onClose}
         className="absolute top-[20px] right-[24px]"
-        aria-label="Close user details"
+        aria-label="关闭用户详情"
       >
         <IconCross />
       </Button>
@@ -55,7 +55,7 @@ export const SelectedUser = ({ user, onClose }) => {
 
       {!!user.created_projects.length && (
         <div className={cn("user-info").elem("section").toClassName()}>
-          <div className={cn("user-info").elem("section-title").toClassName()}>Created Projects</div>
+          <div className={cn("user-info").elem("section-title").toClassName()}>创建的项目</div>
 
           <UserProjectsLinks projects={user.created_projects} />
         </div>
@@ -63,7 +63,7 @@ export const SelectedUser = ({ user, onClose }) => {
 
       {!!user.contributed_to_projects.length && (
         <div className={cn("user-info").elem("section").toClassName()}>
-          <div className={cn("user-info").elem("section-title").toClassName()}>Contributed to</div>
+          <div className={cn("user-info").elem("section-title").toClassName()}>参与贡献</div>
 
           <UserProjectsLinks projects={user.contributed_to_projects} />
         </div>

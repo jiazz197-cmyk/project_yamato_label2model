@@ -17,7 +17,7 @@ export const API_CONFIG = {
         console.log("mock", url, params, fakeRequest);
         const response = {
           id: params.pk,
-          title: "My Sample Project",
+          title: "我的示例项目",
           description: "",
           label_config:
             '<View>\n  <Text name="text" value="$text" />\n  <View style="box-shadow: 2px 2px 5px #999;\n               padding: 20px; margin-top: 2em;\n               border-radius: 5px;" >\n    <Header value="Choose text sentiment"/>\n    <Choices name="sentiment" toName="text"\n             choice="single" showInLine="true" >\n      <Choice value="Positive"/>\n      <Choice value="Negative"/>\n      <Choice value="Neutral"/>\n    </Choices>\n  </View>\n</View>\n\n<!-- {\n  "data": {"text": "This is a great 3D movie that delivers everything almost right in your face."}\n} -->',
@@ -30,7 +30,7 @@ export const API_CONFIG = {
           color: "#FFFFFF",
           maximum_annotations: 1,
           is_published: false,
-          model_version: "model 0",
+          model_version: "模型 0",
           is_draft: false,
           created_by: {
             id: 1,
@@ -50,7 +50,7 @@ export const API_CONFIG = {
           skipped_annotations_number: 0,
           total_annotations_number: 300,
           total_predictions_number: 100,
-          sampling: "Sequential sampling",
+          sampling: "顺序采样",
           annotator_evaluation_enabled: false,
           show_overlap_first: false,
           overlap_cohort_percentage: 100,
@@ -72,7 +72,7 @@ export const API_CONFIG = {
               type: "Choices",
               inputs: [
                 {
-                  type: "Text",
+                  type: "文本",
                   value: "text",
                   valueType: null,
                 },
@@ -127,7 +127,7 @@ export const API_CONFIG = {
           duplication_done: null,
           require_comment_on_skip: false,
           data_types: {
-            text: "Text",
+            text: "文本",
           },
           reviewer_queue_total: 0,
           queue_left: 0,

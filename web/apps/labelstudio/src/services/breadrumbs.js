@@ -6,7 +6,7 @@ const initialBreadcrumbs = [];
 
 const noop = () => {
   if (process.env.NODE_ENV === "development") {
-    console.warn("Breadcrumbs must be initialized first");
+    console.warn("必须先初始化面包屑导航");
   }
 };
 
@@ -17,7 +17,7 @@ export const setBreadcrumbs = (newCrumbs) => {
 };
 
 export const addCrumb = (crumb) => {
-  if (!isDefined(crumb?.key)) throw Error("Crumb must have a key");
+  if (!isDefined(crumb?.key)) throw Error("面包屑必须包含 key");
 
   JotaiStore.set(crumbsAtom, (crumbs) => [...crumbs, crumb]);
 };

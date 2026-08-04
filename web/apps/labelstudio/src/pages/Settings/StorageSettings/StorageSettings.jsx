@@ -29,7 +29,7 @@ export const StorageSettings = () => {
   const sourceStorageRef = useRef();
   const targetStorageRef = useRef();
 
-  useUpdatePageTitle(createTitleFromSegments([project?.title, "Cloud Storage Settings"]));
+  useUpdatePageTitle(createTitleFromSegments([project?.title, "云存储设置"]));
 
   // Fetch storage data at parent level
   const sourceStorage = useStorageCard("", project?.id);
@@ -57,7 +57,7 @@ export const StorageSettings = () => {
   return (
     <section className="max-w-[680px]">
       <Typography variant="headline" size="medium" className="mb-base">
-        Cloud Storage
+        云存储
       </Typography>
       {hasAnyStorages && (
         <Typography size="small" className="text-neutral-content-subtler mb-wider">
@@ -77,8 +77,8 @@ export const StorageSettings = () => {
         <div className="grid grid-cols-2 gap-8">
           <StorageSet
             ref={sourceStorageRef}
-            title="Source Cloud Storage"
-            buttonLabel="Add Source Storage"
+            title="源云存储"
+            buttonLabel="添加源存储"
             rootClass={rootClass}
             storageTypes={sourceStorage.storageTypes}
             storages={sourceStorage.storages}
@@ -90,9 +90,9 @@ export const StorageSettings = () => {
 
           <StorageSet
             ref={targetStorageRef}
-            title="Target Cloud Storage"
+            title="目标云存储"
             target="export"
-            buttonLabel="Add Target Storage"
+            buttonLabel="添加目标存储"
             rootClass={rootClass}
             storageTypes={targetStorage.storageTypes}
             storages={targetStorage.storages}
@@ -111,8 +111,8 @@ export const StorageSettings = () => {
             size="medium"
             variant="primary"
             icon={<IconCloudCustom />}
-            title="Add your first cloud storage"
-            description="Use cloud or database storage as the source for your labeling tasks or the target of your completed annotations."
+            title="添加第一个云存储"
+            description="使用云存储或数据库存储作为标注任务的来源，或作为已完成标注的存放目标。"
             additionalContent={
               <div className="flex items-center justify-center gap-base" data-testid="dm-storage-provider-icons">
                 <Tooltip title="Amazon S3">
@@ -130,8 +130,8 @@ export const StorageSettings = () => {
                     <IconCloudProviderAzure width={32} height={32} className="text-neutral-content-subtler" />
                   </div>
                 </Tooltip>
-                <Tooltip title="Redis Storage">
-                  <div className="flex items-center justify-center p-2" aria-label="Redis Storage">
+                <Tooltip title="Redis 存储">
+                  <div className="flex items-center justify-center p-2" aria-label="Redis 存储">
                     <IconCloudProviderRedis width={32} height={32} className="text-neutral-content-subtler" />
                   </div>
                 </Tooltip>
@@ -142,18 +142,18 @@ export const StorageSettings = () => {
                 <Button
                   look="primary"
                   data-testid="add-source-storage-button-empty-state"
-                  aria-label="Add Source Storage"
+                  aria-label="添加源存储"
                   onClick={() => sourceStorageRef.current?.openAddModal()}
                 >
-                  Add Source Storage
+                  添加源存储
                 </Button>
                 <Button
                   look="primary"
                   data-testid="add-target-storage-button-empty-state"
-                  aria-label="Add Target Storage"
+                  aria-label="添加目标存储"
                   onClick={() => targetStorageRef.current?.openAddModal()}
                 >
-                  Add Target Storage
+                  添加目标存储
                 </Button>
               </div>
             }
@@ -165,10 +165,10 @@ export const StorageSettings = () => {
                     target="_blank"
                     rel="noopener noreferrer"
                     data-testid="storage-help-link"
-                    aria-label="Learn more about cloud storage (opens in new window)"
+                    aria-label="了解更多云存储信息（在新窗口打开）"
                     className="inline-flex items-center gap-1 hover:underline"
                   >
-                    Learn more
+                    了解更多
                     <IconExternal width={16} height={16} />
                   </a>
                 </Typography>
@@ -181,5 +181,5 @@ export const StorageSettings = () => {
   );
 };
 
-StorageSettings.title = "Cloud Storage";
+StorageSettings.title = "云存储";
 StorageSettings.path = "/storage";

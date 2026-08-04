@@ -34,12 +34,12 @@ export const PeoplePage = () => {
 
   const apiTokensSettingsModalProps = useMemo(
     () => ({
-      title: "API Token Settings",
+      title: "API 令牌设置",
       style: { width: 480 },
       body: () => (
         <TokenSettingsModal
           onSaved={() => {
-            toast.show({ message: "API Token settings saved" });
+            toast.show({ message: "API 令牌设置已保存" });
             apiSettingsModal.current?.close();
           }}
         />
@@ -65,16 +65,16 @@ export const PeoplePage = () => {
 
           <Space>
             {isFF(FF_AUTH_TOKENS) && (
-              <Button look="outlined" onClick={showApiTokenSettingsModal} aria-label="Show API token settings">
-                API Tokens Settings
+              <Button look="outlined" onClick={showApiTokenSettingsModal} aria-label="显示 API 令牌设置">
+                API 令牌设置
               </Button>
             )}
             <Button
               leading={<IconPlus className="!h-4" />}
               onClick={() => setInvitationOpen(true)}
-              aria-label="Invite new member"
+              aria-label="邀请新成员"
             >
-              Add Members
+              添加成员
             </Button>
           </Space>
         </Space>

@@ -45,12 +45,12 @@ export const StorageCard = ({ rootClass, target, storage, onEditStorage, onDelet
           align="right"
           content={
             <Menu size="compact" style={{ width: 110 }}>
-              <Menu.Item onClick={() => onEditStorage(storageData)}>Edit</Menu.Item>
-              <Menu.Item onClick={() => onDeleteStorage(storageData)}>Delete</Menu.Item>
+              <Menu.Item onClick={() => onEditStorage(storageData)}>编辑</Menu.Item>
+              <Menu.Item onClick={() => onDeleteStorage(storageData)}>删除</Menu.Item>
             </Menu>
           }
         >
-          <Button look="string" className="-ml-3" aria-label="Storage options">
+          <Button look="string" className="-ml-3" aria-label="存储选项">
             <IconEllipsisVertical />
           </Button>
         </Dropdown.Trigger>
@@ -69,9 +69,9 @@ export const StorageCard = ({ rootClass, target, storage, onEditStorage, onDelet
             waiting={syncing}
             onClick={startSync}
             disabled={notSyncedYet}
-            aria-label="Sync Storage"
+            aria-label="同步存储"
           >
-            Sync Storage
+            同步存储
           </Button>
           {notSyncedYet && (
             <div className={rootClass.elem("sync-count").toClassName()}>

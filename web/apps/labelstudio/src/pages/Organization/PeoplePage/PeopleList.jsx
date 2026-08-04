@@ -63,9 +63,9 @@ export const PeopleList = ({ onSelect, selectedUser, defaultSelected }) => {
             <div className={cn("people-list").elem("users").toClassName()}>
               <div className={cn("people-list").elem("header").toClassName()}>
                 <div className={cn("people-list").elem("column").mix("avatar").toClassName()} />
-                <div className={cn("people-list").elem("column").mix("email").toClassName()}>Email</div>
-                <div className={cn("people-list").elem("column").mix("name").toClassName()}>Name</div>
-                <div className={cn("people-list").elem("column").mix("last-activity").toClassName()}>Last Activity</div>
+                <div className={cn("people-list").elem("column").mix("email").toClassName()}>邮箱</div>
+                <div className={cn("people-list").elem("column").mix("name").toClassName()}>姓名</div>
+                <div className={cn("people-list").elem("column").mix("last-activity").toClassName()}>最近活动</div>
               </div>
               <div className={cn("people-list").elem("body").toClassName()}>
                 {usersList.map(({ user }) => {

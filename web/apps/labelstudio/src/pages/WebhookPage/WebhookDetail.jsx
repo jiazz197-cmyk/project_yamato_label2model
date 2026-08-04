@@ -55,11 +55,11 @@ const WebhookForm = ({
       }}
     >
       <Form.Row columnCount={1}>
-        <Label text="Payload URL" large />
+        <Label text="回调 URL" large />
         <div className="grid grid-cols-[1fr_135px] gap-tight">
           <Input name="url" className="self-stretch w-auto" placeholder="URL" />
           <div className="grid grid-flow-col auto-cols-max items-center justify-end gap-tight self-center">
-            <span className="text-neutral-content">Is Active</span>
+            <span className="text-neutral-content">是否启用</span>
             <Toggle
               skip
               checked={isActive}
@@ -82,7 +82,7 @@ const WebhookForm = ({
                 onClick={onAddHeaderClick}
                 className="!p-0 [&_span]:!text-[var(--grape_500)]"
                 leading={<IconPlus />}
-                tooltip="Add Header"
+                tooltip="添加请求头"
               />
             </div>
             {headers.map((header, index) => {
@@ -108,7 +108,7 @@ const WebhookForm = ({
                       type="button"
                       icon={<IconCross />}
                       onClick={() => onHeaderRemove(index)}
-                      tooltip="Remove Header"
+                      tooltip="移除请求头"
                     />
                   </div>
                 </div>
@@ -129,14 +129,14 @@ const WebhookForm = ({
               onChange={(e) => {
                 setSendPayload(e.target.checked);
               }}
-              label="Send payload"
+              label="发送载荷"
             />
           </div>
           <div className="my-2">
             <Toggle
               skip
               checked={sendForAllActions}
-              label="Send for all actions"
+              label="所有事件都发送"
               onChange={(e) => {
                 setSendForAllActions(e.target.checked);
               }}
@@ -145,7 +145,7 @@ const WebhookForm = ({
           <div>
             {!sendForAllActions ? (
               <div>
-                <h4 className="text-neutral-content">Send Payload for</h4>
+                <h4 className="text-neutral-content">发送载荷事件：</h4>
                 <div>
                   {Object.entries(webhooksInfo).map(([key, value]) => {
                     return (
@@ -175,7 +175,7 @@ const WebhookForm = ({
             type="button"
             variant="negative"
             look="outlined"
-            aria-label="Delete webhook"
+            aria-label="删除 Webhook"
             onClick={() =>
               WebhookDeleteModal({
                 onDelete: async () => {
@@ -188,7 +188,7 @@ const WebhookForm = ({
               })
             }
           >
-            Delete Webhook
+            删除 Webhook
           </Button>
         )}
         <div className={rootClass.elem("status").toClassName()}>
@@ -200,15 +200,15 @@ const WebhookForm = ({
           type="button"
           className="ml-auto"
           onClick={onBack}
-          aria-label="Cancel webhook edit"
+          aria-label="取消编辑 Webhook"
         >
-          Cancel
+          取消
         </Button>
         <Button
           className={rootClass.elem("save-button").toClassName()}
-          aria-label={webhook === null ? "Add Webhook" : "Save Changes"}
+          aria-label={webhook === null ? "添加 Webhook" : "保存更改"}
         >
-          {webhook === null ? "Add Webhook" : "Save Changes"}
+          {webhook === null ? "添加 Webhook" : "保存更改"}
         </Button>
       </div>
     </Form>
@@ -318,10 +318,10 @@ const WebhookDetail = ({ webhook, webhooksInfo, fetchWebhooks, onBack, onSelectA
           onClick={() => onSelectActive(null)}
           className="cursor-pointer text-neutral-content-subtler hover:text-neutral-content-subtle"
         >
-          Webhooks
+          Webhook
         </Typography>
         <Typography variant="headline" size="medium" className="text-neutral-content-subtler">
-          / {webhook === null ? "New Webhook" : "Edit Webhook"}
+          / {webhook === null ? "新建 Webhook" : "编辑 Webhook"}
         </Typography>
       </header>
       <div className="mt-base">

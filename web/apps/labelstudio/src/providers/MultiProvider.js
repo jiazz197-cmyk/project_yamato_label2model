@@ -5,11 +5,11 @@ export const MultiProvider = (props) => {
 
   /* Error/Validation */
   if (!props.providers) {
-    throw "MultiProvider: Missing providers prop";
+    throw "MultiProvider：缺少 providers 属性";
   }
 
   if (!props.children) {
-    throw "MultiProvider: Missing children";
+    throw "MultiProvider：缺少 children";
   }
 
   // Turn object into an array

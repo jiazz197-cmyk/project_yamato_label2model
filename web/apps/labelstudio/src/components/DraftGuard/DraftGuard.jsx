@@ -37,10 +37,10 @@ export const DraftGuard = () => {
           const status = res?.$meta?.status;
 
           if (status === 200 || status === 201) {
-            toast.show({ message: "Draft saved successfully", type: "info" });
+            toast.show({ message: "草稿保存成功", type: "info" });
             unblock();
           } else if (status !== undefined) {
-            toast.show({ message: "There was an error saving your draft", type: "error" });
+            toast.show({ message: "保存草稿时出错", type: "error" });
           } else {
             unblock();
           }

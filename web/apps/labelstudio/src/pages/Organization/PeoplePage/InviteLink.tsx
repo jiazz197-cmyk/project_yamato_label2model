@@ -39,7 +39,7 @@ export function InviteLink({
   return (
     <Modal
       ref={modalRef}
-      title="Invite members"
+      title="邀请成员"
       opened={opened}
       bareFooter={true}
       body={<InvitationModal />}
@@ -70,7 +70,7 @@ const InvitationModal = () => {
             })
           }
         >
-          Learn more
+          了解更多
         </a>
         .
       </Typography>
@@ -90,9 +90,9 @@ const InvitationFooter = () => {
           look="outlined"
           style={{ width: 170 }}
           onClick={() => refetch()}
-          aria-label="Refresh invite link"
+          aria-label="刷新邀请链接"
         >
-          Reset Link
+          重置链接
         </Button>
       </Space>
       <Space>
@@ -100,9 +100,9 @@ const InvitationFooter = () => {
           variant={copied ? "positive" : "primary"}
           className="w-[170px]"
           onClick={() => copyText(link!)}
-          aria-label="Copy invite link"
+          aria-label="复制邀请链接"
         >
-          {copied ? "Copied!" : "Copy link"}
+          {copied ? "已复制！" : "复制链接"}
         </Button>
       </Space>
     </Space>

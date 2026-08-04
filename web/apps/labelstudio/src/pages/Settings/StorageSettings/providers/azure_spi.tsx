@@ -7,7 +7,7 @@ const azureSpiProvider: ProviderConfig = {
   name: "azure_spi",
   title: "Azure Blob Storage\nwith Service Principal",
   description:
-    "Configure your Azure Blob Storage connection using Service Principal authentication for enhanced security (proxy only)",
+    "使用服务主体认证配置 Azure Blob Storage 连接以增强安全性（仅代理模式）",
   icon: IconCloudProviderAzure,
   disabled: true,
   badge: <EnterpriseBadge />,
@@ -18,7 +18,7 @@ const azureSpiProvider: ProviderConfig = {
       content: (
         <Alert variant="gradient">
           <IconSpark />
-          <AlertTitle>Enterprise Feature</AlertTitle>
+          <AlertTitle>企业版功能</AlertTitle>
           <AlertDescription>
             Azure Blob Storage with Service Principal is available in Label Studio Enterprise.{" "}
             <a
@@ -27,7 +27,7 @@ const azureSpiProvider: ProviderConfig = {
               rel="noopener noreferrer"
               className="underline hover:no-underline"
             >
-              Learn more
+              了解更多
             </a>
           </AlertDescription>
         </Alert>

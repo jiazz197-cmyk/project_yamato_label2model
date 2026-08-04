@@ -26,31 +26,31 @@ const resources = [
     url: "https://labelstud.io/guide/",
   },
   {
-    title: "API Documentation",
+    title: "API 文档",
     url: "https://api.labelstud.io/api-reference/introduction/getting-started",
   },
   {
-    title: "Release Notes",
+    title: "版本发布说明",
     url: "https://labelstud.io/learn/categories/release-notes/",
   },
   {
-    title: "LabelStud.io Blog",
+    title: "LabelStud.io 博客",
     url: "https://labelstud.io/blog/",
   },
   {
-    title: "Slack Community",
+    title: "Slack 社区",
     url: "https://slack.labelstud.io",
   },
 ];
 
 const actions = [
   {
-    title: "Create Project",
+    title: "创建项目",
     icon: IconFolderAdd,
     type: "createProject",
   },
   {
-    title: "Invite Members",
+    title: "邀请成员",
     icon: IconUserAdd,
     type: "inviteMembers",
   },
@@ -136,7 +136,7 @@ export const HomePage: Page = () => {
         <section className="flex flex-col gap-6">
           <div className="flex flex-col gap-1">
             <Typography variant="headline" size="small">
-              Welcome 👋
+              欢迎 👋
             </Typography>
             <Typography size="small" className="text-neutral-content-subtler">
               Let's get you started.
@@ -165,7 +165,7 @@ export const HomePage: Page = () => {
                 <>
                   Recent Projects{" "}
                   <a href="/projects" className="text-lg font-normal hover:underline">
-                    View All
+                    查看全部
                   </a>
                 </>
               ) : null
@@ -187,13 +187,13 @@ export const HomePage: Page = () => {
                   <IconFolderOpen />
                 </div>
                 <Typography variant="headline" size="small">
-                  Create your first project
+                  创建你的第一个项目
                 </Typography>
                 <Typography size="small" className="text-neutral-content-subtler">
-                  Import your data and set up the labeling interface to start annotating
+                  导入数据并配置标注界面，即可开始标注
                 </Typography>
-                <Button className="mt-4" onClick={() => setModalIsOpen(true)} aria-label="Create new project">
-                  Create Project
+                <Button className="mt-4" onClick={() => setModalIsOpen(true)} aria-label="创建新项目">
+                  创建项目
                 </Button>
               </div>
             ) : isSuccess && data && sortedProjects.length > 0 ? (
@@ -207,7 +207,7 @@ export const HomePage: Page = () => {
         </section>
         <section className="flex flex-col gap-6">
           <HeidiTips collection="projectSettings" />
-          <SimpleCard title="Resources" description="Learn, explore and get help" data-testid="resources-card">
+          <SimpleCard title="Resources" description="学习、探索并获取帮助" data-testid="resources-card">
             <ul>
               {resources.map((link) => {
                 return (
@@ -228,7 +228,7 @@ export const HomePage: Page = () => {
           </SimpleCard>
           <div className="flex gap-2 items-center">
             <IconHumanSignal />
-            <span className="text-neutral-content-subtle">Label Studio Version: Community</span>
+            <span className="text-neutral-content-subtle">Label Studio 版本：社区版</span>
           </div>
         </section>
       </div>

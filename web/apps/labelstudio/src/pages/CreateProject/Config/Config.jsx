@@ -54,7 +54,7 @@ const AdaptivePreview = React.memo(
             <IconInfoOutline width={16} height={16} />
             <span>{LARGE_CONFIG_MESSAGE}</span>
             <Button size="small" onClick={onUpdatePreview} waiting={isUpdating} disabled={isUpdating}>
-              {isUpdating ? "Updating..." : "Update Preview"}
+              {isUpdating ? "Updating..." : "更新预览"}
             </Button>
           </div>
           <Preview key={previewKeyProp} config={config} {...previewProps} />
@@ -68,12 +68,12 @@ const AdaptivePreview = React.memo(
 
 const EmptyConfigPlaceholder = () => (
   <div className={configClass.elem("empty-config").toClassName()}>
-    <p>Your labeling configuration is empty. It is required to label your data.</p>
+    <p>你的标注配置为空，而配置是标注数据的必要条件。</p>
     <p>
       Start from one of our predefined templates or create your own config on the Code panel. The labeling config is
       XML-based and you can{" "}
       <a href="https://labelstud.io/tags/" target="_blank" rel="noreferrer">
-        read about the available tags in our documentation
+        在文档中了解可用标签
       </a>
       .
     </p>
@@ -110,7 +110,7 @@ const Label = ({ label, template, color }) => {
         size="smaller"
         variant="negative"
         onClick={() => template.removeLabel(label)}
-        aria-label="delete label"
+        aria-label="删除标签"
         className="hidden !p-0 z-10 absolute right-0 [&_span]:!p-0 group-hover:inline-flex"
         leading={<IconTrash className="w-4 h-4 fill-[currentColor]" />}
       />
@@ -140,8 +140,8 @@ const ConfigureControl = ({ control, template }) => {
   return (
     <div className={configClass.elem("labels").toClassName()}>
       <form className={configClass.elem("add-labels").toClassName()} action="">
-        <h4>{tagname === "Choices" ? "Add choices" : "Add label names"}</h4>
-        <span>Use new line as a separator to add multiple labels</span>
+        <h4>{tagname === "Choices" ? "添加选项" : "添加标签名称"}</h4>
+        <span>使用换行符分隔可添加多个标签</span>
         <textarea
           name="labels"
           id=""
@@ -151,8 +151,8 @@ const ConfigureControl = ({ control, template }) => {
           onKeyPress={onKeyPress}
           className="lsf-textarea-ls p-2 px-3"
         />
-        <Button type="button" size="small" look="outlined" onClick={onAddLabels} aria-label="Add labels">
-          Add
+        <Button type="button" size="small" look="outlined" onClick={onAddLabels} aria-label="添加标签">
+          添加
         </Button>
       </form>
       <div className={configClass.elem("current-labels").toClassName()}>
@@ -263,7 +263,7 @@ const ConfigureSettings = ({ template }) => {
   return (
     <ul className={configClass.elem("settings").toClassName()}>
       <li>
-        <h4>Configure settings</h4>
+        <h4>配置设置</h4>
         <ul className={configClass.elem("object-settings").toClassName()}>{items}</ul>
       </li>
     </ul>
@@ -326,12 +326,12 @@ const ConfigureColumn = ({ template, obj, columns }) => {
     const columnOptions =
       columns?.map((column) => ({
         value: column,
-        label: column === DEFAULT_COLUMN ? "<imported file>" : `$${column}`,
+        label: column === DEFAULT_COLUMN ? "导入的文件" : `$${column}`,
       })) ?? [];
     if (!columns?.length) {
-      columnOptions.push({ value, label: "<imported file>" });
+      columnOptions.push({ value, label: "导入的文件" });
     }
-    columnOptions.push({ value: "-", label: "<set manually>" });
+    columnOptions.push({ value: "-", label: "手动设置" });
     return columnOptions;
   }, [columns, value]);
 
@@ -359,10 +359,10 @@ const ConfigureColumns = ({ columns, template }) => {
 
   return (
     <div className={configClass.elem("object").toClassName()}>
-      <h4>Configure data</h4>
+      <h4>配置数据</h4>
       {template.objects.length > 1 && columns?.length > 0 && columns.length < template.objects.length && (
         <p className={configClass.elem("object-error").toClassName()}>
-          This template requires more data then you have for now
+          此模板需要的数据多于你当前拥有的数据
         </p>
       )}
       {columns?.length === 0 && (
@@ -565,7 +565,7 @@ const Configurator = ({
         setTemplate(config);
       } catch (e) {
         setParserError({
-          detail: "Parser error",
+          detail: "解析错误",
           validation_errors: [e.message],
         });
       }
@@ -623,7 +623,7 @@ const Configurator = ({
     <p className={configClass.elem("tags-link").toClassName()}>
       Configure the labeling interface with tags.&nbsp;
       <a href="https://labelstud.io/tags/" target="_blank" rel="noreferrer">
-        See all tags
+        查看所有标签
       </a>
       .
     </p>
@@ -647,9 +647,9 @@ const Configurator = ({
               onClick={onBrowse}
               size="small"
               look="outlined"
-              aria-label="Browse templates"
+              aria-label="浏览模板"
             >
-              Browse Templates
+              浏览模板
             </Button>
             <ToggleItems items={{ code: "Code", visual: "Visual" }} active={configure} onSelect={onSelect} />
           </header>
@@ -708,8 +708,8 @@ const Configurator = ({
                   </span>
                 </div>
               )}
-              <Button className="w-[120px]" onClick={onSave} waiting={waiting} aria-label="Save configuration">
-                {waiting ? "Saving..." : "Save"}
+              <Button className="w-[120px]" onClick={onSave} waiting={waiting} aria-label="保存配置">
+                {waiting ? "Saving..." : "保存"}
               </Button>
               {isFF(FF_UNSAVED_CHANGES) && <UnsavedChanges hasChanges={hasChanges} onSave={onSave} />}
             </Form.Actions>
@@ -795,7 +795,7 @@ export const ConfigPage = ({
         tpl.onConfigUpdate = setConfig;
         setCurrentTemplate(tpl);
       } catch (e) {
-        console.error("Template parsing error:", e);
+        console.error("模板解析错误：", e);
       }
     },
     [setConfig, setCurrentTemplate],

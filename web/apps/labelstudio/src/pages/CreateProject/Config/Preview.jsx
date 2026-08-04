@@ -145,7 +145,7 @@ export const Preview = ({ config, data, error, loading, project }) => {
 
   return (
     <div className={configClass.elem("preview").toClassName()}>
-      <h3>Preview</h3>
+      <h3>预览</h3>
       {error && (
         <div className={configClass.elem("preview-error").toClassName()}>
           <h2>

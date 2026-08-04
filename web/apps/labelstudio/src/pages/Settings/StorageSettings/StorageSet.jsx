@@ -36,7 +36,7 @@ export const StorageSet = forwardRef(
 
     const showStorageFormModal = useCallback(
       (storage) => {
-        const action = storage ? "Edit" : "Connect";
+        const action = storage ? "编辑" : "Connect";
         const actionTarget = target === "export" ? "Target" : "Source";
         const title = `${action} ${actionTarget} Storage`;
 
@@ -104,8 +104,8 @@ export const StorageSet = forwardRef(
     const onDeleteStorage = useCallback(
       async (storage) => {
         confirm({
-          title: "Deleting storage",
-          body: "This action cannot be undone. Are you sure?",
+          title: "正在删除存储",
+          body: "此操作无法撤销，确定继续吗？",
           buttonLook: "negative",
           onOk: async () => {
             const response = await api.callApi("deleteStorage", {

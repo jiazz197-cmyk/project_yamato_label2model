@@ -43,7 +43,7 @@ const WebhookListItem = ({ webhook, onSelectActive, onActiveChange, onDelete, ca
       {canChangeWebhooks && (
         <div className="hidden group-hover:flex gap-2">
           <Button variant="primary" look="outlined" onClick={() => onSelectActive(webhook.id)} icon={<IconPencil />}>
-            Edit
+            编辑
           </Button>
           <Button
             variant="negative"
@@ -55,7 +55,7 @@ const WebhookListItem = ({ webhook, onSelectActive, onActiveChange, onDelete, ca
             }
             icon={<IconCross />}
           >
-            Delete
+            删除
           </Button>
         </div>
       )}
@@ -88,12 +88,12 @@ const WebhookList = ({ onSelectActive, onAddWebhook, webhooks, fetchWebhooks }) 
     <>
       <header className="mb-base">
         <Typography variant="headline" size="medium" className="mb-tight">
-          Webhooks
+          Webhook
         </Typography>
         {webhooks.length > 0 && (
           <Typography size="small" className="text-neutral-content-subtler">
-            Setup integrations that subscribe to certain events using Webhooks. When an event is triggered, {"app name"}{" "}
-            sends an HTTP POST request to the configured webhook URL.
+            Setup integrations that subscribe to certain events using Webhooks. When an event is triggered, {"应用名称"}{" "}
+            向配置的 Webhook URL 发送 HTTP POST 请求。
           </Typography>
         )}
       </header>
@@ -104,16 +104,16 @@ const WebhookList = ({ onSelectActive, onAddWebhook, webhooks, fetchWebhooks }) 
               size="medium"
               variant="primary"
               icon={<IconWebhook />}
-              title="Add your first webhook"
-              description="Setup integrations that subscribe to certain events using Webhooks. When an event is triggered, Label Studio sends an HTTP POST request to the configured webhook URL."
+              title="添加第一个 Webhook"
+              description="使用 Webhook 配置集成来订阅特定事件。事件触发时，Label Studio 会向配置的 Webhook URL 发送 HTTP POST 请求。"
               actions={
                 canChangeWebhooks ? (
                   <Button variant="primary" look="filled" onClick={onAddWebhook}>
-                    Add Webhook
+                    添加 Webhook
                   </Button>
                 ) : (
                   <Typography variant="body" size="small">
-                    Contact your administrator to create Webhooks
+                    请联系管理员创建 Webhook
                   </Typography>
                 )
               }
@@ -125,9 +125,9 @@ const WebhookList = ({ onSelectActive, onAddWebhook, webhooks, fetchWebhooks }) 
                       target="_blank"
                       rel="noopener noreferrer"
                       className="inline-flex items-center gap-1 hover:underline"
-                      aria-label="Learn more about webhooks (opens in new window)"
+                      aria-label="了解更多 Webhook 信息（在新窗口打开）"
                     >
-                      Learn more
+                      了解更多
                       <IconExternal width={16} height={16} />
                     </a>
                   </Typography>
@@ -158,7 +158,7 @@ const WebhookList = ({ onSelectActive, onAddWebhook, webhooks, fetchWebhooks }) 
       {webhooks.length > 0 && canChangeWebhooks && (
         <div className="flex justify-end w-full mt-base">
           <Button variant="primary" look="filled" onClick={onAddWebhook}>
-            Add Webhook
+            添加 Webhook
           </Button>
         </div>
       )}

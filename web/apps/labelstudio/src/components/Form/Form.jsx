@@ -20,7 +20,7 @@ import {
 import * as Validators from "./Validation/Validators";
 import { ToastProvider, ToastViewport } from "@humansignal/ui";
 
-const PASSWORD_PROTECTED_VALUE = "got ya, suspicious hacker!";
+const PASSWORD_PROTECTED_VALUE = "抓到你了，可疑的黑客！";
 
 export default class Form extends React.Component {
   state = {
@@ -524,8 +524,8 @@ Form.Builder = React.forwardRef(
         {children}
         {props.autosubmit !== true && withActions === true && (
           <Form.Actions>
-            <Button type="submit" className="w-[120px]" aria-label="Submit form">
-              Save
+            <Button type="submit" className="w-[120px]" aria-label="提交表单">
+              保存
             </Button>
           </Form.Actions>
         )}
@@ -564,7 +564,7 @@ Form.ResponseParser = ({ children }) => {
   const callback = children;
 
   if (callback instanceof Function === false) {
-    throw new Error("Response Parser only accepts function as a child");
+    throw new Error("Response Parser 只接受函数作为子元素");
   }
 
   const response = useContext(FormResponseContext);

@@ -19,7 +19,7 @@ export const DangerZone = () => {
   const toast = useToast();
   const [processing, setProcessing] = useState(null);
 
-  useUpdatePageTitle(createTitleFromSegments([project?.title, "Danger Zone"]));
+  useUpdatePageTitle(createTitleFromSegments([project?.title, "危险操作区"]));
 
   const showDangerConfirmation = ({ title, message, requiredWord, buttonText, onConfirm }) => {
     const isDev = process.env.NODE_ENV === "development";
@@ -61,7 +61,7 @@ export const DangerZone = () => {
               onClick={() => ctrl?.hide()}
               data-testid="danger-zone-cancel-button"
             >
-              Cancel
+              取消
             </Button>
             <Button
               variant="negative"
@@ -83,34 +83,34 @@ export const DangerZone = () => {
   const handleOnClick = (type) => () => {
     const actionConfig = {
       reset_cache: {
-        title: "Reset Cache",
+        title: "重置缓存",
         message: (
           <>
-            You are about to reset the cache for <strong>{project.title}</strong>. This action cannot be undone.
+            你即将重置以下项目的缓存： <strong>{project.title}</strong>。此操作无法撤销。
           </>
         ),
         requiredWord: "cache",
-        buttonText: "Reset Cache",
+        buttonText: "重置缓存",
       },
       tabs: {
-        title: "Drop All Tabs",
+        title: "关闭所有标签页",
         message: (
           <>
-            You are about to drop all tabs for <strong>{project.title}</strong>. This action cannot be undone.
+            你即将关闭以下项目的所有标签页： <strong>{project.title}</strong>。此操作无法撤销。
           </>
         ),
         requiredWord: "tabs",
-        buttonText: "Drop All Tabs",
+        buttonText: "关闭所有标签页",
       },
       project: {
-        title: "Delete Project",
+        title: "删除项目",
         message: (
           <>
-            You are about to delete the project <strong>{project.title}</strong>. This action cannot be undone.
+            你即将删除项目： <strong>{project.title}</strong>。此操作无法撤销。
           </>
         ),
         requiredWord: "delete",
-        buttonText: "Delete Project",
+        buttonText: "删除项目",
       },
     };
 
@@ -131,21 +131,21 @@ export const DangerZone = () => {
                 pk: project.id,
               },
             });
-            toast.show({ message: "Cache reset successfully" });
+            toast.show({ message: "缓存重置成功" });
           } else if (type === "tabs") {
             await api.callApi("deleteTabs", {
               body: {
                 project: project.id,
               },
             });
-            toast.show({ message: "All tabs dropped successfully" });
+            toast.show({ message: "所有标签页已关闭" });
           } else if (type === "project") {
             await api.callApi("deleteProject", {
               params: {
                 pk: project.id,
               },
             });
-            toast.show({ message: "Project deleted successfully" });
+            toast.show({ message: "项目已删除" });
             history.replace("/projects");
           }
         } catch (error) {
@@ -177,20 +177,20 @@ export const DangerZone = () => {
       {
         type: "reset_cache",
         help:
-          "Reset Cache may help in cases like if you are unable to modify the labeling configuration due " +
-          "to validation errors concerning existing labels, but you are confident that the labels don't exist. You can " +
-          "use this action to reset the cache and try again.",
-        label: "Reset Cache",
+          "如果因现有标签的校验错误而无法修改标注配置，但你能确认这些标签并不存在，重置缓存可能会有所帮助。" +
+          "你可以" +
+          "使用此操作重置缓存后重试。",
+        label: "重置缓存",
       },
       {
         type: "tabs",
-        help: "If the Data Manager is not loading, dropping all Data Manager tabs can help.",
-        label: "Drop All Tabs",
+        help: "如果数据管理器无法加载，关闭所有数据管理器标签页可能会有所帮助。",
+        label: "关闭所有标签页",
       },
       {
         type: "project",
-        help: "Deleting a project removes all tasks, annotations, and project data from the database.",
-        label: "Delete Project",
+        help: "删除项目会从数据库中移除所有任务、标注和项目数据。",
+        label: "删除项目",
       },
     ],
     [project],
@@ -199,7 +199,7 @@ export const DangerZone = () => {
   return (
     <div className={cn("simple-settings").toClassName()}>
       <Typography variant="headline" size="medium" className="mb-tighter">
-        Danger Zone
+        危险操作区
       </Typography>
       <Typography variant="body" size="medium" className="text-neutral-content-subtler !mb-base">
         Perform these actions at your own risk. Actions you take on this page can't be reverted. Make sure your data is
@@ -244,5 +244,5 @@ export const DangerZone = () => {
   );
 };
 
-DangerZone.title = "Danger Zone";
+DangerZone.title = "危险操作区";
 DangerZone.path = "/danger-zone";

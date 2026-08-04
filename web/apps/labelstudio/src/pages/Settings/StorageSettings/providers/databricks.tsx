@@ -6,7 +6,7 @@ import type { ProviderConfig } from "@humansignal/app-common/blocks/StorageProvi
 const databricksProvider: ProviderConfig = {
   name: "databricks",
   title: "Databricks Files\n(UC Volumes)",
-  description: "Configure your Databricks Unity Catalog Volumes connection with all required settings (proxy only)",
+  description: "使用所有必需的设置配置 Databricks Unity Catalog Volumes 连接（仅代理模式）",
   icon: IconCloudProviderDatabricks,
   disabled: true,
   badge: <EnterpriseBadge />,
@@ -17,7 +17,7 @@ const databricksProvider: ProviderConfig = {
       content: (
         <Alert variant="gradient">
           <IconSpark />
-          <AlertTitle>Enterprise Feature</AlertTitle>
+          <AlertTitle>企业版功能</AlertTitle>
           <AlertDescription>
             Databricks Files (UC Volumes) is available in Label Studio Enterprise.{" "}
             <a
@@ -26,7 +26,7 @@ const databricksProvider: ProviderConfig = {
               rel="noopener noreferrer"
               className="underline hover:no-underline"
             >
-              Learn more
+              了解更多
             </a>
           </AlertDescription>
         </Alert>

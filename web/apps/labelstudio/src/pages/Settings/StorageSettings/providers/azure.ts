@@ -5,21 +5,21 @@ import { z } from "zod";
 export const azureProvider: ProviderConfig = {
   name: "azure",
   title: "Azure Blob Storage",
-  description: "Configure your Azure Blob Storage connection with all required Label Studio settings",
+  description: "使用所有必需的 Label Studio 设置配置 Azure Blob Storage 连接",
   icon: IconCloudProviderAzure,
   fields: [
     {
       name: "container",
       type: "text",
-      label: "Container Name",
+      label: "容器名称",
       required: true,
       placeholder: "my-azure-container",
-      schema: z.string().min(1, "Container name is required"),
+      schema: z.string().min(1, "请填写容器名称"),
     },
     {
       name: "prefix",
       type: "text",
-      label: "Bucket prefix",
+      label: "存储桶前缀",
       placeholder: "path/to/files",
       schema: z.string().optional().default(""),
       target: "export",
@@ -27,7 +27,7 @@ export const azureProvider: ProviderConfig = {
     {
       name: "account_name",
       type: "password",
-      label: "Account Name",
+      label: "账户名称",
       autoComplete: "off",
       accessKey: true,
       placeholder: "mystorageaccount",
@@ -36,18 +36,18 @@ export const azureProvider: ProviderConfig = {
     {
       name: "account_key",
       type: "password",
-      label: "Account Key",
+      label: "账户密钥",
       autoComplete: "new-password",
       accessKey: true,
-      placeholder: "Your storage account key",
+      placeholder: "你的存储账户密钥",
       schema: z.string().optional().default(""),
     },
     {
       name: "presign",
       type: "toggle",
-      label: "Use pre-signed URLs (On) / Proxy through the platform (Off)",
+      label: "使用预签名 URL（开）/ 通过平台代理（关）",
       description:
-        "When pre-signed URLs are enabled, all data bypasses the platform and user browsers directly read data from storage",
+        "启用预签名 URL 后，所有数据将绕过平台，由用户浏览器直接从存储中读取",
       schema: z.boolean().default(true),
       target: "import",
       resetConnection: false,
@@ -55,7 +55,7 @@ export const azureProvider: ProviderConfig = {
     {
       name: "presign_ttl",
       type: "counter",
-      label: "Expire pre-signed URLs (minutes)",
+      label: "预签名 URL 有效期（分钟）",
       min: 1,
       max: 10080,
       step: 1,

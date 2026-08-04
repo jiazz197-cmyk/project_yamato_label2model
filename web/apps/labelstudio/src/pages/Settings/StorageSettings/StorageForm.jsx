@@ -34,7 +34,7 @@ export const StorageForm = forwardRef(({ onSubmit, target, project, rootClass, s
         skip: true,
         type: "select",
         name: "storage_type",
-        label: "Storage Type",
+        label: "存储类型",
         disabled: !!storage,
         options: storageTypes.map(({ name, title }) => ({
           value: name,
@@ -103,7 +103,7 @@ export const StorageForm = forwardRef(({ onSubmit, target, project, rootClass, s
                   Successfully connected!
                 </span>
                 <span className={cn("form-indicator").elem("item").mod({ type: "fail" }).toClassName()} case={false}>
-                  Connection failed
+                  连接失败
                 </span>
               </Oneof>
             </div>
@@ -117,12 +117,12 @@ export const StorageForm = forwardRef(({ onSubmit, target, project, rootClass, s
             look="outlined"
             waiting={checking}
             onClick={validateStorageConnection}
-            aria-label="Test storage connection"
+            aria-label="测试存储连接"
           >
-            Check Connection
+            检查连接
           </Button>
-          <Button type="submit" aria-label={storage ? "Save storage settings" : "Add storage"}>
-            {storage ? "Save" : "Add Storage"}
+          <Button type="submit" aria-label={storage ? "保存存储设置" : "添加存储"}>
+            {storage ? "保存" : "添加存储"}
           </Button>
         </div>
       </Form.Actions>

@@ -15,20 +15,20 @@ const defaultPathExample = localFilesDocumentRoot
   : undefined;
 
 const pathSchema = defaultPathExample
-  ? z.string().min(1, "Path is required").default(defaultPathExample)
-  : z.string().min(1, "Path is required");
+  ? z.string().min(1, "请填写路径").default(defaultPathExample)
+  : z.string().min(1, "请填写路径");
 
 const LocalFilesServingWarning = () => {
   if (localFilesServingEnabled) return null;
   return (
     <>
       <Alert variant="destructive">
-        <AlertTitle>Local file serving is disabled</AlertTitle>
+        <AlertTitle>本地文件服务已禁用</AlertTitle>
         <AlertDescription>
           Set the "LOCAL_FILES_SERVING_ENABLED" environment variable to "true" and restart Label Studio to enable Local
           Files storage. See the documentation for details:{" "}
           <a href="https://labelstud.io/guide/storage.html#Local-storage" target="_blank" rel="noreferrer">
-            Local Storage documentation
+            本地存储文档
           </a>
           {isCommunityEdition && (
             <Alert variant="info">
@@ -53,8 +53,8 @@ const LocalFilesServingWarning = () => {
 
 export const localFilesProvider: ProviderConfig = {
   name: "localfiles",
-  title: "Local Files",
-  description: "Configure your local file storage connection with all required Label Studio settings",
+  title: "本地文件",
+  description: "使用所有必需的 Label Studio 设置配置本地文件存储连接",
   icon: () => (
     <IconFolderOpen
       width={40}
@@ -74,7 +74,7 @@ export const localFilesProvider: ProviderConfig = {
     {
       name: "path",
       type: "text",
-      label: "Absolute local path",
+      label: "本地绝对路径",
       required: true,
       placeholder: defaultPathExample || "/data/my-folder/subdirectory",
       schema: pathSchema,

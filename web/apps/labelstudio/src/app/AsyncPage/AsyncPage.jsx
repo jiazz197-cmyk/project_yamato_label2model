@@ -51,8 +51,8 @@ const loadAsyncPage = async (url) => {
       body: () => (
         <ErrorWrapper
           possum={false}
-          title={"Connection refused"}
-          message={"Server not responding. Is it still running?"}
+          title={"连接被拒绝"}
+          message={"服务器无响应，它还在运行吗？"}
         />
       ),
       simple: true,

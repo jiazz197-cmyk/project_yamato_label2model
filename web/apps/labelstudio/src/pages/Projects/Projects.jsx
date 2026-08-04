@@ -163,8 +163,8 @@ ProjectsPage.routes = ({ store }) => [
 ProjectsPage.context = ({ openModal, showButton }) => {
   if (!showButton) return null;
   return (
-    <Button onClick={openModal} size="small" aria-label="Create new project">
-      Create
+    <Button onClick={openModal} size="small" aria-label="创建新项目">
+      创建
     </Button>
   );
 };

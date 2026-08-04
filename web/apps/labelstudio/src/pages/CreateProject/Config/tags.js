@@ -3,33 +3,33 @@ const OBJECTS = {
     type: "Image",
     settings: {
       strokeWidth: {
-        title: "Width of region borders",
+        title: "区域边框宽度",
         type: Number,
         param: ($obj, value) => $obj.$controls.forEach(($control) => $control.setAttribute("strokeWidth", value)),
         value: ($obj) => $obj.$controls[0]?.getAttribute("strokeWidth") ?? 1,
       },
       zoom: {
-        title: "Allow image zoom (ctrl+wheel)",
+        title: "允许图像缩放（Ctrl+滚轮）",
         type: Boolean,
         param: "zoom",
       },
       zoomControl: {
-        title: "Show controls to zoom in and out",
+        title: "显示放大缩小控件",
         type: Boolean,
         param: "zoomControl",
       },
       rotateControl: {
-        title: "Show controls to rotate image",
+        title: "显示旋转图像控件",
         type: Boolean,
         param: "rotateControl",
       },
     },
   },
   Text: {
-    type: "Text",
+    type: "文本",
     settings: {
       granularity: {
-        title: "Select text by words",
+        title: "按词选择文本",
         type: Boolean,
         param: ($obj, value) =>
           value ? $obj.setAttribute("granularity", "word") : $obj.removeAttribute("granularity"),
@@ -42,10 +42,10 @@ const OBJECTS = {
     type: "HyperText",
   },
   Audio: {
-    type: "Audio",
+    type: "音频",
   },
   AudioPlus: {
-    type: "Audio",
+    type: "音频",
   },
   List: {
     type: "List",
@@ -60,7 +60,7 @@ const OBJECTS = {
     type: "TimeSeries",
   },
   Video: {
-    type: "Video",
+    type: "视频",
   },
 };
 
@@ -68,10 +68,10 @@ const Labels = {
   type: "Labels",
   settings: {
     placeLabelsLeft: {
-      title: "Display labels:",
+      title: "显示标签：",
       type: ["bottom", "left", "right", "top"],
       control: true,
-      when: ($tag) => $tag.$object.tagName !== "Video",
+      when: ($tag) => $tag.$object.tagName !== "视频",
       param: ($control, value) => {
         let $container = $control.parentNode;
         let $labels = $control;
@@ -114,7 +114,7 @@ const Labels = {
       },
     },
     filter: {
-      title: "Add filter for long list of labels",
+      title: "为长标签列表添加筛选",
       type: Boolean,
       control: true,
       param: ($obj, value) => {

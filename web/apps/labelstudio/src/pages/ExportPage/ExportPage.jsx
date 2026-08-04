@@ -161,7 +161,7 @@ export const ExportPage = () => {
 
         history.replace(`${path}${search !== "?" ? search : ""}`);
       }}
-      title="Export data"
+      title="导出数据"
       style={{ width: 720 }}
       closeOnClickOutside={false}
       allowClose={!downloading}
@@ -185,18 +185,18 @@ export const ExportPage = () => {
         <div className={cn("export-page").elem("footer").toClassName()}>
           {downloadingMessage && (
             <div className={cn("export-page").elem("status-message").toClassName()}>
-              Files are being prepared. It might take long time.
+              文件正在准备中，可能需要较长时间。
             </div>
           )}
           <Space style={{ width: "100%" }} spread>
             <div className={cn("export-page").elem("recent").toClassName()}>
               <a className="no-go" href={EXPORT_TIMEOUT_DOCS_URL} target="_blank" rel="noreferrer">
-                Having a timeout or trouble exporting large projects?
+                导出大型项目时超时或有困难？
               </a>
             </div>
             <div className={cn("export-page").elem("actions").toClassName()}>
-              <Button className="w-[135px]" onClick={proceedExport} waiting={downloading} aria-label="Export data">
-                Export
+              <Button className="w-[135px]" onClick={proceedExport} waiting={downloading} aria-label="导出数据">
+                导出
               </Button>
             </div>
           </Space>
@@ -210,7 +210,7 @@ const FormatInfo = ({ availableFormats, selected, onClick }) => {
   return (
     <div className={cn("formats").toClassName()}>
       <div className={cn("formats").elem("info").toClassName()}>
-        You can export dataset in one of the following formats:
+        你可以使用以下格式之一导出数据集：
       </div>
       <div className={cn("formats").elem("list").toClassName()}>
         {availableFormats.map((format) => (
@@ -257,20 +257,20 @@ const FormatInfo = ({ availableFormats, selected, onClick }) => {
         ))}
       </div>
       <div className={cn("formats").elem("feedback").toClassName()}>
-        Can't find an export format?
+        找不到想要的导出格式？
         <br />
-        Please let us know in{" "}
+        请在{" "}
         <a className="no-go" href="https://slack.labelstud.io/?source=product-export" target="_blank" rel="noreferrer">
           Slack
         </a>{" "}
-        or submit an issue to the{" "}
+        或向{" "}
         <a
           className="no-go"
           href="https://github.com/HumanSignal/label-studio-converter/issues"
           target="_blank"
           rel="noreferrer"
         >
-          Repository
+          代码仓库
         </a>
       </div>
     </div>
@@ -291,13 +291,13 @@ const ExportLargeProjectWarning = ({ taskCount }) => {
       <div className={cn("export-page").elem("warning-body").toClassName()}>
         To avoid potential timeouts during large dataset exports in the Community Edition, use the{" "}
         <a className="no-go" href={EXPORT_TIMEOUT_DOCS_URL} target="_blank" rel="noreferrer">
-          CLI/SDK export options
+          CLI/SDK 导出选项
         </a>{" "}
         or consider{" "}
         <a className="no-go" href={ENTERPRISE_URL} target="_blank" rel="noreferrer">
-          Enterprise
+          企业版
         </a>{" "}
-        for background exports at scale.
+        用于大规模后台导出。
       </div>
     </div>
   );
@@ -317,7 +317,7 @@ const ExportTimeoutGuidance = ({ projectId, exportType }) => {
     <div className={cn("export-page").elem("timeout").toClassName()}>
       <div className={cn("export-page").elem("timeout-header").toClassName()}>
         <IconWarningCircleFilled className={cn("export-page").elem("timeout-icon").toClassName()} />
-        <div className={cn("export-page").elem("timeout-title").toClassName()}>Export timed out</div>
+        <div className={cn("export-page").elem("timeout-title").toClassName()}>导出超时</div>
       </div>
       <div className={cn("export-page").elem("timeout-body").toClassName()}>
         This export is processed synchronously in the Community Edition UI and can exceed typical reverse-proxy timeouts
@@ -325,7 +325,7 @@ const ExportTimeoutGuidance = ({ projectId, exportType }) => {
       </div>
 
       <div className={cn("export-page").elem("timeout-actions").toClassName()}>
-        <div className={cn("export-page").elem("timeout-actions-title").toClassName()}>Recommended options:</div>
+        <div className={cn("export-page").elem("timeout-actions-title").toClassName()}>推荐选项：</div>
         <ul className={cn("export-page").elem("timeout-actions-list").toClassName()}>
           <li>
             <div className={cn("export-page").elem("timeout-action-item").toClassName()}>
@@ -334,7 +334,7 @@ const ExportTimeoutGuidance = ({ projectId, exportType }) => {
                 <span>
                   Export using the{" "}
                   <a className="no-go" href={EXPORT_CONSOLE_DOCS_URL} target="_blank" rel="noreferrer">
-                    console command
+                    控制台命令
                     <IconExternal className={cn("export-page").elem("timeout-link-icon").toClassName()} />
                   </a>
                   :
@@ -347,12 +347,12 @@ const ExportTimeoutGuidance = ({ projectId, exportType }) => {
                     type="button"
                     className={cn("export-page").elem("timeout-copy-button").toClassName()}
                     onClick={handleCopy}
-                    aria-label="Copy command"
-                    title={copied ? "Copied!" : "Copy command"}
+                    aria-label="复制命令"
+                    title={copied ? "已复制！" : "复制命令"}
                   >
                     <IconCopyOutline className={cn("export-page").elem("timeout-copy-icon").toClassName()} />
                     {copied && (
-                      <span className={cn("export-page").elem("timeout-copy-text").toClassName()}>Copied</span>
+                      <span className={cn("export-page").elem("timeout-copy-text").toClassName()}>已复制</span>
                     )}
                   </button>
                 </div>
@@ -365,10 +365,10 @@ const ExportTimeoutGuidance = ({ projectId, exportType }) => {
               <div className={cn("export-page").elem("timeout-action-content").toClassName()}>
                 Use{" "}
                 <a className="no-go" href={EXPORT_SNAPSHOT_SDK_URL} target="_blank" rel="noreferrer">
-                  export snapshots via the SDK
+                  通过 SDK 导出快照
                   <IconExternal className={cn("export-page").elem("timeout-link-icon").toClassName()} />
                 </a>{" "}
-                to create and download a snapshot without relying on a single UI request.
+                无需依赖单次 UI 请求即可创建并下载快照。
               </div>
             </div>
           </li>
@@ -381,7 +381,7 @@ const ExportTimeoutGuidance = ({ projectId, exportType }) => {
                   Label Studio Enterprise
                   <IconExternal className={cn("export-page").elem("timeout-link-icon").toClassName()} />
                 </a>{" "}
-                since it is designed for large-scale projects and asynchronous exports.
+                因为它专为大型项目和异步导出而设计。
               </div>
             </div>
           </li>
@@ -391,7 +391,7 @@ const ExportTimeoutGuidance = ({ projectId, exportType }) => {
           <span>
             More details in the documentation:{" "}
             <a className="no-go" href={EXPORT_TIMEOUT_DOCS_URL} target="_blank" rel="noreferrer">
-              Export timeout in Community Edition
+              社区版导出超时
               <IconExternal className={cn("export-page").elem("timeout-link-icon").toClassName()} />
             </a>
           </span>

@@ -19,27 +19,27 @@ export const GeneralSettings = () => {
   const colors = ["#FDFDFC", "#FF4C25", "#FF750F", "#ECB800", "#9AC422", "#34988D", "#617ADA", "#CC6FBE"];
 
   const samplings = [
-    { value: "Sequential", label: "Sequential", description: "Tasks are ordered by Task ID" },
-    { value: "Uniform", label: "Random", description: "Tasks are chosen with uniform random" },
+    { value: "Sequential", label: "Sequential", description: "任务按任务 ID 排序" },
+    { value: "Uniform", label: "Random", description: "任务采用均匀随机抽样" },
   ];
 
   return (
     <div className={cn("general-settings").toClassName()}>
       <div className={cn("general-settings").elem("wrapper").toClassName()}>
-        <h1>General Settings</h1>
+        <h1>常规设置</h1>
         <div className={cn("settings-wrapper").toClassName()}>
           <Form action="updateProject" formData={{ ...project }} params={{ pk: project.id }} onSubmit={updateProject}>
             <Form.Row columnCount={1} rowGap="16px">
-              <Input name="title" label="Project Name" />
+              <Input name="title" label="项目名称" />
 
-              <TextArea name="description" label="Description" style={{ minHeight: 128 }} />
+              <TextArea name="description" label="描述" style={{ minHeight: 128 }} />
               {isFF(FF_LSDV_E_297) && (
                 <div className={cn("workspace-placeholder").toClassName()}>
                   <div className={cn("workspace-placeholder").elem("badge-wrapper").toClassName()}>
-                    <div className={cn("workspace-placeholder").elem("title").toClassName()}>Workspace</div>
+                    <div className={cn("workspace-placeholder").elem("title").toClassName()}>工作区</div>
                     <EnterpriseBadge size="small" className="ml-2" />
                   </div>
-                  <Select placeholder="Select an option" disabled options={[]} />
+                  <Select placeholder="请选择选项" disabled options={[]} />
                   <Typography size="small" className="my-tight">
                     Simplify project management by organizing projects into workspaces.{" "}
                     <a
@@ -54,7 +54,7 @@ export const GeneralSettings = () => {
                       rel="noreferrer"
                       className="underline hover:no-underline"
                     >
-                      Learn more
+                      了解更多
                     </a>
                   </Typography>
                 </div>
@@ -67,7 +67,7 @@ export const GeneralSettings = () => {
                 ))}
               </RadioGroup>
 
-              <RadioGroup label="Task Sampling" labelProps={{ size: "large" }} name="sampling" simple>
+              <RadioGroup label="任务抽样" labelProps={{ size: "large" }} name="sampling" simple>
                 {samplings.map(({ value, label, description }) => (
                   <RadioGroup.Button
                     key={value}
@@ -83,7 +83,7 @@ export const GeneralSettings = () => {
                     label={
                       <>
                         Uncertainty sampling{" "}
-                        <Tooltip title="Available on Label Studio Enterprise">
+                        <Tooltip title="仅 Label Studio Enterprise 可用">
                           <Badge
                             variant="enterprise"
                             icon={<IconSpark />}
@@ -106,7 +106,7 @@ export const GeneralSettings = () => {
                           })}
                           rel="noreferrer"
                         >
-                          Learn more
+                          了解更多
                         </a>
                       </>
                     }
@@ -119,8 +119,8 @@ export const GeneralSettings = () => {
               <Form.Indicator>
                 <span case="success">Saved!</span>
               </Form.Indicator>
-              <Button type="submit" className="w-[150px]" aria-label="Save general settings">
-                Save
+              <Button type="submit" className="w-[150px]" aria-label="保存常规设置">
+                保存
               </Button>
             </Form.Actions>
           </Form>

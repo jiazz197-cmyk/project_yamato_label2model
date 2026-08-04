@@ -23,7 +23,7 @@ ModelsPage.context = () => {
   return (
     <Space size="small">
       <Link to="/prompt/settings" className={buttonVariant({ size: "small" })}>
-        Create Model
+        创建模型
       </Link>
     </Space>
   );

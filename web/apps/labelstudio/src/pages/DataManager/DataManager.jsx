@@ -20,7 +20,7 @@ import "./DataManager.prefix.css";
 const loadDependencies = () => [import("@humansignal/datamanager"), import("@humansignal/editor")];
 
 const initializeDataManager = async (root, props, params) => {
-  if (!window.LabelStudio) throw Error("Label Studio Frontend doesn't exist on the page");
+  if (!window.LabelStudio) throw Error("页面上不存在 Label Studio 前端");
   if (!root && root.dataset.dmInitialized) return;
 
   root.dataset.dmInitialized = true;
@@ -96,8 +96,8 @@ export const DataManagerPage = ({ ...props }) => {
 
     dataManager.on("crash", (details) => {
       const error = details?.error;
-      const isMissingTaskError = error?.startsWith("Task ID:");
-      const isMissingProjectError = error?.startsWith("Project ID:");
+      const isMissingTaskError = error?.startsWith("任务 ID：");
+      const isMissingProjectError = error?.startsWith("项目 ID：");
 
       if (isMissingTaskError || isMissingProjectError) {
         const message = `The ${
@@ -214,10 +214,10 @@ export const DataManagerPage = ({ ...props }) => {
 
   return crashed ? (
     <div className={cn("crash").toClassName()}>
-      <div className={cn("crash").elem("info").toClassName()}>Project was deleted or not yet created</div>
+      <div className={cn("crash").elem("info").toClassName()}>项目已被删除或尚未创建</div>
 
-      <Button to="/projects" aria-label="Back to projects">
-        Back to projects
+      <Button to="/projects" aria-label="返回项目列表">
+        返回项目列表
       </Button>
     </div>
   ) : (
@@ -243,7 +243,7 @@ DataManagerPage.context = ({ dmRef }) => {
   const [mode, setMode] = useState(dmRef?.mode ?? "explorer");
 
   const links = {
-    "/settings": "Settings",
+    "/settings": "设置",
   };
 
   const updateCrumbs = (currentMode) => {
@@ -265,7 +265,7 @@ DataManagerPage.context = ({ dmRef }) => {
 
     if (isLabelStream && show_instruction && expert_instruction) {
       modal({
-        title: "Labeling Instructions",
+        title: "标注说明",
         body: <div dangerouslySetInnerHTML={{ __html: expert_instruction }} />,
         style: { width: 680 },
       });
@@ -296,7 +296,7 @@ DataManagerPage.context = ({ dmRef }) => {
           look="outlined"
           onClick={() => {
             modal({
-              title: "Instructions",
+              title: "说明",
               body: () => (
                 <div
                   dangerouslySetInnerHTML={{
@@ -307,7 +307,7 @@ DataManagerPage.context = ({ dmRef }) => {
             });
           }}
         >
-          Instructions
+          说明
         </Button>
       )}
 

@@ -75,7 +75,7 @@ export const loadLiveTipsCollection = () => {
       }
     })
     .catch((e) => {
-      console.warn("Failed to load live Heidi tips collection", e);
+      console.warn("加载实时 Heidi 提示集合失败", e);
     })
     .finally(() => {
       // Wait until the content is fetched to clear the abort timeout

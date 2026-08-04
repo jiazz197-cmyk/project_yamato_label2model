@@ -40,7 +40,7 @@ export const ErrorWrapper = ({
           className={cn("error-message").elem("heidi").toClassName()}
           src={absoluteURL("/static/images/opossum_broken.svg")}
           height="111"
-          alt="Heidi's down"
+          alt="Heidi 出故障了"
         />
       )}
 
@@ -98,7 +98,7 @@ export const ErrorWrapper = ({
               icon={<IconSlack />}
               href={SLACK_INVITE_URL}
             >
-              Ask on Slack
+              在 Slack 提问
             </Button>
 
             <Space size="small">
@@ -107,19 +107,19 @@ export const ErrorWrapper = ({
                   disabled={copied}
                   onClick={copyStacktrace}
                   className="w-[100px]"
-                  aria-label="Copy error stacktrace"
+                  aria-label="复制错误堆栈"
                 >
-                  {copied ? "Copied" : "Copy Stacktrace"}
+                  {copied ? "已复制" : "复制堆栈"}
                 </Button>
               )}
               {onGoBack && (
-                <Button onClick={onGoBack} aria-label="Go back">
-                  Go Back
+                <Button onClick={onGoBack} aria-label="返回">
+                  返回
                 </Button>
               )}
               {onReload && (
-                <Button onClick={onReload} aria-label="Reload page">
-                  Reload
+                <Button onClick={onReload} aria-label="重新加载页面">
+                  重新加载
                 </Button>
               )}
             </Space>

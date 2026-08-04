@@ -6,7 +6,7 @@ import type { ProviderConfig } from "@humansignal/app-common/blocks/StorageProvi
 const s3sProvider: ProviderConfig = {
   name: "s3s",
   title: "Amazon S3\nwith IAM Role",
-  description: "Configure your AWS S3 connection using IAM role access for enhanced security (proxy only)",
+  description: "使用 IAM 角色访问配置 AWS S3 连接以增强安全性（仅代理模式）",
   icon: IconCloudProviderS3,
   disabled: true,
   badge: <EnterpriseBadge />,
@@ -17,7 +17,7 @@ const s3sProvider: ProviderConfig = {
       content: (
         <Alert variant="gradient">
           <IconSpark />
-          <AlertTitle>Enterprise Feature</AlertTitle>
+          <AlertTitle>企业版功能</AlertTitle>
           <AlertDescription>
             Amazon S3 with IAM Role is available in Label Studio Enterprise.{" "}
             <a
@@ -26,7 +26,7 @@ const s3sProvider: ProviderConfig = {
               rel="noopener noreferrer"
               className="underline hover:no-underline"
             >
-              Learn more
+              了解更多
             </a>
           </AlertDescription>
         </Alert>

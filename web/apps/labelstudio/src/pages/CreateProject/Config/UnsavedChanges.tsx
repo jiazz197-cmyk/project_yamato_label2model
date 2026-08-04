@@ -8,7 +8,7 @@ type SaveAndLeaveButtonProps = {
   onSave: () => Promise<void>;
   text?: string;
 };
-const SaveAndLeaveButton = ({ onSave, text = "Save and Leave" }: SaveAndLeaveButtonProps) => {
+const SaveAndLeaveButton = ({ onSave, text = "保存并离开" }: SaveAndLeaveButtonProps) => {
   const [saving, setSaving] = useState(false);
   const saveHandler = useCallback(async () => {
     setSaving(true);
@@ -16,7 +16,7 @@ const SaveAndLeaveButton = ({ onSave, text = "Save and Leave" }: SaveAndLeaveBut
     setSaving(false);
   }, [onSave]);
   return (
-    <Button size="small" onClick={saveHandler} waiting={saving} aria-label="Save changes">
+    <Button size="small" onClick={saveHandler} waiting={saving} aria-label="保存更改">
       {text}
     </Button>
   );
@@ -40,8 +40,8 @@ export const unsavedChangesModal = ({
   cancelText,
   discardText,
   okText,
-  title = "You have unsaved changes.",
-  body = "Would you like to save them before leaving?",
+  title = "你有未保存的更改。",
+  body = "离开前是否保存？",
   ...props
 }: UnsavedChangesModalProps) => {
   let modalInstance: any;
@@ -65,7 +65,7 @@ export const unsavedChangesModal = ({
           }}
           autoFocus
         >
-          {cancelText ?? "Cancel"}
+          {cancelText ?? "取消"}
         </Button>
 
         {onDiscard && (
@@ -78,7 +78,7 @@ export const unsavedChangesModal = ({
             }}
             size="small"
           >
-            {discardText ?? "Discard and leave"}
+            {discardText ?? "放弃并离开"}
           </Button>
         )}
 

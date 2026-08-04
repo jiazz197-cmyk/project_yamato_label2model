@@ -50,8 +50,8 @@ const displayErrorModal = (errorDetails: FormattedError) => {
     body: isShutdown ? (
       <ErrorWrapper
         possum={false}
-        title={"Connection refused"}
-        message={"Server not responding. Is it still running?"}
+        title={"连接被拒绝"}
+        message={"服务器无响应，它还在运行吗？"}
       />
     ) : (
       <ErrorWrapper
@@ -136,7 +136,7 @@ export const ApiProvider = forwardRef<ApiContextType, PropsWithChildren<Record<s
         redirectUrl = absoluteURL("/projects");
       }
 
-      sessionStorage.setItem("redirectMessage", "The page or resource you were looking for does not exist.");
+      sessionStorage.setItem("redirectMessage", "您访问的页面或资源不存在。");
       location.href = redirectUrl;
     }
   }, []);

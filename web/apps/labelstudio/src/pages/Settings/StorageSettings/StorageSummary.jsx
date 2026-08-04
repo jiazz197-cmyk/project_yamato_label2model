@@ -12,7 +12,7 @@ const CopyButton = ({ msg }) => {
 
   return (
     <Button variant="neutral" icon={<IconFileCopy />} onClick={() => copyText()} disabled={copied} className="w-[7rem]">
-      {copied ? "Copied!" : "Copy"}
+      {copied ? "已复制！" : "Copy"}
     </Button>
   );
 };
@@ -50,7 +50,7 @@ export const StorageSummary = ({ target, storage, className, storageTypes = [] }
       `meta = ${JSON.stringify(storage.meta)}\n`;
 
     const currentModal = modal({
-      title: "Storage Sync Error Log",
+      title: "存储同步错误日志",
       body: <CodeBlock code={msg} variant="negative" className="max-h-[50vh] overflow-y-auto" />,
       footer: (
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
@@ -61,18 +61,18 @@ export const StorageSummary = ({ target, storage, className, storageTypes = [] }
                   href="https://labelstud.io/guide/storage.html#Troubleshooting"
                   target="_blank"
                   rel="noreferrer noopener"
-                  aria-label="Learn more about cloud storage troubleshooting"
+                  aria-label="了解更多云存储故障排查"
                 >
-                  See docs
+                  查看文档
                 </a>{" "}
-                for troubleshooting tips on cloud storage connections.
+                获取云存储连接故障排查提示。
               </>
             </div>
           )}
           <Space>
             <CopyButton msg={msg} />
             <Button variant="primary" className="w-[7rem]" onClick={() => currentModal.close()}>
-              Close
+              关闭
             </Button>
           </Space>
         </div>
@@ -101,20 +101,20 @@ export const StorageSummary = ({ target, storage, className, storageTypes = [] }
         <DescriptionList.Item
           term="Status"
           help={[
-            "Initialized: storage was added, but never synced; sufficient for starting URI link resolving",
-            "Queued: sync job is in the queue, but not yet started",
-            "In progress: sync job is running",
-            "Failed: sync job stopped, some errors occurred",
-            "Completed with errors: sync job completed but some tasks had validation errors",
-            "Completed: sync job completed successfully",
+            "已初始化：存储已添加但从未同步；足以开始解析 URI 链接",
+            "排队中：同步任务已入队，但尚未开始",
+            "进行中：同步任务正在运行",
+            "失败：同步任务已停止，发生了一些错误",
+            "已完成但有错误：同步任务已完成，但部分任务存在校验错误",
+            "已完成：同步任务成功完成",
           ].join("\n")}
         >
-          {storageStatus === "Failed" || storageStatus === "Completed with errors" ? (
+          {storageStatus === "Failed" || storageStatus === "已完成但有错误" ? (
             <span
               className="cursor-pointer border-b border-dashed border-negative-border-subtle text-negative-content"
               onClick={handleButtonClick}
             >
-              {storageStatus} (View Logs)
+              {storageStatus} （查看日志）
             </span>
           ) : (
             storageStatus
@@ -141,8 +141,8 @@ export const StorageSummary = ({ target, storage, className, storageTypes = [] }
           </DescriptionList.Item>
         )}
 
-        <DescriptionList.Item term="Last Sync">
-          {storage.last_sync ? format(new Date(storage.last_sync), "MMMM dd, yyyy ∙ HH:mm:ss") : "Not synced yet"}
+        <DescriptionList.Item term="上次同步">
+          {storage.last_sync ? format(new Date(storage.last_sync), "MMMM dd, yyyy ∙ HH:mm:ss") : "尚未同步"}
         </DescriptionList.Item>
       </DescriptionList>
     </div>
