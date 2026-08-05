@@ -23,7 +23,7 @@ const hotkeys = Hotkey("Polygons");
  * </View>
  * @name Polygon
  * @meta_title Polygon Tag for Adding Polygons to Images
- * @meta_description Customize Label Studio with the Polygon tag by adding polygons to images for segmentation machine learning and data science projects.
+ * @meta_description Customize Yamato with the Polygon tag by adding polygons to images for segmentation machine learning and data science projects.
  * @param {string} name                           - Name of tag
  * @param {string} toname                         - Name of image to label
  * @param {number} [opacity=0.6]                  - Opacity of polygon

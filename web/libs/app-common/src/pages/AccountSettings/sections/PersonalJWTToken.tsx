@@ -113,7 +113,7 @@ export function PersonalJWTToken() {
       confirm({
         title: "Revoke Token",
         body: `Are you sure you want to delete this access token? Any application using this token will need a new token to be able to access ${
-          window?.APP_SETTINGS?.app_name || "Label Studio"
+          window?.APP_SETTINGS?.app_name || "Yamato"
         }`,
         okText: "Revoke",
         buttonLook: "negative",

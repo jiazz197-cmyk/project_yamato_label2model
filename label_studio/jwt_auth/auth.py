@@ -53,7 +53,7 @@ class JWTAuthScheme(OpenApiAuthenticationExtension):
             'name': 'Authorization',
             'in': 'header',
             'description': 'The token (or API key) must be passed as a request header. '
-            'You can find your user token on the User Account page in Label Studio. Example: '
+            'You can find your user token on the User Account page in Yamato. Example: '
             '<br><pre><code class="language-bash">'
             'curl https://label-studio-host/api/projects -H "Authorization: Token [your-token]"'
             '</code></pre>',

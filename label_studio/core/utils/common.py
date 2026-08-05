@@ -460,7 +460,7 @@ def collect_versions(force=False):
         'label-studio-os-backend': version.get_git_commit_info(ls=True),
     }
 
-    # label studio frontend
+    # Yamato frontend
     try:
         with open(os.path.join(settings.EDITOR_ROOT, 'version.json')) as f:
             lsf = json.load(f)
@@ -754,12 +754,12 @@ def get_ttl_hash(seconds: int = 60) -> int:
 
 
 def is_community():
-    """Determine if the current Label Studio instance is the community edition (aka LSO).
+    """Determine if the current Yamato instance is the community edition (aka LSO).
 
     Returns
     -------
     bool
-        True if running open-source Label Studio, False otherwise.
+        True if running open-source Yamato, False otherwise.
     """
     try:
         import label_studio_enterprise  # noqa: F401

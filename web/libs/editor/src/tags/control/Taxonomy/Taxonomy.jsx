@@ -63,7 +63,7 @@ import { errorBuilder } from "../../../core/DataValidator/ConfigValidator";
  * </View>
  * @name Taxonomy
  * @meta_title Taxonomy Tag for Hierarchical Labels
- * @meta_description Customize Label Studio with the Taxonomy tag and use hierarchical labels for machine learning and data science projects.
+ * @meta_description Customize Yamato with the Taxonomy tag and use hierarchical labels for machine learning and data science projects.
  * @param {string} name                   - Name of the element
  * @param {string} toName                 - Name of the element that you want to classify
  * @param {string} [apiUrl]               - **Beta** -- Retrieve the taxonomy from a remote source. This can be a JSON-formatted file or a hierarchical data source read as an API. For more information, see the [Taxonomy template page](/templates/taxonomy)

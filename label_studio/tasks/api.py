@@ -57,7 +57,7 @@ logger = logging.getLogger(__name__)
     decorator=extend_schema(
         tags=['Tasks'],
         summary='Create task',
-        description='Create a new labeling task in Label Studio.',
+        description='Create a new labeling task in Yamato.',
         request={
             'application/json': task_request_schema,
         },
@@ -263,7 +263,7 @@ class TaskListAPI(DMTaskListAPI):
     decorator=extend_schema(
         tags=['Tasks'],
         summary='Delete task',
-        description='Delete a task in Label Studio. This action cannot be undone!',
+        description='Delete a task in Yamato. This action cannot be undone!',
         parameters=[
             OpenApiParameter(name='id', type=OpenApiTypes.STR, location='path', description='Task ID'),
         ],
@@ -308,7 +308,7 @@ class TaskAPI(generics.RetrieveUpdateDestroyAPIView):
 
         The resolve_uri parameter controls whether storage URLs (e.g., s3://bucket/file.jpg)
         are converted to proxy URLs (/tasks/<id>/resolve/?fileuri=...). This is useful for:
-        - resolve_uri=True (default): URLs are proxied through Label Studio for security
+        - resolve_uri=True (default): URLs are proxied through Yamato for security
         - resolve_uri=False: Original storage URLs are preserved, useful for debugging
           or when users need to see the actual source paths in task preview
         """

@@ -1,7 +1,7 @@
 """This file and its contents are licensed under the Apache License 2.0. Please see the included NOTICE for copyright information and LICENSE for a copy of the license."""
 
 """
-Django Base settings for Label Studio.
+Django Base settings for Yamato.
 
 For more information on this file, see
 https://docs.djangoproject.com/en/3.1/topics/settings/
@@ -389,8 +389,8 @@ RQ_FAILED_JOB_TTL = int(get_env('RQ_FAILED_JOB_TTL', 30 * 24 * 60 * 60))
 
 # drf-spectacular settings for OpenAPI 3.0 schema generation
 SPECTACULAR_SETTINGS = {
-    'TITLE': 'Label Studio API',
-    'DESCRIPTION': 'Label Studio API for data annotation and labeling',
+    'TITLE': 'Yamato API',
+    'DESCRIPTION': 'Yamato API for data annotation and labeling',
     'VERSION': '',
     'SERVE_INCLUDE_SCHEMA': False,
     'COMPONENT_SPLIT_REQUEST': True,
@@ -407,11 +407,11 @@ SPECTACULAR_SETTINGS = {
     'SERVERS': [
         {
             'url': HOSTNAME,
-            'description': 'Label Studio',
+            'description': 'Yamato',
         },
     ],
-    'CONTACT': {'url': 'https://labelstud.io'},
-    'X_LOGO': {'url': '../../static/icons/logo-black.svg'},
+    'CONTACT': {'url': 'https://yamato.local'},
+    'X_LOGO': {'url': '../../static/icons/logo.svg'},
     'ENUM_ADD_EXPLICIT_BLANK_NULL_CHOICE': False,
 }
 
@@ -553,7 +553,7 @@ RANDOM_NEXT_TASK_SAMPLE_SIZE = int(get_env('RANDOM_NEXT_TASK_SAMPLE_SIZE', 50))
 TASK_API_PAGE_SIZE_MAX = int(get_env('TASK_API_PAGE_SIZE_MAX', 0)) or None
 
 # Email backend
-FROM_EMAIL = get_env('FROM_EMAIL', 'Label Studio <hello@labelstud.io>')
+FROM_EMAIL = get_env('FROM_EMAIL', 'Yamato <noreply@yamato.local>')
 EMAIL_BACKEND = get_env('EMAIL_BACKEND', 'django.core.mail.backends.dummy.EmailBackend')
 
 ENABLE_LOCAL_FILES_STORAGE = get_bool_env('ENABLE_LOCAL_FILES_STORAGE', default=True)
@@ -596,6 +596,7 @@ DATA_UNDEFINED_NAME = '$undefined$'
 LICENSE = {}
 VERSIONS = {}
 VERSION_EDITION = 'Community'
+PRODUCT_NAME = "Yamato"
 LATEST_VERSION_CHECK = get_bool_env('LATEST_VERSION_CHECK', True)
 VERSIONS_CHECK_TIME = 0
 ALLOW_ORGANIZATION_WEBHOOKS = get_bool_env('ALLOW_ORGANIZATION_WEBHOOKS', False)
@@ -727,7 +728,7 @@ FEATURE_FLAGS_OFFLINE = get_bool_env('FEATURE_FLAGS_OFFLINE', True)
 FEATURE_FLAGS_DEFAULT_VALUE = False
 
 # Whether to send analytics telemetry data. Fall back to old lowercase name for legacy compatibility.
-COLLECT_ANALYTICS = get_bool_env('COLLECT_ANALYTICS', get_bool_env('collect_analytics', True))
+COLLECT_ANALYTICS = get_bool_env('COLLECT_ANALYTICS', get_bool_env('collect_analytics', False))
 
 # Strip harmful content from SVG files by default
 SVG_SECURITY_CLEANUP = get_bool_env('SVG_SECURITY_CLEANUP', False)
@@ -932,7 +933,7 @@ QS_ITERATOR_DEFAULT_CHUNK_SIZE = int(get_env('QS_ITERATOR_DEFAULT_CHUNK_SIZE', 1
 # Max number of users to display in the Data Manager in Annotators/Reviewers/Comment Authors, etc
 DM_MAX_USERS_TO_DISPLAY = int(get_env('DM_MAX_USERS_TO_DISPLAY', 10))
 
-# Base FSM (Finite State Machine) Configuration for Label Studio
+# Base FSM (Finite State Machine) Configuration for Yamato
 FSM_CACHE_TTL = 300  # Cache TTL in seconds (5 minutes)
 FSM_SYNC_PROJECT_STATE = 'fsm.project_transitions.sync_project_state'
 FSM_INFERENCE_FUNCTION = 'fsm.state_inference._get_or_infer_state'

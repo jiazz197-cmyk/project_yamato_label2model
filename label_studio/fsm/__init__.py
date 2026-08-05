@@ -1,8 +1,8 @@
 """
-Finite State Machine (FSM) core functionality for Label Studio.
+Finite State Machine (FSM) core functionality for Yamato.
 
 This package provides the core FSM infrastructure that can be extended
-by Label Studio Enterprise and other applications.
+by Yamato Enterprise and other applications.
 
 Core components:
 - BaseState: Abstract model for all state tracking

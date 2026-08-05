@@ -31,7 +31,7 @@ const RelationItemRect = ({ x, y, width, height }) => {
 };
 
 const RelationConnector = ({ id, command, color, direction, highlight }) => {
-  const pathColor = highlight ? "#fa541c" : color;
+  const pathColor = highlight ? "#3287e2" : color;
   const pathSettings = {
     d: command,
     stroke: pathColor,

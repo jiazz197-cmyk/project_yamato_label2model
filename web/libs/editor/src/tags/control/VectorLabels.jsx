@@ -154,7 +154,7 @@ import ControlBase from "./Base";
  * @name VectorLabels
  * @regions VectorRegion
  * @meta_title Vector Label Tag for Labeling Vectors in Images
- * @meta_description Customize Label Studio with the VectorLabels tag and label vectors in images for semantic segmentation machine learning and data science projects.
+ * @meta_description Customize Yamato with the VectorLabels tag and label vectors in images for semantic segmentation machine learning and data science projects.
  * @param {string} name                             - Name of tag
  * @param {string} toName                           - Name of image to label
  * @param {single|multiple=} [choice=single]        - Configure whether you can select one or multiple labels

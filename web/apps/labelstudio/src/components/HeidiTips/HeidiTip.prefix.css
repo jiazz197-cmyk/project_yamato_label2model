@@ -47,16 +47,4 @@
     }
   }
 
-  &__heidi {
-    margin-top: -12px;
-    padding-left: 16px;
-    pointer-events: none;
-    color: var(--color-neutral-border);
-
-    & svg {
-      & path.spike-stroke {
-        color: red;
-      }
-    }
   }
-}

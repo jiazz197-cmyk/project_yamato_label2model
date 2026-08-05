@@ -172,7 +172,7 @@ class GCS(object):
                 }
 
         except DefaultCredentialsError as exc:
-            logger.warning(f'Label studio could not load default GCS credentials from env. {exc}', exc_info=True)
+            logger.warning(f'Yamato could not load default GCS credentials from env. {exc}', exc_info=True)
             GCS._credentials_cache = {}
 
         return GCS._credentials_cache

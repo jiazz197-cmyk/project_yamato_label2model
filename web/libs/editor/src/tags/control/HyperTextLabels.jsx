@@ -24,7 +24,7 @@ import ControlBase from "./Base";
  * @name HyperTextLabels
  * @regions HyperTextRegion
  * @meta_title Hypertext Label Tag to Create Labeled Hypertext (HTML)
- * @meta_description Customize Label Studio with the HyperTextLabels tag to label hypertext (HTML) for machine learning and data science projects.
+ * @meta_description Customize Yamato with the HyperTextLabels tag to label hypertext (HTML) for machine learning and data science projects.
  * @param {string} name                      - Name of the element
  * @param {string} toName                    - Name of the HTML element to label
  * @param {single|multiple=} [choice=single] - Configure if you can select one or multiple labels

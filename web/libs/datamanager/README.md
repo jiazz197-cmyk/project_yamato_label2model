@@ -1,16 +1,16 @@
 # Data Manager
 
-LabelStudio DataManager is a vital component within the Label Studio ecosystem, designed to efficiently manage and navigate through annotated data. It provides users with advanced capabilities to organize, filter, and browse their datasets seamlessly.
+Yamato DataManager is a vital component within the Yamato ecosystem, designed to efficiently manage and navigate through annotated data. It provides users with advanced capabilities to organize, filter, and browse their datasets seamlessly.
 
 
 ### Features
 
-DataManager boasts several key features, enhancing data handling within Label Studio:
+DataManager boasts several key features, enhancing data handling within Yamato:
 
 - Grid and List Views: Facilitate easy exploration of datasets.
 - Customizable Data Representation: Tailor the visibility and presentation of your data.
 - Advanced Data Filtering: Slice datasets with filters for precise exploration.
-- Integration with Label Studio Frontend: Ensures cohesive functionality with the Label Studio Frontend.
+- Integration with Yamato Frontend: Ensures cohesive functionality with the Yamato Frontend.
 
 ### Environment Configuration:
 #### Custom Configuration for DataManager:
@@ -18,7 +18,7 @@ DataManager boasts several key features, enhancing data handling within Label St
   - Duplicate the `.env.example` file located in the DataManager directory and rename the copy to `.env`.
   - Make your desired changes in this new `.env` file. The key configurations to consider are:
     - `NX_API_GATEWAY`: Set this to your API root. For example, `https://localhost:8080/api/dm`.
-    - `LS_ACCESS_TOKEN`: This is the access token for Label Studio, which can be obtained from your Label Studio account page.
+    - `LS_ACCESS_TOKEN`: This is the access token for Yamato, which can be obtained from your Yamato account page.
 - This process allows you to have a customized configuration for DataManager, separate from the default settings in the .env.local files.
 
 
@@ -28,13 +28,13 @@ DataManager provides specific scripts for operation and testing:
 _Important Note: These scripts must be executed within the web folder or its subfolders. This is crucial for the scripts to function correctly, as they are designed to work within the context of the web directory's structure and dependencies._
 
 - **`yarn dm:watch`: Build DataManager continuously.**
-    - This script is essential for development. It continuously builds DataManager, allowing developers to see their changes in real-time within the Label Studio environment.
+    - This script is essential for development. It continuously builds DataManager, allowing developers to see their changes in real-time within the Yamato environment.
 - **`yarn dm:unit`: Run unit tests on DataManager.**
     - Essential for maintaining code quality and reliability, particularly important in a collaborative development environment.
 
 #### Events
 
-DataManager integrates closely with Label Studio, handling various events:
+DataManager integrates closely with Yamato, handling various events:
 
 ```js
 dm.on('submitAnnotation', () => /* handle the submit process */)

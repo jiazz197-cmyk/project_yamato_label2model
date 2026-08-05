@@ -24,7 +24,7 @@ import ControlBase from "./Base";
  * </View>
  * @name ParagraphLabels
  * @meta_title Paragraph Label Tag for Paragraph Labels
- * @meta_description Customize Label Studio with paragraph labels for machine learning and data science projects.
+ * @meta_description Customize Yamato with paragraph labels for machine learning and data science projects.
  * @param {string} name                      - Name of the element
  * @param {string} toName                    - Name of the paragraph element to label
  * @param {single|multiple=} [choice=single] - Configure whether you can select one or multiple labels

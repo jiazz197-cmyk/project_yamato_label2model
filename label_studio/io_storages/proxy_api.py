@@ -55,7 +55,7 @@ class ResolveStorageUriAPIMixin:
         # Check if storage should use presigned URLs;
         # It's important to have this check here, because it increases security:
         # If storage.presign is False, it means an admin doesn't want to expose presigned URLs anyhow,
-        # and all files are proxied through Label Studio using LS auth and RBAC control.
+        # and all files are proxied through Yamato using LS auth and RBAC control.
 
         if presign:
             # Redirect to presigned URL (original flow)
@@ -285,7 +285,7 @@ class ResolveStorageUriAPIMixin:
 class TaskResolveStorageUri(ResolveStorageUriAPIMixin, APIView):
     """A file proxy to presign storage urls at the task level.
 
-    If the storage has presign=False, it will proxy the data through Label Studio
+    If the storage has presign=False, it will proxy the data through Yamato
     instead of redirecting to presigned URLs.
     """
 
@@ -293,7 +293,7 @@ class TaskResolveStorageUri(ResolveStorageUriAPIMixin, APIView):
     permission_classes = (IsAuthenticated,)
 
     def get(self, request, *args, **kwargs):
-        """Get the presigned url for a given fileuri or proxy data through Label Studio"""
+        """Get the presigned url for a given fileuri or proxy data through Yamato"""
         request = self.request
         task_id = kwargs.get('task_id')
         fileuri = request.GET.get('fileuri')
@@ -313,7 +313,7 @@ class TaskResolveStorageUri(ResolveStorageUriAPIMixin, APIView):
 class ProjectResolveStorageUri(ResolveStorageUriAPIMixin, APIView):
     """A file proxy to presign storage urls at the project level.
 
-    If the storage has presign=False, it will proxy the data through Label Studio
+    If the storage has presign=False, it will proxy the data through Yamato
     instead of redirecting to presigned URLs.
     """
 
@@ -321,7 +321,7 @@ class ProjectResolveStorageUri(ResolveStorageUriAPIMixin, APIView):
     permission_classes = (IsAuthenticated,)
 
     def get(self, request, *args, **kwargs):
-        """Get the presigned url for a given fileuri or proxy data through Label Studio"""
+        """Get the presigned url for a given fileuri or proxy data through Yamato"""
         request = self.request
         project_id = kwargs.get('project_id')
         fileuri = request.GET.get('fileuri')

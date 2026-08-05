@@ -20,7 +20,8 @@ def generate_secret_key_if_missing(data_dir: str) -> str:
     env_key = 'SECRET_KEY'
     env = environ.Env()
     env_filepath = os.path.join(data_dir, '.env')
-    environ.Env.read_env(env_filepath)
+    if os.path.exists(env_filepath):
+        environ.Env.read_env(env_filepath)
 
     if existing_secret := env.str(env_key, ''):
         return existing_secret

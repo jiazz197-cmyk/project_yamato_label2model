@@ -123,7 +123,7 @@ export const Filters = injector(({ store, views, currentView, filters, projectId
             <Button
               size="small"
               look="string"
-              tooltip={copyFeedback ? "Copied!" : "Copy filters to clipboard; Tip: Use it in Label Studio SDK"}
+              tooltip={copyFeedback ? "Copied!" : "Copy filters to clipboard; Tip: Use it in Yamato SDK"}
               onClick={handleCopyFilters}
               aria-label="Copy filters"
             >

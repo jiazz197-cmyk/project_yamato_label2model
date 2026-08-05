@@ -49,14 +49,14 @@ EDITOR_KEYMAP = json.dumps(get_env('EDITOR_KEYMAP'))
 from label_studio import __version__
 from label_studio.core.utils import sentry
 
-sentry.init_sentry(release_name='label-studio', release_version=__version__)
+sentry.init_sentry(release_name='yamato', release_version=__version__)
 
 # we should do it after sentry init
 from label_studio.core.utils.common import collect_versions
 
 versions = collect_versions()
 
-# in Label Studio Community version, feature flags are always ON
+# in Yamato Community version, feature flags are always ON
 FEATURE_FLAGS_DEFAULT_VALUE = True
 # or if file is not set, default is using offline mode
 FEATURE_FLAGS_OFFLINE = get_bool_env('FEATURE_FLAGS_OFFLINE', True)

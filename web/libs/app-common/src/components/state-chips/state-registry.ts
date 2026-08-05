@@ -1,8 +1,8 @@
 /**
- * State Registry System for Label Studio
+ * State Registry System for Yamato
  *
  * This module provides an extensible state management system that allows
- * Label Studio Enterprise to extend state definitions without modifying base code.
+ * Yamato Enterprise to extend state definitions without modifying base code.
  *
  * Instead of mapping states directly to colors (CREATED → "grey"), we use semantic
  * types that represent meaning (CREATED → StateType.INITIAL → neutral styling).
@@ -265,7 +265,7 @@ class StateRegistry {
 export const stateRegistry = new StateRegistry();
 
 // ============================================================================
-// Core State Registrations (Label Studio Open Source)
+// Core State Registrations (Yamato Open Source)
 // ============================================================================
 
 /**

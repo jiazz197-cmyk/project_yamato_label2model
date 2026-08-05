@@ -99,7 +99,7 @@
   "upload": {
     "TextRaw": "Sample: Your text will go here.",
     "TextUrl": "https://htx-pub.s3.amazonaws.com/example.txt",
-    "HyperText": "<a href='https://labelstud.io'>Label Studio</a>",
+    "HyperText": "<a href='https://yamato.local'>Yamato</a>",
     "Image": "<HOSTNAME>/static/samples/sample.jpg",
     "Audio": "<HOSTNAME>/static/samples/game.wav",
     "AudioPlus": "<HOSTNAME>/static/samples/game.wav",

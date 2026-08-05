@@ -28,7 +28,7 @@ import ControlBase from "./Base";
  * @name RectangleLabels
  * @regions RectRegion
  * @meta_title Rectangle Label Tag to Label Rectangle Bounding Box in Images
- * @meta_description Customize Label Studio with the RectangleLabels tag and add labeled rectangle bounding boxes in images for semantic segmentation and object detection machine learning and data science projects.
+ * @meta_description Customize Yamato with the RectangleLabels tag and add labeled rectangle bounding boxes in images for semantic segmentation and object detection machine learning and data science projects.
  * @param {string} name              - Name of the element
  * @param {string} toName            - Name of the image to label
  * @param {single|multiple=} [choice=single] - Configure whether you can select one or multiple labels

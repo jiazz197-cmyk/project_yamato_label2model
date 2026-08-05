@@ -20,7 +20,7 @@ import { SNAP_TO_PIXEL_MODE } from "../../components/ImageView/Image";
  * </View>
  * @name KeyPoint
  * @meta_title Keypoint Tag for Adding Keypoints to Images
- * @meta_description Customize Label Studio with the KeyPoint tag to add key points to images for computer vision machine learning and data science projects.
+ * @meta_description Customize Yamato with the KeyPoint tag to add key points to images for computer vision machine learning and data science projects.
  * @param {string} name                  - Name of the element
  * @param {string} toName                - Name of the image to label
  * @param {float=} [opacity=0.9]         - Opacity of keypoint

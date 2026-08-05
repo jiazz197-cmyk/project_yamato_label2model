@@ -74,7 +74,7 @@ _ml_backend_schema = {
         tags=['Machine Learning'],
         summary='Add ML Backend',
         description="""
-    Add an ML backend to a project using the Label Studio UI or by sending a POST request using the following cURL 
+    Add an ML backend to a project using the Yamato UI or by sending a POST request using the following cURL 
     command:
     ```bash
     curl -X POST -H 'Content-type: application/json' {host}/api/ml -H 'Authorization: Token abc123'\\
@@ -151,7 +151,7 @@ class MLBackendListAPI(generics.ListCreateAPIView):
         tags=['Machine Learning'],
         summary='Update ML Backend',
         description="""
-    Update ML backend parameters using the Label Studio UI or by sending a PATCH request using the following cURL command:
+    Update ML backend parameters using the Yamato UI or by sending a PATCH request using the following cURL command:
     ```bash
     curl -X PATCH -H 'Content-type: application/json' {host}/api/ml/{{ml_backend_ID}} -H 'Authorization: Token abc123'\\
     --data '{{"url": "http://localhost:9091"}}' 

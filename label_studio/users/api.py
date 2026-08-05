@@ -69,7 +69,7 @@ _user_schema = {
         tags=['Users'],
         summary='Save user details',
         description="""
-    Save details for a specific user, such as their name or contact information, in Label Studio.
+    Save details for a specific user, such as their name or contact information, in Yamato.
     """,
         parameters=[
             OpenApiParameter(name='id', type=OpenApiTypes.INT, location='path', description='User ID'),
@@ -85,7 +85,7 @@ _user_schema = {
     decorator=extend_schema(
         tags=['Users'],
         summary='List users',
-        description='List the users that exist on the Label Studio server.',
+        description='List the users that exist on the Yamato server.',
         extensions={
             'x-fern-sdk-group-name': 'users',
             'x-fern-sdk-method-name': 'list',
@@ -98,7 +98,7 @@ _user_schema = {
     decorator=extend_schema(
         tags=['Users'],
         summary='Create new user',
-        description='Create a user in Label Studio.',
+        description='Create a user in Yamato.',
         request={
             'application/json': _user_schema,
         },
@@ -115,7 +115,7 @@ _user_schema = {
     decorator=extend_schema(
         tags=['Users'],
         summary='Get user info',
-        description='Get info about a specific Label Studio user, based on the user ID.',
+        description='Get info about a specific Yamato user, based on the user ID.',
         parameters=[
             OpenApiParameter(name='id', type=OpenApiTypes.INT, location='path', description='User ID'),
         ],
@@ -134,7 +134,7 @@ _user_schema = {
         tags=['Users'],
         summary='Update user details',
         description="""
-        Update details for a specific user, such as their name or contact information, in Label Studio.
+        Update details for a specific user, such as their name or contact information, in Yamato.
         """,
         parameters=[
             OpenApiParameter(name='id', type=OpenApiTypes.INT, location='path', description='User ID'),
@@ -155,7 +155,7 @@ _user_schema = {
     decorator=extend_schema(
         tags=['Users'],
         summary='Delete user',
-        description='Delete a specific Label Studio user.',
+        description='Delete a specific Yamato user.',
         parameters=[
             OpenApiParameter(name='id', type=OpenApiTypes.INT, location='path', description='User ID'),
         ],

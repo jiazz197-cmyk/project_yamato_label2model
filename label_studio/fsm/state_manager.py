@@ -1,8 +1,8 @@
 """
-Core state management functionality for Label Studio.
+Core state management functionality for Yamato.
 
 Provides high-performance state management with caching and batch operations
-that can be extended by Label Studio Enterprise with additional features.
+that can be extended by Yamato Enterprise with additional features.
 """
 
 import logging
@@ -62,10 +62,10 @@ class InvalidTransitionError(StateManagerError):
 
 class StateManager:
     """
-    Core state management system for Label Studio.
+    Core state management system for Yamato.
 
     Provides the foundation for state management that can be extended
-    by Label Studio Enterprise with additional features like:
+    by Yamato Enterprise with additional features like:
     - Advanced caching strategies
     - Bulk operations optimization
     - Complex transition validation

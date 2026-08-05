@@ -6,7 +6,6 @@ import { IconCheck, IconEllipsis, IconMinus, IconSparks } from "@humansignal/ico
 import { Userpic, Button, Dropdown, Tooltip } from "@humansignal/ui";
 import { Menu, Pagination } from "../../components";
 import { cn } from "../../utils/bem";
-import { absoluteURL } from "../../utils/helpers";
 import { ProjectStateChip } from "@humansignal/app-common";
 
 const DEFAULT_CARD_COLORS = ["#FFFFFF", "#FDFDFC"];
@@ -38,12 +37,7 @@ export const ProjectsList = ({ projects, currentPage, totalItems, loadNextPage, 
 export const EmptyProjectsList = ({ openModal }) => {
   return (
     <div className={cn("empty-projects-page").toClassName()}>
-      <img
-        alt="Heidi looking for projects"
-        className={cn("empty-projects-page").elem("heidi").toClassName()}
-        src={absoluteURL("/static/images/opossum_looking.png")}
-      />
-      <h1 className={cn("empty-projects-page").elem("header").toClassName()}>Heidi doesn't see any projects here!</h1>
+      <h1 className={cn("empty-projects-page").elem("header").toClassName()}>No projects here!</h1>
       <p>Create one and start labeling your data.</p>
       <Button onClick={openModal} className="my-8" aria-label="Create new project">
         Create Project

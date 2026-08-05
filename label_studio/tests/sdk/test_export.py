@@ -77,7 +77,7 @@ def test_direct_export(test_project):
 
 
 # TODO: support pytest-asyncio, otherwise this test will be skipped
-@pytest.mark.skip(reason='pytest-asyncio is not supported in this version of Label Studio')
+@pytest.mark.skip(reason='pytest-asyncio is not supported in this version of Yamato')
 async def test_async_export(test_project_async):
     ls, project = test_project_async
 

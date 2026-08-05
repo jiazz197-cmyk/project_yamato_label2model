@@ -36,7 +36,7 @@ import chroma from "chroma-js";
  * </View>
  * @name Shortcut
  * @meta_title Shortcut Tag to Define Shortcuts
- * @meta_description Customize Label Studio to define keyboard shortcuts and hotkeys to accelerate labeling for machine learning and data science projects.
+ * @meta_description Customize Yamato to define keyboard shortcuts and hotkeys to accelerate labeling for machine learning and data science projects.
  * @param {string} value                    - The value of the shortcut
  * @param {string} [alias]                  - Shortcut alias
  * @param {string} [hotkey]                 - Hotkey

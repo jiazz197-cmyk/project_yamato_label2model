@@ -181,7 +181,7 @@ actions: list[DataManagerAction] = [
             'title': 'Retrieve Predictions',
             'text': 'Send the selected tasks to all ML backends connected to the project.'
             'This operation might be abruptly interrupted due to a timeout. '
-            'The recommended way to get predictions is to update tasks using the Label Studio API.'
+            'The recommended way to get predictions is to update tasks using the Yamato API.'
             'Please confirm your action.',
             'type': 'confirm',
         },
