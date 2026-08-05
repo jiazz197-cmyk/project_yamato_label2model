@@ -39,7 +39,7 @@ export const StorageCard = ({ rootClass, target, storage, onEditStorage, onDelet
 
   return (
     <Card
-      header={storageData.title ?? `Untitled ${storageData.type}`}
+      header={storageData.title ?? `未命名 ${storageData.type}`}
       extra={
         <Dropdown.Trigger
           align="right"
@@ -75,7 +75,7 @@ export const StorageCard = ({ rootClass, target, storage, onEditStorage, onDelet
           </Button>
           {notSyncedYet && (
             <div className={rootClass.elem("sync-count").toClassName()}>
-              Syncing may take some time, please refresh the page to see the current status.
+              同步可能需要一些时间，请刷新页面以查看当前状态。
             </div>
           )}
         </div>

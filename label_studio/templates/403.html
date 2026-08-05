@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block page_labeling %}
-  <title>403 | Label Studio</title>
+  <title>403 禁止访问 | Label Studio - 数据标注平台</title>
   {{ block.super }}
 {% endblock %}
 
@@ -13,7 +13,7 @@
 
 {% block content %}
 <div class="ls-global-error">
-  <img class="ls-global-error__heidi" src="{{ settings.HOSTNAME }}{% static 'images/heidi-403.svg' %}" alt="Heidi's down" draggable="false" />
+  <img class="ls-global-error__heidi" src="{{ settings.HOSTNAME }}{% static 'images/heidi-403.svg' %}" alt="Heidi 出故障了" draggable="false" />
   <h1>哎呀，此操作不被允许。</h1>
   <h2>你可以尝试以下几种方式：</h2>
   <p class="ls-global-error__actions">

@@ -61,8 +61,7 @@ export const StorageSettings = () => {
       </Typography>
       {hasAnyStorages && (
         <Typography size="small" className="text-neutral-content-subtler mb-wider">
-          Use cloud or database storage as the source for your labeling tasks or the target of your completed
-          annotations.
+          使用云存储或数据库存储作为标注任务的来源，或作为已完成标注的存放目标。
         </Typography>
       )}
 

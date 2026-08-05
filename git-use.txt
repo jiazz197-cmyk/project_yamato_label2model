@@ -1,0 +1,77 @@
+配置你的 Git 身份：
+1、终端：
+git config --global user.name "Your Name"
+git config --global user.email "your.email@example.com"
+2、检查是否成功：（也可用于先验证当前的用户名和邮件）
+git config --global --list
+
+初始化你的仓库：
+1、把文件夹变成Git可以管理的仓库（初始化仓库）：
+git init
+2、把所有文件加入到暂存区：
+git add .
+3、确认暂存区的内容
+git status
+4、提交规范：
+常见格式
+git commit -m "********"
+规范格式
+<type>(<scope>): <description>
+[optional body]
+[optional footer(s)]
+type（必需）：提交类型，表明改动的性质。
+scope（可选）：影响范围，如模块名、文件名等。
+description（必需）：简短描述，通常使用祈使句，首字母小写，末尾不加句号。
+body（可选）：详细说明，解释改动原因、与之前行为的对比等。
+footer（可选）：放置不兼容变更、关闭的 Issue、Breaking Changes 等信息。
+
+以上属于本地提交，本地仓库管理。
+
+连接 GitHub 并推送：
+5、点击 Create repository——不要勾选 “Add a README file” （因为本地已有提交）。  
+git remote add origin https://github.com/你的用户名/文件名
+这个地址就是远程仓库的“名字”（准确说是 URL）
+6、检查是否关联成功：
+git remote -v
+7、推送本地提交到 GitHub
+git push -u origin master  （-u 会让本地 master 分支追踪远程 origin/master，下次直接 git push 即可。）
+
+以上属于线上提交，本地和云端互联
+
+创建分支，用于多人协作
+规范的分支命名
+分支名建议使用 类型/描述格式，清晰表达目的。常见类型：
+feat/xxx — 新功能
+fix/xxx — 修复 bug
+docs/xxx — 文档更新
+refactor/xxx — 代码重构
+chore/xxx — 杂项（构建、依赖等）
+8、创建一个特性分支
+git checkout -b feat/add-page	#feat/add-page为规范实例
+解释：
+checkout：切换分支。
+-b：创建并立即切换到新分支。
+9、当更改创建了新文件
+git status查看状态
+10、添加到暂存区并提交
+git add src/index.html	#这里为src文件夹下的index.html文件，可以是任何你自己添加的文件
+git commit -m "feat: add index page with welcome message"
+11、确认当前分支的正确名字
+git branch
+12、将新分支推送到 GitHub
+git push -u origin feat/add-page		#这里feat/add-page是我们刚才的分支
+
+合并分支
+13、切换回 master 分支
+git checkout master
+14、确保 master 是最新的
+git pull origin master	#这会把远程 master 上别人的更新拉下来（这是个好习惯）
+15、合并特性分支
+git merge feat/add-page
+16、把更新后的 master 推送到 GitHub
+git push origin master
+17、（可选）删除已完成的功能分支
+# 删除本地分支
+git branch -d feat/add-page
+# 删除远程分支
+git push origin --delete feat/add-page

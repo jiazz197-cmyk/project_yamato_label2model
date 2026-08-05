@@ -87,3 +87,5 @@ web/coverage-chunks
 .cache
 
 .omo/
+
+web/.yarnrc.yml

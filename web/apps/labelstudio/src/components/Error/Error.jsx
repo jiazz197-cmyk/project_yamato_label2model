@@ -83,7 +83,7 @@ export const ErrorWrapper = ({
       {!minimal && (version || errorId) && (
         <div className={cn("error-message").elem("version").toClassName()}>
           <Space>
-            {version && `Version: ${version}`}
+            {version && `版本：${version}`}
             {errorId && `错误 ID：${errorId}`}
           </Space>
         </div>
