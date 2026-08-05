@@ -1,5 +1,5 @@
 """
-FSM State Models for Label Studio.
+FSM State Models for Yamato.
 
 This module contains the state model definitions (BaseState and concrete state models).
 These are separated from models.py to avoid registration issues in LSE where
@@ -216,7 +216,7 @@ class BaseState(models.Model):
 
 
 # =============================================================================
-# Core State Models for Label Studio OSS
+# Core State Models for Yamato OSS
 # =============================================================================
 # Note: These are registered here for OSS. LSE will register its own extended
 # versions in lse_fsm/models.py instead of importing these.
@@ -225,7 +225,7 @@ class BaseState(models.Model):
 @register_state_model('task')
 class TaskState(BaseState):
     """
-    Core task state tracking for Label Studio.
+    Core task state tracking for Yamato.
     Provides basic task state management with:
     - Simple 3-state workflow (CREATED → IN_PROGRESS → COMPLETED)
     - High-performance queries with UUID7 ordering
@@ -267,7 +267,7 @@ class TaskState(BaseState):
 @register_state_model('annotation')
 class AnnotationState(BaseState):
     """
-    Core annotation state tracking for Label Studio.
+    Core annotation state tracking for Yamato.
     Provides basic annotation state management with:
     - Simple 2-state workflow (CREATED → COMPLETED)
     """
@@ -314,7 +314,7 @@ class AnnotationState(BaseState):
 @register_state_model('project')
 class ProjectState(BaseState):
     """
-    Core project state tracking for Label Studio.
+    Core project state tracking for Yamato.
     Provides basic project state management with:
     - Simple 3-state workflow (CREATED → IN_PROGRESS → COMPLETED)
     - Project lifecycle tracking

@@ -2,7 +2,7 @@
   --spinner-size: 50px;
   --corner-size: calc(var(--spinner-size) * 0.375);
   --spinner-duration: 2.5s;
-  --spinner-color: var(--persimmon_400);
+  --spinner-color: var(--color-blueberry-400);
 
   position: relative;
   width: var(--spinner-size);
@@ -17,8 +17,8 @@
     transform: translate(-50%, -50%);
     background-color: var(--color-neutral-background-subtle);
     box-shadow:
-      0 0 0 calc(var(--spinner-size) * 0.0625) var(--persimmon_400) inset,
-      0 0 0 calc(var(--spinner-size) * 0.0625) var(--persimmon_400);
+      0 0 0 calc(var(--spinner-size) * 0.0625) var(--color-blueberry-400) inset,
+      0 0 0 calc(var(--spinner-size) * 0.0625) var(--color-blueberry-400);
     will-change: transform, width, height;
 
     &:not(.spinner-ls__body_stopped) {

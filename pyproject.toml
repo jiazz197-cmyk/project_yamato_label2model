@@ -80,7 +80,7 @@ dependencies = [
 Repository = "https://github.com/HumanSignal/label-studio"
 
 [project.scripts]
-label-studio = "label_studio.server:main"
+yamato = "label_studio.server:main"
 
 [project.optional-dependencies]
 uwsgi = ['pyuwsgi (==2.0.28.post1)', 'uwsgitop (==0.12)']

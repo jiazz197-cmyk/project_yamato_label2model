@@ -108,7 +108,7 @@ export const CustomButtonLabels: Story = {
  */
 export const Closable: Story = {
   args: {
-    title: "Agreement configuration is available in Label Studio Enterprise",
+    title: "Agreement configuration is available in Yamato Enterprise",
     description: "Configure agreement metrics and calculation methods on the Enterprise plan.",
     learnMoreUrl: "https://docs.humansignal.com/guide/stats",
     secondaryButtonLabel: "Learn more",

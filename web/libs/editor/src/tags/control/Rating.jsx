@@ -29,7 +29,7 @@ import { FF_LSDV_4583, isFF } from "../../utils/feature-flags";
  *
  * @name Rating
  * @meta_title Rating Tag for Ratings
- * @meta_description Customize Label Studio to add ratings to tasks with the Rating tag in your machine learning and data science projects.
+ * @meta_description Customize Yamato to add ratings to tasks with the Rating tag in your machine learning and data science projects.
  * @param {string} name                       - Name of the element
  * @param {string} toName                     - Name of the element that you want to label
  * @param {number} [maxRating=5]              - Maximum rating value

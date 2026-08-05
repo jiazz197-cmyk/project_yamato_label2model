@@ -110,7 +110,7 @@ annotation_request_schema = {
         'result': {
             'type': 'array',
             'items': {'type': 'object'},
-            'description': 'Labeling result in JSON format. Read more about the format in [the Label Studio documentation.](https://labelstud.io/guide/task_format)',
+            'description': 'Labeling result in JSON format. Read more about the format in [the Yamato documentation.](https://labelstud.io/guide/task_format)',
             'example': result_example,
         },
         'task': {'type': 'integer', 'description': 'Corresponding task for this annotation'},
@@ -141,7 +141,7 @@ prediction_request_schema = {
         'result': {
             'type': 'array',
             'items': {'type': 'object'},
-            'description': 'Prediction result in JSON format. Read more about the format in [the Label Studio documentation.](https://labelstud.io/guide/predictions)',
+            'description': 'Prediction result in JSON format. Read more about the format in [the Yamato documentation.](https://labelstud.io/guide/predictions)',
             'example': result_example,
         },
         'score': {

@@ -25,7 +25,7 @@ const LocalFilesServingWarning = () => {
       <Alert variant="destructive">
         <AlertTitle>Local file serving is disabled</AlertTitle>
         <AlertDescription>
-          Set the "LOCAL_FILES_SERVING_ENABLED" environment variable to "true" and restart Label Studio to enable Local
+          Set the "LOCAL_FILES_SERVING_ENABLED" environment variable to "true" and restart Yamato to enable Local
           Files storage. See the documentation for details:{" "}
           <a href="https://labelstud.io/guide/storage.html#Local-storage" target="_blank" rel="noreferrer">
             Local Storage documentation
@@ -54,7 +54,7 @@ const LocalFilesServingWarning = () => {
 export const localFilesProvider: ProviderConfig = {
   name: "localfiles",
   title: "Local Files",
-  description: "Configure your local file storage connection with all required Label Studio settings",
+  description: "Configure your local file storage connection with all required Yamato settings",
   icon: () => (
     <IconFolderOpen
       width={40}
@@ -79,7 +79,7 @@ export const localFilesProvider: ProviderConfig = {
       placeholder: defaultPathExample || "/data/my-folder/subdirectory",
       schema: pathSchema,
       defaultValue: defaultPathExample,
-      description: `This path must be an absolute path on the host machine where Label Studio is running and start with \n"${localFilesDocumentRoot}" (LOCAL_FILES_DOCUMENT_ROOT).`,
+      description: `This path must be an absolute path on the host machine where Yamato is running and start with \n"${localFilesDocumentRoot}" (LOCAL_FILES_DOCUMENT_ROOT).`,
     },
   ],
   layout: [{ fields: ["serving_warning"] }, { fields: ["path"] }],

@@ -8,7 +8,7 @@
  * Use with the following data types: text.
  *
  * ### How to read my text files in python?
- * The Label Studio editor counts `\r\n` as two different symbols, displaying them as `\n\n`, making it look like there is extra margin between lines.
+ * The Yamato editor counts `\r\n` as two different symbols, displaying them as `\n\n`, making it look like there is extra margin between lines.
  * You should either preprocess your files to replace `\r\n` with `\n` completely, or open files in Python with `newline=''` to avoid converting `\r\n` to `\n`:
  * `with open('my-file.txt', encoding='utf-8', newline='') as f: text = f.read()`
  * This is especially important when you are doing span NER labeling and need to get the correct offsets:
@@ -28,7 +28,7 @@
  * @name Text
  * @regions TextRegion
  * @meta_title Text Tags for Text Objects
- * @meta_description Customize Label Studio with the Text tag to annotate text for NLP and NER machine learning and data science projects.
+ * @meta_description Customize Yamato with the Text tag to annotate text for NLP and NER machine learning and data science projects.
  * @param {string} name                                   Name of the element
  * @param {string} value                                  Data field containing text or a UR
  * @param {url|text} [valueType=text]                     Whether the text is stored directly in uploaded data or needs to be loaded from a URL

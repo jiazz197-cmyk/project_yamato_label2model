@@ -531,261 +531,261 @@
       "$primary": {
         "surface": {
           "$type": "color",
-          "$value": "{@primitives.$color.$grape.700}",
+          "$value": "{@primitives.$color.$blueberry.700}",
           "$description": "",
           "$variable_metadata": {
             "name": "color/primary/surface",
             "figmaId": "VariableID:1519:3685",
             "modes": {
-              "light": "{@primitives.$color.$grape.700}",
-              "dark": "{@primitives.$color.$grape.600}"
+              "light": "{@primitives.$color.$blueberry.700}",
+              "dark": "{@primitives.$color.$blueberry.600}"
             }
           }
         },
         "surface-hover": {
           "$type": "color",
-          "$value": "{@primitives.$color.$grape.600}",
+          "$value": "{@primitives.$color.$blueberry.600}",
           "$description": "",
           "$variable_metadata": {
             "name": "color/primary/surface-hover",
             "figmaId": "VariableID:1732:4657",
             "modes": {
-              "light": "{@primitives.$color.$grape.600}",
-              "dark": "{@primitives.$color.$grape.500}"
+              "light": "{@primitives.$color.$blueberry.600}",
+              "dark": "{@primitives.$color.$blueberry.500}"
             }
           }
         },
         "surface-active": {
           "$type": "color",
-          "$value": "{@primitives.$color.$grape.800}",
+          "$value": "{@primitives.$color.$blueberry.800}",
           "$description": "",
           "$variable_metadata": {
             "name": "color/primary/surface-active",
             "figmaId": "VariableID:1732:4656",
             "modes": {
-              "light": "{@primitives.$color.$grape.800}",
-              "dark": "{@primitives.$color.$grape.700}"
+              "light": "{@primitives.$color.$blueberry.800}",
+              "dark": "{@primitives.$color.$blueberry.700}"
             }
           }
         },
         "surface-content": {
           "$type": "color",
-          "$value": "{@primitives.$color.$grape.000}",
+          "$value": "{@primitives.$color.$blueberry.000}",
           "$description": "",
           "$variable_metadata": {
             "name": "color/primary/surface-content",
             "figmaId": "VariableID:1519:3688",
             "modes": {
-              "light": "{@primitives.$color.$grape.000}",
-              "dark": "{@primitives.$color.$grape.000}"
+              "light": "{@primitives.$color.$blueberry.000}",
+              "dark": "{@primitives.$color.$blueberry.000}"
             }
           }
         },
         "surface-content-subtle": {
           "$type": "color",
-          "$value": "{@primitives.$color.$grape.100}",
+          "$value": "{@primitives.$color.$blueberry.100}",
           "$description": "",
           "$variable_metadata": {
             "name": "color/primary/surface-content-subtle",
             "figmaId": "VariableID:2525:25950",
             "modes": {
-              "light": "{@primitives.$color.$grape.100}",
-              "dark": "{@primitives.$color.$grape.300}"
+              "light": "{@primitives.$color.$blueberry.100}",
+              "dark": "{@primitives.$color.$blueberry.300}"
             }
           }
         },
         "surface-icon": {
           "$type": "color",
-          "$value": "{@primitives.$color.$grape.100}",
+          "$value": "{@primitives.$color.$blueberry.100}",
           "$description": "",
           "$variable_metadata": {
             "name": "color/primary/surface-icon",
             "figmaId": "VariableID:3368:5641",
             "modes": {
-              "light": "{@primitives.$color.$grape.100}",
-              "dark": "{@primitives.$color.$grape.100}"
+              "light": "{@primitives.$color.$blueberry.100}",
+              "dark": "{@primitives.$color.$blueberry.100}"
             }
           }
         },
         "content": {
           "$type": "color",
-          "$value": "{@primitives.$color.$grape.700}",
+          "$value": "{@primitives.$color.$blueberry.700}",
           "$description": "",
           "$variable_metadata": {
             "name": "color/primary/content",
             "figmaId": "VariableID:1525:3724",
             "modes": {
-              "light": "{@primitives.$color.$grape.700}",
-              "dark": "{@primitives.$color.$grape.400}"
+              "light": "{@primitives.$color.$blueberry.700}",
+              "dark": "{@primitives.$color.$blueberry.400}"
             }
           }
         },
         "content-hover": {
           "$type": "color",
-          "$value": "{@primitives.$color.$grape.400}",
+          "$value": "{@primitives.$color.$blueberry.400}",
           "$description": "",
           "$variable_metadata": {
             "name": "color/primary/content-hover",
             "figmaId": "VariableID:3420:32388",
             "modes": {
-              "light": "{@primitives.$color.$grape.400}",
-              "dark": "{@primitives.$color.$grape.300}"
+              "light": "{@primitives.$color.$blueberry.400}",
+              "dark": "{@primitives.$color.$blueberry.300}"
             }
           }
         },
         "content-subtle": {
           "$type": "color",
-          "$value": "{@primitives.$color.$grape.500}",
+          "$value": "{@primitives.$color.$blueberry.500}",
           "$description": "",
           "$variable_metadata": {
             "name": "color/primary/content-subtle",
             "figmaId": "VariableID:2525:26031",
             "modes": {
-              "light": "{@primitives.$color.$grape.500}",
-              "dark": "{@primitives.$color.$grape.600}"
+              "light": "{@primitives.$color.$blueberry.500}",
+              "dark": "{@primitives.$color.$blueberry.600}"
             }
           }
         },
         "icon": {
           "$type": "color",
-          "$value": "{@primitives.$color.$grape.500}",
+          "$value": "{@primitives.$color.$blueberry.500}",
           "$description": "",
           "$variable_metadata": {
             "name": "color/primary/icon",
             "figmaId": "VariableID:3367:1056",
             "modes": {
-              "light": "{@primitives.$color.$grape.500}",
-              "dark": "{@primitives.$color.$grape.400}"
+              "light": "{@primitives.$color.$blueberry.500}",
+              "dark": "{@primitives.$color.$blueberry.400}"
             }
           }
         },
         "background": {
           "$type": "color",
-          "$value": "{@primitives.$color.$grape.000}",
+          "$value": "{@primitives.$color.$blueberry.000}",
           "$description": "",
           "$variable_metadata": {
             "name": "color/primary/background",
             "figmaId": "VariableID:1525:3723",
             "modes": {
-              "light": "{@primitives.$color.$grape.000}",
-              "dark": "{@primitives.$color.$grape.950}"
+              "light": "{@primitives.$color.$blueberry.000}",
+              "dark": "{@primitives.$color.$blueberry.950}"
             }
           }
         },
         "emphasis": {
           "$type": "color",
-          "$value": "{@primitives.$color.$grape.100}",
+          "$value": "{@primitives.$color.$blueberry.100}",
           "$description": "",
           "$variable_metadata": {
             "name": "color/primary/emphasis",
             "figmaId": "VariableID:1846:12052",
             "modes": {
-              "light": "{@primitives.$color.$grape.100}",
-              "dark": "{@primitives.$color.$grape.800}"
+              "light": "{@primitives.$color.$blueberry.100}",
+              "dark": "{@primitives.$color.$blueberry.800}"
             }
           }
         },
         "emphasis-subtle": {
           "$type": "color",
-          "$value": "{@primitives.$color.$grape.000}",
+          "$value": "{@primitives.$color.$blueberry.000}",
           "$description": "",
           "$variable_metadata": {
             "name": "color/primary/emphasis-subtle",
             "figmaId": "VariableID:1846:12053",
             "modes": {
-              "light": "{@primitives.$color.$grape.000}",
-              "dark": "{@primitives.$color.$grape.900}"
+              "light": "{@primitives.$color.$blueberry.000}",
+              "dark": "{@primitives.$color.$blueberry.900}"
             }
           }
         },
         "border": {
           "$type": "color",
-          "$value": "{@primitives.$color.$grape.700}",
+          "$value": "{@primitives.$color.$blueberry.700}",
           "$description": "",
           "$variable_metadata": {
             "name": "color/primary/border",
             "figmaId": "VariableID:1741:584",
             "modes": {
-              "light": "{@primitives.$color.$grape.700}",
-              "dark": "{@primitives.$color.$grape.600}"
+              "light": "{@primitives.$color.$blueberry.700}",
+              "dark": "{@primitives.$color.$blueberry.600}"
             }
           }
         },
         "border-subtle": {
           "$type": "color",
-          "$value": "{@primitives.$color.$grape.500}",
+          "$value": "{@primitives.$color.$blueberry.500}",
           "$description": "",
           "$variable_metadata": {
             "name": "color/primary/border-subtle",
             "figmaId": "VariableID:2525:26012",
             "modes": {
-              "light": "{@primitives.$color.$grape.500}",
-              "dark": "{@primitives.$color.$grape.700}"
+              "light": "{@primitives.$color.$blueberry.500}",
+              "dark": "{@primitives.$color.$blueberry.700}"
             }
           }
         },
         "border-subtler": {
           "$type": "color",
-          "$value": "{@primitives.$color.$grape.300}",
+          "$value": "{@primitives.$color.$blueberry.300}",
           "$description": "",
           "$variable_metadata": {
             "name": "color/primary/border-subtler",
             "figmaId": "VariableID:1534:4317",
             "modes": {
-              "light": "{@primitives.$color.$grape.300}",
-              "dark": "{@primitives.$color.$grape.800}"
+              "light": "{@primitives.$color.$blueberry.300}",
+              "dark": "{@primitives.$color.$blueberry.800}"
             }
           }
         },
         "border-subtlest": {
           "$type": "color",
-          "$value": "{@primitives.$color.$grape.200}",
+          "$value": "{@primitives.$color.$blueberry.200}",
           "$description": "",
           "$variable_metadata": {
             "name": "color/primary/border-subtlest",
             "figmaId": "VariableID:2525:26108",
             "modes": {
-              "light": "{@primitives.$color.$grape.200}",
-              "dark": "{@primitives.$color.$grape.900}"
+              "light": "{@primitives.$color.$blueberry.200}",
+              "dark": "{@primitives.$color.$blueberry.900}"
             }
           }
         },
         "border-bold": {
           "$type": "color",
-          "$value": "{@primitives.$color.$grape.800}",
+          "$value": "{@primitives.$color.$blueberry.800}",
           "$description": "",
           "$variable_metadata": {
             "name": "color/primary/border-bold",
             "figmaId": "VariableID:2959:5067",
             "modes": {
-              "light": "{@primitives.$color.$grape.800}",
-              "dark": "{@primitives.$color.$grape.400}"
+              "light": "{@primitives.$color.$blueberry.800}",
+              "dark": "{@primitives.$color.$blueberry.400}"
             }
           }
         },
         "focus-outline": {
           "$type": "color",
-          "$value": "{@primitives.$color.$grape.100}",
+          "$value": "{@primitives.$color.$blueberry.100}",
           "$description": "",
           "$variable_metadata": {
             "name": "color/primary/focus-outline",
             "figmaId": "VariableID:1732:4211",
             "modes": {
-              "light": "{@primitives.$color.$grape.100}",
-              "dark": "{@primitives.$color.$grape.700}"
+              "light": "{@primitives.$color.$blueberry.100}",
+              "dark": "{@primitives.$color.$blueberry.700}"
             }
           }
         },
         "shadow": {
           "$type": "color",
-          "$value": "{@primitives.$color.$grape.900}",
+          "$value": "{@primitives.$color.$blueberry.900}",
           "$description": "",
           "$variable_metadata": {
             "name": "color/primary/shadow",
             "figmaId": "VariableID:3366:2236",
             "modes": {
-              "light": "{@primitives.$color.$grape.900}",
-              "dark": "{@primitives.$color.$grape.950}"
+              "light": "{@primitives.$color.$blueberry.900}",
+              "dark": "{@primitives.$color.$blueberry.950}"
             }
           }
         }
@@ -1541,79 +1541,79 @@
         "$grape": {
           "dark": {
             "$type": "color",
-            "$value": "{@primitives.$color.$grape.900}",
+            "$value": "{@primitives.$color.$blueberry.900}",
             "$description": "",
             "$variable_metadata": {
               "name": "color/accent/grape/dark",
               "figmaId": "VariableID:3139:42829",
               "modes": {
-                "light": "{@primitives.$color.$grape.900}",
-                "dark": "{@primitives.$color.$grape.200}"
+                "light": "{@primitives.$color.$blueberry.900}",
+                "dark": "{@primitives.$color.$blueberry.200}"
               }
             }
           },
           "bold": {
             "$type": "color",
-            "$value": "{@primitives.$color.$grape.700}",
+            "$value": "{@primitives.$color.$blueberry.700}",
             "$description": "",
             "$variable_metadata": {
               "name": "color/accent/grape/bold",
               "figmaId": "VariableID:3131:41217",
               "modes": {
-                "light": "{@primitives.$color.$grape.700}",
-                "dark": "{@primitives.$color.$grape.400}"
+                "light": "{@primitives.$color.$blueberry.700}",
+                "dark": "{@primitives.$color.$blueberry.400}"
               }
             }
           },
           "base": {
             "$type": "color",
-            "$value": "{@primitives.$color.$grape.400}",
+            "$value": "{@primitives.$color.$blueberry.400}",
             "$description": "",
             "$variable_metadata": {
               "name": "color/accent/grape/base",
               "figmaId": "VariableID:3475:13540",
               "modes": {
-                "light": "{@primitives.$color.$grape.400}",
-                "dark": "{@primitives.$color.$grape.400}"
+                "light": "{@primitives.$color.$blueberry.400}",
+                "dark": "{@primitives.$color.$blueberry.400}"
               }
             }
           },
           "subtle": {
             "$type": "color",
-            "$value": "{@primitives.$color.$grape.200}",
+            "$value": "{@primitives.$color.$blueberry.200}",
             "$description": "",
             "$variable_metadata": {
               "name": "color/accent/grape/subtle",
               "figmaId": "VariableID:5091:536",
               "modes": {
-                "light": "{@primitives.$color.$grape.200}",
-                "dark": "{@primitives.$color.$grape.800}"
+                "light": "{@primitives.$color.$blueberry.200}",
+                "dark": "{@primitives.$color.$blueberry.800}"
               }
             }
           },
           "subtler": {
             "$type": "color",
-            "$value": "{@primitives.$color.$grape.100}",
+            "$value": "{@primitives.$color.$blueberry.100}",
             "$description": "",
             "$variable_metadata": {
               "name": "color/accent/grape/subtler",
               "figmaId": "VariableID:3227:25844",
               "modes": {
-                "light": "{@primitives.$color.$grape.100}",
-                "dark": "{@primitives.$color.$grape.900}"
+                "light": "{@primitives.$color.$blueberry.100}",
+                "dark": "{@primitives.$color.$blueberry.900}"
               }
             }
           },
           "subtlest": {
             "$type": "color",
-            "$value": "{@primitives.$color.$grape.000}",
+            "$value": "{@primitives.$color.$blueberry.000}",
             "$description": "",
             "$variable_metadata": {
               "name": "color/accent/grape/subtlest",
               "figmaId": "VariableID:3137:42575",
               "modes": {
-                "light": "{@primitives.$color.$grape.000}",
-                "dark": "{@primitives.$color.$grape.950}"
+                "light": "{@primitives.$color.$blueberry.000}",
+                "dark": "{@primitives.$color.$blueberry.950}"
               }
             }
           }
@@ -1941,79 +1941,79 @@
         "$canteloupe": {
           "dark": {
             "$type": "color",
-            "$value": "{@primitives.$color.$canteloupe.900}",
+            "$value": "{@primitives.$color.$blueberry.300}",
             "$description": "",
             "$variable_metadata": {
               "name": "color/accent/canteloupe/dark",
               "figmaId": "VariableID:3139:42831",
               "modes": {
-                "light": "{@primitives.$color.$canteloupe.900}",
-                "dark": "{@primitives.$color.$canteloupe.200}"
+                "light": "{@primitives.$color.$blueberry.300}",
+                "dark": "{@primitives.$color.$blueberry.300}"
               }
             }
           },
           "bold": {
             "$type": "color",
-            "$value": "{@primitives.$color.$canteloupe.700}",
+            "$value": "{@primitives.$color.$blueberry.300}",
             "$description": "",
             "$variable_metadata": {
               "name": "color/accent/canteloupe/bold",
               "figmaId": "VariableID:3137:42580",
               "modes": {
-                "light": "{@primitives.$color.$canteloupe.700}",
-                "dark": "{@primitives.$color.$canteloupe.400}"
+                "light": "{@primitives.$color.$blueberry.300}",
+                "dark": "{@primitives.$color.$blueberry.300}"
               }
             }
           },
           "base": {
             "$type": "color",
-            "$value": "{@primitives.$color.$canteloupe.400}",
+            "$value": "{@primitives.$color.$blueberry.300}",
             "$description": "",
             "$variable_metadata": {
               "name": "color/accent/canteloupe/base",
               "figmaId": "VariableID:3475:49118",
               "modes": {
-                "light": "{@primitives.$color.$canteloupe.400}",
-                "dark": "{@primitives.$color.$canteloupe.400}"
+                "light": "{@primitives.$color.$blueberry.300}",
+                "dark": "{@primitives.$color.$blueberry.300}"
               }
             }
           },
           "subtle": {
             "$type": "color",
-            "$value": "{@primitives.$color.$canteloupe.200}",
+            "$value": "{@primitives.$color.$blueberry.300}",
             "$description": "",
             "$variable_metadata": {
               "name": "color/accent/canteloupe/subtle",
               "figmaId": "VariableID:3227:25839",
               "modes": {
-                "light": "{@primitives.$color.$canteloupe.200}",
-                "dark": "{@primitives.$color.$canteloupe.800}"
+                "light": "{@primitives.$color.$blueberry.300}",
+                "dark": "{@primitives.$color.$blueberry.300}"
               }
             }
           },
           "subtler": {
             "$type": "color",
-            "$value": "{@primitives.$color.$canteloupe.100}",
+            "$value": "{@primitives.$color.$blueberry.300}",
             "$description": "",
             "$variable_metadata": {
               "name": "color/accent/canteloupe/subtler",
               "figmaId": "VariableID:5091:541",
               "modes": {
-                "light": "{@primitives.$color.$canteloupe.100}",
-                "dark": "{@primitives.$color.$canteloupe.900}"
+                "light": "{@primitives.$color.$blueberry.300}",
+                "dark": "{@primitives.$color.$blueberry.300}"
               }
             }
           },
           "subtlest": {
             "$type": "color",
-            "$value": "{@primitives.$color.$canteloupe.000}",
+            "$value": "{@primitives.$color.$blueberry.300}",
             "$description": "",
             "$variable_metadata": {
               "name": "color/accent/canteloupe/subtlest",
               "figmaId": "VariableID:3137:42581",
               "modes": {
-                "light": "{@primitives.$color.$canteloupe.000}",
-                "dark": "{@primitives.$color.$canteloupe.950}"
+                "light": "{@primitives.$color.$blueberry.300}",
+                "dark": "{@primitives.$color.$blueberry.300}"
               }
             }
           }
@@ -2021,79 +2021,79 @@
         "$persimmon": {
           "dark": {
             "$type": "color",
-            "$value": "{@primitives.$color.$persimmon.900}",
+            "$value": "{@primitives.$color.$blueberry.400}",
             "$description": "",
             "$variable_metadata": {
               "name": "color/accent/persimmon/dark",
               "figmaId": "VariableID:3139:42830",
               "modes": {
-                "light": "{@primitives.$color.$persimmon.900}",
-                "dark": "{@primitives.$color.$persimmon.200}"
+                "light": "{@primitives.$color.$blueberry.400}",
+                "dark": "{@primitives.$color.$blueberry.400}"
               }
             }
           },
           "bold": {
             "$type": "color",
-            "$value": "{@primitives.$color.$persimmon.700}",
+            "$value": "{@primitives.$color.$blueberry.400}",
             "$description": "",
             "$variable_metadata": {
               "name": "color/accent/persimmon/bold",
               "figmaId": "VariableID:3137:42578",
               "modes": {
-                "light": "{@primitives.$color.$persimmon.700}",
-                "dark": "{@primitives.$color.$persimmon.400}"
+                "light": "{@primitives.$color.$blueberry.400}",
+                "dark": "{@primitives.$color.$blueberry.400}"
               }
             }
           },
           "base": {
             "$type": "color",
-            "$value": "{@primitives.$color.$persimmon.400}",
+            "$value": "{@primitives.$color.$blueberry.400}",
             "$description": "",
             "$variable_metadata": {
               "name": "color/accent/persimmon/base",
               "figmaId": "VariableID:3475:49119",
               "modes": {
-                "light": "{@primitives.$color.$persimmon.400}",
-                "dark": "{@primitives.$color.$persimmon.400}"
+                "light": "{@primitives.$color.$blueberry.400}",
+                "dark": "{@primitives.$color.$blueberry.400}"
               }
             }
           },
           "subtle": {
             "$type": "color",
-            "$value": "{@primitives.$color.$persimmon.200}",
+            "$value": "{@primitives.$color.$blueberry.400}",
             "$description": "",
             "$variable_metadata": {
               "name": "color/accent/persimmon/subtle",
               "figmaId": "VariableID:5091:1735",
               "modes": {
-                "light": "{@primitives.$color.$persimmon.200}",
-                "dark": "{@primitives.$color.$persimmon.800}"
+                "light": "{@primitives.$color.$blueberry.400}",
+                "dark": "{@primitives.$color.$blueberry.400}"
               }
             }
           },
           "subtler": {
             "$type": "color",
-            "$value": "{@primitives.$color.$persimmon.100}",
+            "$value": "{@primitives.$color.$blueberry.400}",
             "$description": "",
             "$variable_metadata": {
               "name": "color/accent/persimmon/subtler",
               "figmaId": "VariableID:3227:25838",
               "modes": {
-                "light": "{@primitives.$color.$persimmon.100}",
-                "dark": "{@primitives.$color.$persimmon.900}"
+                "light": "{@primitives.$color.$blueberry.400}",
+                "dark": "{@primitives.$color.$blueberry.400}"
               }
             }
           },
           "subtlest": {
             "$type": "color",
-            "$value": "{@primitives.$color.$persimmon.000}",
+            "$value": "{@primitives.$color.$blueberry.400}",
             "$description": "",
             "$variable_metadata": {
               "name": "color/accent/persimmon/subtlest",
               "figmaId": "VariableID:3137:42579",
               "modes": {
-                "light": "{@primitives.$color.$persimmon.000}",
-                "dark": "{@primitives.$color.$persimmon.950}"
+                "light": "{@primitives.$color.$blueberry.400}",
+                "dark": "{@primitives.$color.$blueberry.400}"
               }
             }
           }

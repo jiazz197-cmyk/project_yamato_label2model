@@ -2,7 +2,7 @@
 Utility functions for working with the declarative transition system.
 
 This module provides helper functions to make it easier to integrate
-the new Pydantic-based transition system with existing Label Studio code.
+the new Pydantic-based transition system with existing Yamato code.
 """
 
 import logging

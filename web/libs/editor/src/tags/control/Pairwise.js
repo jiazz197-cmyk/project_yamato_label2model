@@ -29,7 +29,7 @@ import ControlBase from "./Base";
  * </View>
  * @name Pairwise
  * @meta_title Pairwise Tag to Compare Objects
- * @meta_description Customize Label Studio with the Pairwise tag for object comparison tasks for machine learning and data science projects.
+ * @meta_description Customize Yamato with the Pairwise tag for object comparison tasks for machine learning and data science projects.
  * @param {string} name               - Name of the element
  * @param {string} toName             - Comma-separated names of the elements you want to compare
  * @param {string} [selectionStyle]   - Style for the selection

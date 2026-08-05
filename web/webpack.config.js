@@ -96,7 +96,7 @@ module.exports = composePlugins(
 
       config.output = {
         ...config.output,
-        uniqueName: "labelstudio",
+        uniqueName: "yamato",
         publicPath:
           isDevelopment && FRONTEND_HOSTNAME
             ? `${FRONTEND_HOSTNAME}/react-app/`

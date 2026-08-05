@@ -31,7 +31,7 @@ function onUnskipTask() {}
 function onTaskLoad() {}
 
 /**
- * Callback on Label Studio load
+ * Callback on Yamato load
  */
 function onLabelStudioLoad() {}
 

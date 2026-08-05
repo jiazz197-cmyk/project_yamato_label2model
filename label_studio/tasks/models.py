@@ -63,7 +63,7 @@ class Task(TaskMixin, FsmHistoryStateModel):
         null=False,
         help_text='User imported or uploaded data for a task. Data is formatted according to '
         'the project label config. You can find examples of data for your project '
-        'on the Import page in the Label Studio Data Manager UI.',
+        'on the Import page in the Yamato Data Manager UI.',
     )
 
     meta = JSONField(

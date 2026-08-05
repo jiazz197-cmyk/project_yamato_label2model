@@ -19,7 +19,7 @@ import { ToolManagerMixin } from "../../mixins/ToolManagerMixin";
  * </View>
  * @name Ellipse
  * @meta_title Ellipse Tag for Adding Elliptical Bounding Box to Images
- * @meta_description Customize Label Studio with ellipse tags to add elliptical bounding boxes to images for machine learning and data science projects.
+ * @meta_description Customize Yamato with ellipse tags to add elliptical bounding boxes to images for machine learning and data science projects.
  * @param {string} name                  - Name of the element
  * @param {string} toName                - Name of the image to label
  * @param {float} [opacity=0.6]          - Opacity of ellipse

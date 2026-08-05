@@ -54,7 +54,7 @@ import { AnnotationMixin } from "../../mixins/AnnotationMixin";
  * </View>
  * @name View
  * @meta_title View Tag for Defining How Blocks are Displayed
- * @meta_description Customize how blocks are displayed on the labeling interface in Label Studio for machine learning and data science projects.
+ * @meta_description Customize how blocks are displayed on the labeling interface in Yamato for machine learning and data science projects.
  * @param {block|inline} display
  * @param {string} [style] CSS style string
  * @param {string} [className] - Class name of the CSS style to apply. Use with the Style tag

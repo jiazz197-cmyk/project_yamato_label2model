@@ -18,15 +18,15 @@ import { Group } from "react-konva";
 /**
  * VectorRegion - Vector graphics region with coordinate system conversion
  *
- * Handles conversion between Label Studio's relative coordinates (0-100%) and KonvaVector's image coordinates (pixels).
+ * Handles conversion between Yamato's relative coordinates (0-100%) and KonvaVector's image coordinates (pixels).
  *
  * **Coordinate Systems:**
- * - **Label Studio**: Relative coordinates (percentages) for storage and portability
+ * - **Yamato**: Relative coordinates (percentages) for storage and portability
  * - **KonvaVector**: Image coordinates (pixels) for precise editing
  *
  * **Conversion Flow:**
  * ```
- * Label Studio (Relative %) ←→ VectorRegion ←→ KonvaVector (Image px)
+ * Yamato (Relative %) ←→ VectorRegion ←→ KonvaVector (Image px)
  *     ↓ serialize()                ↓ afterCreate()
  * Database Storage          Internal State     User Interface
  * ```
@@ -34,7 +34,7 @@ import { Group } from "react-konva";
  * **Key Methods:**
  * - `relativeToImageCoords()`: Converts relative → image coordinates
  * - `imageToRelativeCoords()`: Converts image → relative coordinates
- * - `serialize()`: Exports in Label Studio format with relative coordinates
+ * - `serialize()`: Exports in Yamato format with relative coordinates
  */
 const Model = types
   .model({
@@ -176,7 +176,7 @@ const Model = types
   .actions((self) => {
     return {
       /**
-       * Converts coordinates from Label Studio format (relative %) to KonvaVector format (image pixels)
+       * Converts coordinates from Yamato format (relative %) to KonvaVector format (image pixels)
        * Called when region is created from serialized data.
        */
       afterCreate() {
@@ -365,7 +365,7 @@ const Model = types
       },
 
       /**
-       * Serializes region data in Label Studio format with relative coordinates
+       * Serializes region data in Yamato format with relative coordinates
        * Converts from image coordinates back to relative coordinates for storage
        *
        * @example
@@ -393,7 +393,7 @@ const Model = types
        * @property {boolean} value.closed whether the vector is closed (polygon) or open (polyline)
        * @property {Array<string>} value.vectorlabels array of label names assigned to this vector
        *
-       * @return {VectorRegionResult} The serialized vector region data in Label Studio format
+       * @return {VectorRegionResult} The serialized vector region data in Yamato format
        */
       serialize() {
         // Preserve the full KonvaVector format to maintain Bezier curves and point relationships

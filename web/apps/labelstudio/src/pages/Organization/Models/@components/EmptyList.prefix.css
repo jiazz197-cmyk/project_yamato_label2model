@@ -18,16 +18,6 @@
     background: var(--color-neutral-emphasis-subtle);
   }
 
-  &__heidi {
-    width: 193px;
-    color: var(--color-neutral-background-bold);
-
-    & svg {
-      width: 100%;
-      height: 100%;
-    }
-  }
-
   &__title {
     color: var(--surface-on, #262626);
     text-align: center;

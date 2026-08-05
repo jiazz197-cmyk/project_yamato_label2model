@@ -49,7 +49,7 @@ logger = logging.getLogger(__name__)
         This endpoint is deprecated in Enterprise. Use the async export API instead:
         POST /api/projects/{{id}}/exports/ (see [Create new export](/api#operation/api_projects_exports_create)).
 
-        In Label Studio Enterprise, this endpoint will always return a 404 Not Found response with instructions to use the async export API.
+        In Yamato Enterprise, this endpoint will always return a 404 Not Found response with instructions to use the async export API.
 
         Retrieve the available export formats for the current project by ID.""",
         deprecated=True,
@@ -132,7 +132,7 @@ class ExportFormatsListAPI(generics.RetrieveAPIView):
         This endpoint is deprecated in Enterprise. Use the async export API instead:
         POST /api/projects/{{id}}/exports/ (see [Create new export](/api#operation/api_projects_exports_create)).
 
-        In Label Studio Enterprise, this endpoint will always return a 404 Not Found response with instructions to use the async export API.
+        In Yamato Enterprise, this endpoint will always return a 404 Not Found response with instructions to use the async export API.
 
         <i>Note: if you have a large project it's recommended to use
         export snapshots, this easy export endpoint might have timeouts.</i><br/><br>
@@ -260,7 +260,7 @@ class ExportAPI(generics.RetrieveAPIView):
 #         tags=['Export'],
 #         summary='List exported files',
 #         description="""
-#         Retrieve a list of files exported from the Label Studio UI using the Export button on the Data Manager page.
+#         Retrieve a list of files exported from the Yamato UI using the Export button on the Data Manager page.
 #         To retrieve the files themselves, see [Download export file](/api#operation/api_projects_exports_download_read).
 #         """,
 #     ),

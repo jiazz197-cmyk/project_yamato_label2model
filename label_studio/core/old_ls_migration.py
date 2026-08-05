@@ -235,7 +235,7 @@ def _migrate_uploaded_files(project, project_path):
 
 
 def migrate_existing_project(project_path, project, config):
-    """Migration projects from previous version of Label Studio"""
+    """Migration projects from previous version of Yamato"""
 
     _migrate_tasks(project_path, project)
     _migrate_tabs(project_path, project)

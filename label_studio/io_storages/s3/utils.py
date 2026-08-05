@@ -172,7 +172,7 @@ def catch_and_reraise_from_none(func):
                 logger.error(f'Exception from unrecognized S3 domain: {e}', exc_info=True)
                 raise S3StorageError(
                     f'Debugging info is not available for s3 endpoints on domain: {domain}. '
-                    'Please contact your Label Studio devops team if you require detailed error reporting for this domain.'
+                    'Please contact your Yamato devops team if you require detailed error reporting for this domain.'
                 ) from None
             else:
                 raise e

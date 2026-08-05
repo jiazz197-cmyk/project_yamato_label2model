@@ -25,7 +25,7 @@ import ControlBase from "./Base";
  * @name EllipseLabels
  * @regions EllipseRegion
  * @meta_title Ellipse Label Tag for Labeling Images with Elliptical Bounding Boxes
- * @meta_description Customize Label Studio with the EllipseLabels tag to label images with elliptical bounding boxes for semantic image segmentation machine learning and data science projects.
+ * @meta_description Customize Yamato with the EllipseLabels tag to label images with elliptical bounding boxes for semantic image segmentation machine learning and data science projects.
  * @param {string} name               - Name of the element
  * @param {string} toName             - Name of the image to label
  * @param {single|multiple=} [choice=single] - Configure whether you can select one or multiple labels

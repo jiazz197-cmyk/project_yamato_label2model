@@ -10,15 +10,15 @@ from django.utils.translation import gettext_lazy as _
 from fsm.registry import register_state_choices
 
 """
-Core state choice enums for Label Studio entities.
-These enums define the essential states for core Label Studio entities.
+Core state choice enums for Yamato entities.
+These enums define the essential states for core Yamato entities.
 """
 
 
 @register_state_choices('task')
 class TaskStateChoices(models.TextChoices):
     """
-    Core task states for basic Label Studio workflow.
+    Core task states for basic Yamato workflow.
     Simplified states covering the essential task lifecycle:
     - Creation and assignment
     - Annotation work
@@ -45,7 +45,7 @@ class AnnotationStateChoices(models.TextChoices):
 @register_state_choices('project')
 class ProjectStateChoices(models.TextChoices):
     """
-    Core project states for basic Label Studio workflow.
+    Core project states for basic Yamato workflow.
     Simplified states covering the essential project lifecycle:
     - Setup and configuration
     - Active work

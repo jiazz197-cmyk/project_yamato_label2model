@@ -5,7 +5,7 @@
   /* Deprecated: [DO NOT USE] */
   --black-raw: 0 0 0;
   --white-raw: 255 255 255;
-  --accent_color-raw: 86 111 207;
+  --accent_color-raw: 50 135 226;
   --danger_color-raw: 221 0 0;
   --danger_color_dimmed: rgb(var(--danger_color-raw) / 50%);
   --black: rgb(var(--black-raw));
@@ -50,12 +50,12 @@
   --red_10: #5c0011;
   --grape_0: var(--color-grape-000);
   --grape_100: var(--color-grape-100);
-  --grape_500-raw: 86 111 207;
+  --grape_500-raw: 50 135 226;
   --grape_500: var(--color-grape-500);
   --grape_600: var(--color-grape-600);
   --grape_700: var(--color-grape-700);
   --grape_800: var(--color-grape-800);
-  --primary_link: var(--grape_500);
+  --primary_link: var(--color-blueberry-500);
   --danger_color: var(--red_7);
   --danger_color--faded: var(--red_3);
   --success_color: var(--kale_400);
@@ -81,17 +81,17 @@
   --neutral-palette-light-theme-surface-surface: var(--sand_100);
   --neutral-palette-light-theme-surface-text: var(--sand_900);
   --volcano-palette-tonal-palette-volcano70: var(--persimmon_400);
-  --primary-primary: var(--grape_500);
+  --primary-primary: var(--color-blueberry-500);
   --primary-background: var(--color-primary-surface-content);
   --primary-text-on-background: var(--color-neutral-background);
-  --primary-bright: var(--grape_500);
+  --primary-bright: var(--color-blueberry-500);
   --primary-bright-secondary: var(--color-primary-surface-content);
   --primary-bright-tertiary: var(--color-primary-surface-content-subtle);
-  --primary-text-on-background-dark: var(--grape_800);
+  --primary-text-on-background-dark: var(--color-blueberry-800);
   --color-surface-on-base-subtle: var(--color-neutral-content-subtler);
   --color-negative-bold: #cc5e46;
   --color-negative-accent-light: #ffbaaa;
-  --accent_color: var(--grape_500);
+  --accent_color: var(--color-blueberry-500);
   --colors-surface-border: var(--sand_300);
   --colors-surface-icon-on-base: var(--sand_700);
   --colors-surface-text: var(--sand_700);
