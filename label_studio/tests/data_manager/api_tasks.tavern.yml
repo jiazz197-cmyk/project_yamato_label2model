@@ -1516,32 +1516,6 @@ stages:
           created_by: created_by.id
       status_code: 201
 
-  - name: Add S3 storage
-    request:
-      data:
-        bucket: pytest-s3-images
-        project: '{project_pk}'
-        title: Testing S3 storage (bucket from conftest.py)
-        use_blob_urls: true
-        presign_ttl: 3600
-        recursive_scan: true
-      method: POST
-      url: '{django_live_url}/api/storages/s3'
-    response:
-      save:
-        json:
-          storage_pk: id
-      status_code: 201
-
-  - name: Sync S3 storage
-    request:
-      method: POST
-      url: '{django_live_url}/api/storages/s3/{storage_pk}/sync'
-    response:
-      json:
-        last_sync_count: 4
-      status_code: 200
-
   - name: setup_views
     request:
       method: POST

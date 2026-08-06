@@ -19,7 +19,6 @@ import ujson as json
 from botocore.exceptions import ClientError
 from django.conf import settings
 from freezegun import freeze_time
-from moto import mock_s3
 from organizations.models import Organization
 from projects.models import Project
 from tasks.models import Task
@@ -35,9 +34,7 @@ except ImportError:
 from label_studio.tests.sdk.fixtures import *  # noqa: F403
 
 from .utils import (
-    azure_client_mock,
     create_business,
-    gcs_client_mock,
     import_from_url_mock,
     make_project,
     ml_backend_mock,
@@ -94,179 +91,6 @@ def aws_credentials():
     os.environ['AWS_SESSION_TOKEN'] = 'testing'
 
 
-@pytest.fixture(autouse=True, scope='session')
-def azure_credentials():
-    """Mocked Azure credentials"""
-    os.environ['AZURE_BLOB_ACCOUNT_NAME'] = 'testing'
-    os.environ['AZURE_BLOB_ACCOUNT_KEY'] = 'testing'
-
-
-@pytest.fixture(scope='function')
-def s3(aws_credentials):
-    with mock_s3():
-        yield boto3.client('s3', region_name='us-east-1')
-
-
-@pytest.fixture(autouse=True)
-def s3_with_images(s3):
-    """
-    Bucket structure:
-    s3://pytest-s3-images/image1.jpg
-    s3://pytest-s3-images/subdir/image1.jpg
-    s3://pytest-s3-images/subdir/image2.jpg
-    """
-    bucket_name = 'pytest-s3-images'
-    s3.create_bucket(Bucket=bucket_name)
-    s3.put_object(Bucket=bucket_name, Key='image1.jpg', Body='123')
-    s3.put_object(Bucket=bucket_name, Key='subdir/image1.jpg', Body='456')
-    s3.put_object(Bucket=bucket_name, Key='subdir/image2.jpg', Body='789')
-    s3.put_object(Bucket=bucket_name, Key='subdir/another/image2.jpg', Body='0ab')
-    yield s3
-
-
-def s3_remove_bucket():
-    """
-    Remove pytest-s3-images
-    """
-    bucket_name = 'pytest-s3-images'
-    _s3 = boto3.client('s3', region_name='us-east-1')
-    _s3.delete_object(Bucket=bucket_name, Key='image1.jpg')
-    _s3.delete_object(Bucket=bucket_name, Key='subdir/image1.jpg')
-    _s3.delete_object(Bucket=bucket_name, Key='subdir/image2.jpg')
-    _s3.delete_object(Bucket=bucket_name, Key='subdir/another/image2.jpg')
-    _s3.delete_bucket(Bucket=bucket_name)
-    return ''
-
-
-@pytest.fixture(autouse=True)
-def s3_with_jsons(s3):
-    bucket_name = 'pytest-s3-jsons'
-    s3.create_bucket(Bucket=bucket_name)
-    s3.put_object(Bucket=bucket_name, Key='test.json', Body=json.dumps({'image_url': 'http://ggg.com/image.jpg'}))
-    yield s3
-
-
-@pytest.fixture(autouse=True)
-def s3_with_hypertext_s3_links(s3):
-    bucket_name = 'pytest-s3-jsons-hypertext'
-    s3.create_bucket(Bucket=bucket_name)
-    s3.put_object(
-        Bucket=bucket_name,
-        Key='test.json',
-        Body=json.dumps(
-            {'text': '<a href="s3://pytest-s3-jsons-hypertext/file with /spaces and\' / \' / quotes.jpg"/>'}
-        ),
-    )
-    yield s3
-
-
-@pytest.fixture(autouse=True)
-def s3_with_partially_encoded_s3_links(s3):
-    bucket_name = 'pytest-s3-json-partially-encoded'
-    s3.create_bucket(Bucket=bucket_name)
-    s3.put_object(
-        Bucket=bucket_name,
-        Key='test.json',
-        Body=json.dumps(
-            {
-                'text': '<a href="s3://pytest-s3-json-partially-encoded/file with /spaces and\' / \' / %2Bquotes%3D.jpg"/>'
-            }
-        ),
-    )
-    yield s3
-
-
-@pytest.fixture(autouse=True)
-def s3_with_unexisted_links(s3):
-    bucket_name = 'pytest-s3-jsons-unexisted_links'
-    s3.create_bucket(Bucket=bucket_name)
-    s3.put_object(Bucket=bucket_name, Key='some-existed-image.jpg', Body='qwerty')
-    yield s3
-
-
-@pytest.fixture(autouse=True)
-def s3_export_bucket(s3):
-    bucket_name = 'pytest-export-s3-bucket'
-    s3.create_bucket(Bucket=bucket_name)
-    yield s3
-
-
-@pytest.fixture(autouse=True)
-def s3_export_bucket_sse(s3):
-    bucket_name = 'pytest-export-s3-bucket-with-sse'
-    s3.create_bucket(Bucket=bucket_name)
-
-    # Set the bucket policy
-    policy = {
-        'Version': '2012-10-17',
-        'Statement': [
-            {
-                'Effect': 'Deny',
-                'Principal': '*',
-                'Action': 's3:PutObject',
-                'Resource': [f'arn:aws:s3:::{bucket_name}', f'arn:aws:s3:::{bucket_name}/*'],
-                'Condition': {'StringNotEquals': {'s3:x-amz-server-side-encryption': 'AES256'}},
-            },
-            {
-                'Effect': 'Deny',
-                'Principal': '*',
-                'Action': 's3:PutObject',
-                'Resource': [f'arn:aws:s3:::{bucket_name}', f'arn:aws:s3:::{bucket_name}/*'],
-                'Condition': {'Null': {'s3:x-amz-server-side-encryption': 'true'}},
-            },
-            {
-                'Effect': 'Deny',
-                'Principal': '*',
-                'Action': 's3:*',
-                'Resource': [f'arn:aws:s3:::{bucket_name}', f'arn:aws:s3:::{bucket_name}/*'],
-                'Condition': {'Bool': {'aws:SecureTransport': 'false'}},
-            },
-        ],
-    }
-
-    s3.put_bucket_policy(Bucket=bucket_name, Policy=json.dumps(policy))
-
-    yield s3
-
-
-@pytest.fixture(autouse=True)
-def s3_export_bucket_kms(s3):
-    bucket_name = 'pytest-export-s3-bucket-with-kms'
-    s3.create_bucket(Bucket=bucket_name)
-
-    # Set the bucket policy
-    policy = {
-        'Version': '2012-10-17',
-        'Statement': [
-            {
-                'Effect': 'Deny',
-                'Principal': '*',
-                'Action': 's3:PutObject',
-                'Resource': [f'arn:aws:s3:::{bucket_name}', f'arn:aws:s3:::{bucket_name}/*'],
-                'Condition': {'StringNotEquals': {'s3:x-amz-server-side-encryption': 'aws:kms'}},
-            },
-            {
-                'Effect': 'Deny',
-                'Principal': '*',
-                'Action': 's3:PutObject',
-                'Resource': [f'arn:aws:s3:::{bucket_name}', f'arn:aws:s3:::{bucket_name}/*'],
-                'Condition': {'Null': {'s3:x-amz-server-side-encryption': 'true'}},
-            },
-            {
-                'Effect': 'Deny',
-                'Principal': '*',
-                'Action': 's3:*',
-                'Resource': [f'arn:aws:s3:::{bucket_name}', f'arn:aws:s3:::{bucket_name}/*'],
-                'Condition': {'Bool': {'aws:SecureTransport': 'false'}},
-            },
-        ],
-    }
-
-    s3.put_bucket_policy(Bucket=bucket_name, Policy=json.dumps(policy))
-
-    yield s3
-
-
 def mock_put(*args, **kwargs):
     client_error = ClientError(
         error_response={'Error': {'Code': 'AccessDenied', 'Message': 'Access Denied'}}, operation_name='PutObject'
@@ -310,21 +134,6 @@ def mock_s3_resource_kms(mocker):
 
     # Patch boto3.Session.resource to return the mock s3 resource
     mocker.patch('boto3.Session.resource', return_value=mock_s3_resource)
-
-
-@pytest.fixture(autouse=True)
-def gcs_client():
-    # be careful, this is a global fixture and will affect all tests
-    # because it will be applied to all tests that use gcs_client
-    # and it may lead to flaky tests if the sample blob names are not deterministic
-    with gcs_client_mock():
-        yield
-
-
-@pytest.fixture(autouse=True)
-def azure_client():
-    with azure_client_mock():
-        yield
 
 
 @pytest.fixture(autouse=True)
@@ -705,19 +514,6 @@ def set_feature_flag_envvar():
     Automatically set the environment variable for all tests, including Tavern tests.
     """
     os.environ['fflag_feat_utc_210_prediction_validation_15082025'] = 'true'
-
-
-@pytest.fixture(name='fflag_feat_back_lsdv_3958_server_side_encryption_for_target_storage_short_on')
-def fflag_feat_back_lsdv_3958_server_side_encryption_for_target_storage_short_on():
-    from core.feature_flags import flag_set
-
-    def fake_flag_set(*args, **kwargs):
-        if args[0] == 'fflag_feat_back_lsdv_3958_server_side_encryption_for_target_storage_short':
-            return True
-        return flag_set(*args, **kwargs)
-
-    with mock.patch('io_storages.s3.models.flag_set', wraps=fake_flag_set):
-        yield
 
 
 @pytest.fixture(name='fflag_fix_all_lsdv_4813_async_export_conversion_22032023_short_on')
