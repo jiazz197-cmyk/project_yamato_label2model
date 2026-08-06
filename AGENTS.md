@@ -49,6 +49,10 @@ cd label_studio; $env:DJANGO_DB='sqlite'; pytest -v -m "not integration_tests"
 
 通过 `.env` 中 `MINIO_STORAGE_ENDPOINT` 启用。`base.py:753-764` 检测到此变量后切换 `STORAGES['default']['BACKEND']` 为 `S3Boto3Storage`，上传文件存 MinIO 而非本地磁盘。标注结果仍存 PostgreSQL。
 
+## 数据流
+
+数据流：用户从浏览器上传文件 → MinIO（持久存储），标注数据 → PostgreSQL，导出 → ZIP 下载。`localfiles` 和 `redis` 存储后端为辅助导入/导出路径，用户可配置本地目录或 Redis 实例作为任务的来源或标注结果的导出目标。
+
 ## FSM app 不可删除
 
 `fsm/` app 被 5 个核心模型类继承（`Project`、`Task`、`Annotation`、`TaskLock`、`AnnotationDraft` 继承 `FsmHistoryStateModel`）。删除会导致 Django 无法启动。`ml/`、`ml_models/`、`ml_model_providers/`、`webhooks/` 保留但未使用。
