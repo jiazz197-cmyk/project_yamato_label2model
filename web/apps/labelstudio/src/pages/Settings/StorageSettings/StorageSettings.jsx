@@ -2,10 +2,7 @@ import {
   Button,
   EmptyState,
   IconCloudCustom,
-  IconCloudProviderAzure,
-  IconCloudProviderGCS,
   IconCloudProviderRedis,
-  IconCloudProviderS3,
   IconExternal,
   SimpleCard,
   Spinner,
@@ -115,21 +112,6 @@ export const StorageSettings = () => {
             description="Use cloud or database storage as the source for your labeling tasks or the target of your completed annotations."
             additionalContent={
               <div className="flex items-center justify-center gap-base" data-testid="dm-storage-provider-icons">
-                <Tooltip title="Amazon S3">
-                  <div className="flex items-center justify-center p-2" aria-label="Amazon S3">
-                    <IconCloudProviderS3 width={32} height={32} className="text-neutral-content-subtler" />
-                  </div>
-                </Tooltip>
-                <Tooltip title="Google Cloud Storage">
-                  <div className="flex items-center justify-center p-2" aria-label="Google Cloud Storage">
-                    <IconCloudProviderGCS width={32} height={32} className="text-neutral-content-subtler" />
-                  </div>
-                </Tooltip>
-                <Tooltip title="Azure Blob Storage">
-                  <div className="flex items-center justify-center p-2" aria-label="Azure Blob Storage">
-                    <IconCloudProviderAzure width={32} height={32} className="text-neutral-content-subtler" />
-                  </div>
-                </Tooltip>
                 <Tooltip title="Redis Storage">
                   <div className="flex items-center justify-center p-2" aria-label="Redis Storage">
                     <IconCloudProviderRedis width={32} height={32} className="text-neutral-content-subtler" />
