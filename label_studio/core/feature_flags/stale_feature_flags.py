@@ -31,8 +31,6 @@ STALE_FEATURE_FLAGS = {
     'fflag_root_43_prediction_results_filter': True,
     'fflag_root_45_better_user_filter': True,
     'fflag_root_13_annotation_results_filtering': True,
-    'fflag_feat_root_16_support_parquet_cloud_storage': True,
-    'fflag_feat_root_11_support_jsonl_cloud_storage': True,
     'fflag_feat_root_47_plugins_without_eval': False,
     'fflag_feat_front_bros_327_multiple_labels_regions_short': True,
     'fflag_feat_front_bros_199_enable_select_all_in_ner_phrase_short': True,

@@ -10,10 +10,7 @@ from core.utils.params import get_env
 from data_import.models import FileUpload
 from data_manager.models import Filter, FilterGroup, View
 from django.core.files.base import File
-from io_storages.azure_blob.models import AzureBlobExportStorage, AzureBlobImportStorage
-from io_storages.gcs.models import GCSExportStorage, GCSImportStorage
 from io_storages.redis.models import RedisExportStorage, RedisImportStorage
-from io_storages.s3.models import S3ExportStorage, S3ImportStorage
 from ml.models import MLBackend
 from tasks.models import Annotation, Prediction, Task
 
@@ -130,35 +127,7 @@ def _migrate_storages(project, config):
     # source storages migration
     source = config.get('source', None)
     if source:
-        if source.get('type') == 'gcs':
-            params = source.get('params', {})
-            GCSImportStorage.objects.create(
-                project=project,
-                bucket=source.get('path'),
-                prefix=params.get('prefix'),
-                regex_filter=params.get('regex'),
-                use_blob_urls=params.get('use_blob_urls'),
-            )
-        elif source.get('type') == 'azure-blob':
-            params = source.get('params', {})
-            AzureBlobImportStorage.objects.create(
-                project=project,
-                container=source.get('path'),
-                prefix=params.get('prefix'),
-                regex_filter=params.get('regex'),
-                use_blob_urls=params.get('use_blob_urls'),
-            )
-        elif source.get('type') == 's3':
-            params = source.get('params', {})
-            S3ImportStorage.objects.create(
-                project=project,
-                bucket=source.get('path'),
-                prefix=params.get('prefix'),
-                regex_filter=params.get('regex'),
-                use_blob_urls=params.get('use_blob_urls'),
-                region_name=params.get('region'),
-            )
-        elif source.get('type') == 'redis':
+        if source.get('type') == 'redis':
             params = source.get('params', {})
             RedisImportStorage.objects.create(
                 project=project,
@@ -171,35 +140,7 @@ def _migrate_storages(project, config):
     # target storages migration
     target = config.get('target', None)
     if target:
-        if target.get('type') == 'gcs':
-            params = target.get('params', {})
-            GCSExportStorage.objects.create(
-                project=project,
-                bucket=target.get('path'),
-                prefix=params.get('prefix'),
-                regex_filter=params.get('regex'),
-                use_blob_urls=params.get('use_blob_urls'),
-            )
-        elif target.get('type') == 'azure-blob':
-            params = target.get('params', {})
-            AzureBlobExportStorage.objects.create(
-                project=project,
-                container=target.get('path'),
-                prefix=params.get('prefix'),
-                regex_filter=params.get('regex'),
-                use_blob_urls=params.get('use_blob_urls'),
-            )
-        elif target.get('type') == 's3':
-            params = target.get('params', {})
-            S3ExportStorage.objects.create(
-                project=project,
-                bucket=target.get('path'),
-                prefix=params.get('prefix'),
-                regex_filter=params.get('regex'),
-                use_blob_urls=params.get('use_blob_urls'),
-                region_name=params.get('region'),
-            )
-        elif target.get('type') == 'redis':
+        if target.get('type') == 'redis':
             params = target.get('params', {})
             RedisExportStorage.objects.create(
                 project=project,
