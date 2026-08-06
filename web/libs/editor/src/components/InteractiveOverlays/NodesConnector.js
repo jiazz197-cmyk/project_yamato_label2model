@@ -63,7 +63,7 @@ const connect = (relation, root) => {
   return {
     id: relation.id,
     label: wrapArray(relation.labels ?? []).join(", "),
-    color: "#fa541c",
+    color: "#3287e2",
     direction: relation.direction,
     start: createShape(relation.startNode, root),
     end: createShape(relation.endNode, root),

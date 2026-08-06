@@ -368,7 +368,7 @@ class OrganizationAPI(generics.RetrieveUpdateAPIView):
     decorator=extend_schema(
         tags=['Invites'],
         summary='Get organization invite link',
-        description='Get a link to use to invite a new member to an organization in Label Studio Enterprise.',
+        description='Get a link to use to invite a new member to an organization in Yamato Enterprise.',
         responses={200: OrganizationInviteSerializer()},
         extensions={
             'x-fern-sdk-group-name': 'organizations',

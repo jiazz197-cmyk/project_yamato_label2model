@@ -23,7 +23,7 @@ const hotkeys = Hotkey("Vectors");
  * </View>
  * @name Vector
  * @meta_title Vector Tag for Adding Vectors to Images
- * @meta_description Customize Label Studio with the Vector tag by adding vectors to images for segmentation machine learning and data science projects.
+ * @meta_description Customize Yamato with the Vector tag by adding vectors to images for segmentation machine learning and data science projects.
  * @param {string} name                           - Name of tag
  * @param {string} toname                         - Name of image to label
  * @param {number} [opacity=0.6]                  - Opacity of vector

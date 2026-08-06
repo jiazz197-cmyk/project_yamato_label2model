@@ -24,7 +24,7 @@ import { guidGenerator } from "../../core/Helpers";
  * </View>
  * @name Relations
  * @meta_title Relations Tag for Multiple Relations
- * @meta_description Customize Label Studio by adding labels to relationships between labeled regions for machine learning and data science projects.
+ * @meta_description Customize Yamato by adding labels to relationships between labeled regions for machine learning and data science projects.
  * @param {single|multiple=} [choice=single] Configure whether you can select one or multiple labels
  */
 const TagAttrs = types.model({

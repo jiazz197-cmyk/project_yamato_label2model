@@ -2,6 +2,28 @@
 
 基于 Label Studio 1.24 (Apache-2.0) 的数据标注平台。保留标注、数据集导出、用户鉴权功能。
 
+## 开发环境（关键）
+
+本项目在 **Windows** 上开发运行。所有配置文件中的绝对路径必须使用 Windows 格式（如 `C:\Users\...`），**不要**使用 WSL 格式（`/mnt/c/...`）。Python、Poetry、Node.js 等工具均在 Windows 侧执行，不是 WSL 内。
+
+### Windows 兼容性（关键改动）
+
+- `web/package.json` 中所有 scripts 使用 `cross-env` 设置环境变量，不使用 Unix `KEY=VALUE command` 语法。
+- `playground:build` 中的文件移动使用 `node -e "require('fs').renameSync(...)"` 替代 Unix `mv` 命令。
+- `.env` 中 `BASE_DATA_DIR` 使用 Windows 路径（`C:\Users\...`），不是 WSL 路径（`/mnt/c/...`）。
+- Makefile 中的 `make run-dev` 等目标使用 Unix `KEY=VALUE command` 语法，在 Windows PowerShell 下不可用。以下是 Windows 等价命令：
+
+```powershell
+# make run-dev (SQLite 临时开发)
+$env:DJANGO_DB='sqlite'; $env:LOG_DIR='tmp'; $env:DEBUG='true'; $env:LOG_LEVEL='DEBUG'; $env:DJANGO_SETTINGS_MODULE='core.settings.label_studio'; poetry run python label_studio/manage.py runserver
+
+# make migrate-dev
+$env:DJANGO_DB='sqlite'; $env:LOG_DIR='tmp'; $env:DEBUG='true'; $env:LOG_LEVEL='DEBUG'; $env:DJANGO_SETTINGS_MODULE='core.settings.label_studio'; poetry run python label_studio/manage.py migrate
+
+# make test
+cd label_studio; $env:DJANGO_DB='sqlite'; pytest -v -m "not integration_tests"
+```
+
 ## 环境加载机制（关键改动）
 
 `label_studio/core/settings/label_studio.py` 顶部（`from core.settings.base import *` 之前）插入了早期 `.env` 加载逻辑：项目根目录的 `.env` 通过 `django-environ` 读入 `os.environ`，使得 `base.py` 中的 `get_env('POSTGRE_*')`、`get_env('MINIO_*')`、`BASE_DATA_DIR` 等都能从 `.env` 取到值。
@@ -31,11 +53,11 @@
 
 `fsm/` app 被 5 个核心模型类继承（`Project`、`Task`、`Annotation`、`TaskLock`、`AnnotationDraft` 继承 `FsmHistoryStateModel`）。删除会导致 Django 无法启动。`ml/`、`ml_models/`、`ml_model_providers/`、`webhooks/` 保留但未使用。
 
-## 开发命令
+## 开发命令（Windows PowerShell）
 
-```bash
+```powershell
 # 前端构建（web/dist/ 不存在时必须先构建）
-cd web && yarn install --frozen-lockfile && yarn build
+cd web; yarn install --frozen-lockfile; yarn build
 
 # 后端依赖
 poetry install
@@ -48,12 +70,12 @@ python label_studio/manage.py collectstatic --no-default-ignore
 python label_studio/manage.py runserver 0.0.0.0:8080
 
 # 测试（使用 SQLite）
-cd label_studio && DJANGO_DB=sqlite pytest -v -m "not integration_tests"
+cd label_studio; $env:DJANGO_DB='sqlite'; pytest -v -m "not integration_tests"
 ```
 
 `DJANGO_SETTINGS_MODULE` 默认为 `core.settings.label_studio`（`manage.py:8` 设置）。
 
-Makefile 中的 `make run-dev` / `make migrate-dev` 等目标使用 SQLite + `LOG_DIR=tmp`，与 `.env` 中的 PostgreSQL 配置无关。
+Makefile 中的 `make run-dev` / `make migrate-dev` 等目标使用 Unix `KEY=VALUE command` 语法，在 Windows PowerShell 下不可用。使用上方等价命令。
 
 ## WSL 注意事项
 

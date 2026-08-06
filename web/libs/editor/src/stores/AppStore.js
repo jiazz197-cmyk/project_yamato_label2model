@@ -82,7 +82,7 @@ export default types
     }),
 
     /**
-     * User of Label Studio
+     * User of Yamato
      */
     user: types.optional(types.maybeNull(types.safeReference(UserExtended)), null),
 
@@ -92,7 +92,7 @@ export default types
     debug: window.HTX_DEBUG === true,
 
     /**
-     * Settings of Label Studio
+     * Settings of Yamato
      */
     settings: types.optional(Settings, {}),
 
@@ -108,11 +108,11 @@ export default types
     showingSettings: types.optional(types.boolean, false),
     /**
      * Flag
-     * Description of task in Label Studio
+     * Description of task in Yamato
      */
     showingDescription: types.optional(types.boolean, false),
     /**
-     * Loading of Label Studio
+     * Loading of Yamato
      */
     isLoading: types.optional(types.boolean, false),
     /**
@@ -120,7 +120,7 @@ export default types
      */
     isSubmitting: false,
     /**
-     * Flag for disable task in Label Studio
+     * Flag for disable task in Yamato
      */
     noTask: types.optional(types.boolean, false),
     /**

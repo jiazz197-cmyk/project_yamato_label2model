@@ -53,7 +53,7 @@ import "./Labels.prefix.css";
  * </Labels>
  * @name Labels
  * @meta_title Labels Tag for Labeling Regions
- * @meta_description Customize Label Studio by using the Labels tag to provide a set of labels for labeling regions in tasks for machine learning and data science projects.
+ * @meta_description Customize Yamato by using the Labels tag to provide a set of labels for labeling regions in tasks for machine learning and data science projects.
  * @param {string} name                      - Name of the element
  * @param {string} toName                    - Name of the element that you want to label
  * @param {single|multiple=} [choice=single] - Configure whether you can select one or multiple labels for a region

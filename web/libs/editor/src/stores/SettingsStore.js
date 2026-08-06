@@ -7,7 +7,7 @@ const SIDEPANEL_MODE_REGIONS = "SIDEPANEL_MODE_REGIONS";
 const SIDEPANEL_MODE_LABELS = "SIDEPANEL_MODE_LABELS";
 
 /**
- * Setting store of Label Studio
+ * Setting store of Yamato
  */
 const SettingsModel = types
   .model("SettingsModel", {

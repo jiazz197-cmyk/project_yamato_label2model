@@ -59,7 +59,7 @@ const { TextArea } = Input;
  * </View>
  * @name TextArea
  * @meta_title Textarea Tag for Text areas
- * @meta_description Customize Label Studio with the TextArea tag to support audio transcription, image captioning, and OCR tasks for machine learning and data science projects
+ * @meta_description Customize Yamato with the TextArea tag to support audio transcription, image captioning, and OCR tasks for machine learning and data science projects
  * @param {string} name                    - Name to identify the TextArea
  * @param {string} toName                  - Name assigned to the object tag that the TextArea is labeling
  * @param {string} [value]                 - A pre-filled default value that appears within the rendered TextArea field and can be submitted

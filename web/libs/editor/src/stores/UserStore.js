@@ -25,7 +25,7 @@ export const UserExtended = types
   }));
 
 /**
- * User store of Label Studio
+ * User store of Yamato
  */
 const UserStore = types
   .model("UserStore", {

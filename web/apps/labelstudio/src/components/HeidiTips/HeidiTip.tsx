@@ -3,7 +3,6 @@ import { cn } from "../../utils/bem";
 import { IconCross } from "@humansignal/icons";
 import "./HeidiTip.prefix.css";
 import { Button } from "@humansignal/ui";
-import { HeidiSpeaking } from "../../assets/images";
 import type { HeidiTipProps, Tip } from "./types";
 import { createURL } from "./utils";
 
@@ -50,9 +49,6 @@ export const HeidiTip: FC<HeidiTipProps> = ({ tip, onDismiss, onLinkClick }) => 
           {tip.content}
           <HeidiLink link={tip.link} onClick={onLinkClick} />
         </div>
-      </div>
-      <div className={cn("heidy-tip").elem("heidi").toClassName()}>
-        <HeidiSpeaking />
       </div>
     </div>
   );

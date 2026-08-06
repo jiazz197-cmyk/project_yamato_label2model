@@ -32,7 +32,7 @@ import { ToolManagerMixin } from "../../mixins/ToolManagerMixin";
  * @name Bitmask
  * @regions BitmaskRegion
  * @meta_title Bitmask Tag for Image Segmentation Labeling
- * @meta_description Customize Label Studio with bitmask tags for image segmentation labeling for machine learning and data science projects.
+ * @meta_description Customize Yamato with bitmask tags for image segmentation labeling for machine learning and data science projects.
  * @param {string} name                      - Name of the element
  * @param {string} toName                    - Name of the image to label
  * @param {single|multiple=} [choice=single] - Configure whether the data labeler can select one or multiple labels

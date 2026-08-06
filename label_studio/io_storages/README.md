@@ -1,11 +1,11 @@
 # Cloud Storages
 
-Cloud storage is used for importing tasks and exporting annotations in Label Studio. There are 2 basic types of cloud storages:
+Cloud storage is used for importing tasks and exporting annotations in Yamato. There are 2 basic types of cloud storages:
 
 1. Import Storages (aka Source Cloud Storages)
 2. Export Storages (aka Target Cloud Storages)
 
-Also Label Studio has Persistent storages where LS storage export files, user avatars and UI uploads. Do not confuse `Cloud Storages` and `Persistent Storage`, they have completely different codebase and tasks. Cloud Storages are implemented in `io_storages`, Persistent Storage uses django-storages and it is installed in Django settings environment variables (see `base.py`). 
+Also Yamato has Persistent storages where LS storage export files, user avatars and UI uploads. Do not confuse `Cloud Storages` and `Persistent Storage`, they have completely different codebase and tasks. Cloud Storages are implemented in `io_storages`, Persistent Storage uses django-storages and it is installed in Django settings environment variables (see `base.py`). 
 
 Note: Dataset Storages were implemented in the enterprise codebase only. They are **deprecated and not used**.
 
@@ -15,7 +15,7 @@ This section uses GCS storage as an example, and the same logic can be applied t
 
 ### Import Storages
  
-This storage type is designed for importing tasks FROM cloud storage to Label Studio. This diagram is based on Google Cloud Storage (GCS), and other storages are implemented in the same way:
+This storage type is designed for importing tasks FROM cloud storage to Yamato. This diagram is based on Google Cloud Storage (GCS), and other storages are implemented in the same way:
   
 ```mermaid
     graph TD;
@@ -59,7 +59,7 @@ This storage type is designed for importing tasks FROM cloud storage to Label St
 
 ### Export Storages
 
-This storage type is designed for exporting tasks or annotations FROM Label Studio to cloud storage. 
+This storage type is designed for exporting tasks or annotations FROM Yamato to cloud storage. 
 
 ```mermaid
     graph TD;
@@ -128,7 +128,7 @@ Export storages use `_get_serialized_data()` which returns different formats bas
 ### 7. **Optional Deletion Support**
 - Export storages can implement `delete_annotation()` 
 - Controlled by `can_delete_objects` field
-- Automatically called when annotations are deleted from Label Studio
+- Automatically called when annotations are deleted from Yamato
 
 
 ## StorageInfo statuses and how they are processed
@@ -177,11 +177,11 @@ To handle these cases correctly, all these conditions must be checked in ensure_
 
 The Storage Proxy API is a critical component that handles access to files stored in cloud storages (S3, GCS, Azure, etc.). It serves two main purposes:
 
-1. **Security & Access Control**: It acts as a secure gateway to cloud storage resources, enforcing Label Studio's permission model and preventing direct exposure of cloud credentials to the client.
+1. **Security & Access Control**: It acts as a secure gateway to cloud storage resources, enforcing Yamato's permission model and preventing direct exposure of cloud credentials to the client.
 
 2. **Flexible Content Delivery**: It supports two modes of operation based on the storage configuration:
    - **Redirect Mode** (`presign=True`): Generates pre-signed URLs with temporary access and redirects the client to them. This is efficient as content flows directly from the storage to the client.
-   - **Proxy Mode** (`presign=False`): Streams content through the Label Studio server. This provides additional security and is useful when storage providers don't support pre-signed URLs or when administrators want to enforce stricter access control.
+   - **Proxy Mode** (`presign=False`): Streams content through the Yamato server. This provides additional security and is useful when storage providers don't support pre-signed URLs or when administrators want to enforce stricter access control.
 
 ### How It Works
 

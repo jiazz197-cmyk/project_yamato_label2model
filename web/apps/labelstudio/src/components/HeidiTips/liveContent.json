@@ -15,7 +15,7 @@
     },
     {
       "title": "Did you know?",
-      "content": "Try Label Studio Starter Cloud, optimized for small teams and projects.",
+      "content": "Try Yamato Starter Cloud, optimized for small teams and projects.",
       "link": {
         "label": "Learn more",
         "url": "https://humansignal.com/pricing/",
@@ -40,7 +40,7 @@
     },
     {
       "title": "Labeling for GenAI",
-      "content": "Label Studio has templates available for supervised LLM fine-tuning, RAG retrieval ranking, RLHF, chatbot evaluation, and more.",
+      "content": "Yamato has templates available for supervised LLM fine-tuning, RAG retrieval ranking, RLHF, chatbot evaluation, and more.",
       "closable": true,
       "link": {
         "label": "Explore templates",
@@ -55,7 +55,7 @@
   "organizationPage": [
     {
       "title": "It looks like your team is growing!",
-      "content": "Assign roles to your team using Label Studio Enterprise and control access to sensitive data at the project and workspace levels.",
+      "content": "Assign roles to your team using Yamato Enterprise and control access to sensitive data at the project and workspace levels.",
       "closable": true,
       "link": {
         "label": "Learn more",
@@ -68,7 +68,7 @@
     },
     {
       "title": "Want to simplify and secure logging in?",
-      "content": "Enable Single Sign-On for your team using SAML, SCIM2 or LDAP with Label Studio Enterprise.",
+      "content": "Enable Single Sign-On for your team using SAML, SCIM2 or LDAP with Yamato Enterprise.",
       "closable": true,
       "link": {
         "label": "Learn more",
@@ -81,7 +81,7 @@
     },
     {
       "title": "Did you know?",
-      "content": "Label Studio now has a Starter Cloud offering optimized for small teams and projects.",
+      "content": "Yamato now has a Starter Cloud offering optimized for small teams and projects.",
       "link": {
         "label": "Learn more",
         "url": "https://humansignal.com/pricing/",
@@ -93,7 +93,7 @@
     },
     {
       "title": "Share knowledge with the community",
-      "content": "Have questions or a tip to share with other Label Studio users? Join the community slack channel for the latest updates. ",
+      "content": "Have questions or a tip to share with other Yamato users? Join the community slack channel for the latest updates. ",
       "closable": true,
       "link": {
         "label": "Join the community",
@@ -106,7 +106,7 @@
     },
     {
       "title": "Did you know?",
-      "content": "Label Studio supports multiple points of integration with cloud storage, machine learning models, and popular tools to automate your machine learning pipeline.",
+      "content": "Yamato supports multiple points of integration with cloud storage, machine learning models, and popular tools to automate your machine learning pipeline.",
       "closable": true,
       "link": {
         "label": "Check out the integrations directory",
@@ -119,7 +119,7 @@
     },
     {
       "title": "Need Compliance?",
-      "content": "Label Studio Enterprise is fully SOC 2 and HIPAA compliant. Want more control? Deploy it On-Premises for maximum flexibility.",
+      "content": "Yamato Enterprise is fully SOC 2 and HIPAA compliant. Want more control? Deploy it On-Premises for maximum flexibility.",
       "closable": true,
       "link": {
         "label": "Contact us",
@@ -133,8 +133,8 @@
   ],
   "projectSettings": [
     {
-      "title": "Apply your AWS spend to Label Studio Enterprise",
-      "content": "Label Studio Enterprise is now available on the AWS Marketplace so you can use your committed spend to streamline data labeling workflows.",
+      "title": "Apply your AWS spend to Yamato Enterprise",
+      "content": "Yamato Enterprise is now available on the AWS Marketplace so you can use your committed spend to streamline data labeling workflows.",
       "closable": true,
       "link": {
         "label": "Learn more",
@@ -160,7 +160,7 @@
     },
     {
       "title": "Did you know?",
-      "content": "Try Label Studio Starter Cloud, optimized for small teams and projects.",
+      "content": "Try Yamato Starter Cloud, optimized for small teams and projects.",
       "closable": true,
       "link": {
         "label": "Learn more",
@@ -214,7 +214,7 @@
   "authPage": [
     {
       "title": "Vibe code any interface!",
-      "description": "Build any UI with Label Studio's agent on the web or skill for local development.",
+      "description": "Build any UI with Yamato's agent on the web or skill for local development.",
       "link": {
         "label": "Explore examples",
         "url": "https://docs.humansignal.com/templates/gallery_interfaces",
@@ -262,7 +262,7 @@
     },
     {
       "title": "Behind the benchmark",
-      "description": "Learn how Legalbenchmarks.ai built and scaled a benchmark for practical contract drafting tasks using LLM-as-a-judge and human review in Label Studio Enterprise.",
+      "description": "Learn how Legalbenchmarks.ai built and scaled a benchmark for practical contract drafting tasks using LLM-as-a-judge and human review in Yamato Enterprise.",
       "link": {
         "label": "Learn more",
         "url": "https://humansignal.com/blog/how-legalbenchmarks-ai-built-a-domain-specific-ai-benchmark/",
@@ -274,7 +274,7 @@
     },
     {
       "title": "Did you know?",
-      "description": "Try Label Studio Starter Cloud, optimized for small teams and projects.",
+      "description": "Try Yamato Starter Cloud, optimized for small teams and projects.",
       "link": {
         "label": "Learn more",
         "url": "https://humansignal.com/pricing/",
@@ -286,7 +286,7 @@
     },
     {
       "title": "Did you know?",
-      "description": "There's an Enterprise version of Label Studio packed with more features and automation to label data faster while ensuring the highest quality.",
+      "description": "There's an Enterprise version of Yamato packed with more features and automation to label data faster while ensuring the highest quality.",
       "link": {
         "label": "Learn more",
         "url": "https://humansignal.com/goenterprise/",

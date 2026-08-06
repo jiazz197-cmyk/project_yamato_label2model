@@ -3,12 +3,7 @@
 {% block content %}
   {{ block.super }}
   <script nonce="{{request.csp_nonce}}">
-    gaClientIdTrackingIframe('users.login.view');
-    // Give time for `ls_gaclient_id` to be set
-    setTimeout(() => {
-      const ls_gaclient_id = sessionStorage.getItem('ls_gaclient_id');
-      __lsa('users.login.view', { ls_gaclient_id });
-    }, 2000);
+    __lsa('users.login.view');
   </script>
 {% endblock %}
 

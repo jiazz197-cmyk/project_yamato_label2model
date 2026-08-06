@@ -28,7 +28,7 @@ import ControlBase from "./Base";
  *
  * @name TimeSeriesLabels
  * @meta_title Time Series Label Tag for Labeling Time Series Data
- * @meta_description Customize Label Studio for with the TimeSeriesLabel tag to label time series data for machine learning and data science projects.
+ * @meta_description Customize Yamato for with the TimeSeriesLabel tag to label time series data for machine learning and data science projects.
  * @param {string} name                      - Name of the element
  * @param {string} toname                    - Name of the timeseries to label
  * @param {single|multiple=} [choice=single] - Configure whether you can select one or multiple labels

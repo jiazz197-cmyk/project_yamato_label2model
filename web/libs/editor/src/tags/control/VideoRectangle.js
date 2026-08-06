@@ -23,7 +23,7 @@ import ControlBase from "./Base";
  * </View>
  * @name VideoRectangle
  * @meta_title Video Tag for Video Labeling
- * @meta_description Customize Label Studio with the Video tag for basic video annotation tasks for machine learning and data science projects.
+ * @meta_description Customize Yamato with the Video tag for basic video annotation tasks for machine learning and data science projects.
  * @param {string} name Name of the element
  * @param {string} toName Name of the element to control (video)
  */

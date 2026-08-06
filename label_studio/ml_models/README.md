@@ -4,7 +4,7 @@ Currently supporting a feature in [Label Studio Enterprise](https://github.com/H
 
 ## ModelInterface
 
-Defines a "type signature" for the inputs and outputs for an LLM call as related to a Label Studio project.
+Defines a "type signature" for the inputs and outputs for an LLM call as related to a Yamato project.
 
 ## ModelVersion
 

@@ -25,7 +25,7 @@ import ControlBase from "./Base";
  * @name PolygonLabels
  * @regions PolygonRegion
  * @meta_title Polygon Label Tag for Labeling Polygons in Images
- * @meta_description Customize Label Studio with the PolygonLabels tag and label polygons in images for semantic segmentation machine learning and data science projects.
+ * @meta_description Customize Yamato with the PolygonLabels tag and label polygons in images for semantic segmentation machine learning and data science projects.
  * @param {string} name                             - Name of tag
  * @param {string} toName                           - Name of image to label
  * @param {single|multiple=} [choice=single]        - Configure whether you can select one or multiple labels

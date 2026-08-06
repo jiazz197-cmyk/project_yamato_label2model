@@ -1,5 +1,5 @@
 /**
- * Label Studio Open Source - State Registry
+ * Yamato Open Source - State Registry
  *
  * This file registers core LSO project states with the state registry from app-common.
  *

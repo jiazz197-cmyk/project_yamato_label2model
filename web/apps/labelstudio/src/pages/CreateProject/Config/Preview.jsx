@@ -8,7 +8,7 @@ import { useAPI } from "../../../providers/ApiProvider";
 
 const configClass = cn("configure");
 
-// Lazy load Label Studio with a single promise to avoid multiple loads
+// Lazy load Yamato with a single promise to avoid multiple loads
 // and enable as early as possible to load the dependencies once this component is mounted for the first time
 let dependencies;
 const loadDependencies = async () => {

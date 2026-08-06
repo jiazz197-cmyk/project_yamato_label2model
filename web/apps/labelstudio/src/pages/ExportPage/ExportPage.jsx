@@ -378,7 +378,7 @@ const ExportTimeoutGuidance = ({ projectId, exportType }) => {
               <div className={cn("export-page").elem("timeout-action-content").toClassName()}>
                 For large-scale exports in the UI, consider{" "}
                 <a className="no-go" href={ENTERPRISE_URL} target="_blank" rel="noreferrer">
-                  Label Studio Enterprise
+                  Yamato Enterprise
                   <IconExternal className={cn("export-page").elem("timeout-link-icon").toClassName()} />
                 </a>{" "}
                 因为它专为大型项目和异步导出而设计。

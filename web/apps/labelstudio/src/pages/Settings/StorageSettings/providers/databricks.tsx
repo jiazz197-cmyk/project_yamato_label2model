@@ -19,7 +19,7 @@ const databricksProvider: ProviderConfig = {
           <IconSpark />
           <AlertTitle>企业版功能</AlertTitle>
           <AlertDescription>
-            Databricks Files (UC Volumes) is available in Label Studio Enterprise.{" "}
+            Databricks Files (UC Volumes) is available in Yamato Enterprise.{" "}
             <a
               href="https://docs.humansignal.com/guide/storage.html#Databricks-Files-UC-Volumes"
               target="_blank"

@@ -20,12 +20,9 @@
   text-align: center;
 }
 
-.ls-global-error__heidi {
-  width: 812px;
-  position: absolute;
-  top: -22px;
-  left: -22px;
-  height: 100%;
+.ls-global-error__logo {
+  max-height: 60px;
+  margin: 20px auto;
   user-select: none;
   -webkit-user-select: none;
 }

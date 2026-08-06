@@ -131,7 +131,7 @@ describe("NodesConnector", () => {
       const conn = NodesConnector.connect(relation, root);
       expect(conn.id).toBe("r1");
       expect(conn.label).toBe("L1");
-      expect(conn.color).toBe("#fa541c");
+      expect(conn.color).toBe("#3287e2");
       expect(conn.direction).toBe("right");
       expect(conn.start).toBe(mockRelationShapeInstance);
       expect(conn.end).toBe(mockRelationShapeInstance);

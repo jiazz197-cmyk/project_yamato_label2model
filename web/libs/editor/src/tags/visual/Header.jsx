@@ -23,7 +23,7 @@ import { Typography } from "@humansignal/ui";
  * </View>
  * @name Header
  * @meta_title Header Tag to Show Headers
- * @meta_description Customize Label Studio with the Header tag to display a header for a labeling task for machine learning and data science projects.
+ * @meta_description Customize Yamato with the Header tag to display a header for a labeling task for machine learning and data science projects.
  * @param {string} value              - Text of header, either static text or the field name in data to use for the header
  * @param {number} [size=4]           - Level of header on a page, used to control size of the text
  * @param {string} [style]            - CSS style for the header

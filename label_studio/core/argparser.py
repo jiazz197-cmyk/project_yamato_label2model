@@ -24,13 +24,13 @@ def parse_input_args(input_args):
         return os.path.normpath(raw_name)
 
     root_parser = argparse.ArgumentParser(add_help=False)
-    root_parser.add_argument('--version', dest='version', action='store_true', help='Show Label Studio version')
+    root_parser.add_argument('--version', dest='version', action='store_true', help='Show Yamato version')
     root_parser.add_argument(
         '-b',
         '--no-browser',
         dest='no_browser',
         action='store_true',
-        help='Do not open browser when starting Label Studio',
+        help='Do not open browser when starting Yamato',
     )
     root_parser.add_argument(
         '-db', '--database', dest='database', help='Database file path for storing tasks and annotations'
@@ -78,7 +78,7 @@ def parse_input_args(input_args):
         dest='host',
         type=str,
         default='',
-        help='Label Studio full hostname for generating imported task urls, sample task urls, static loading, etc.\n'
+        help='Yamato full hostname for generating imported task urls, sample task urls, static loading, etc.\n'
         "Leave it empty to make all paths relative to the domain root, it's preferable for work for most cases."
         'Examples: "https://77.42.77.42:1234", "http://ls.domain.com/subdomain/"',
     )
@@ -107,7 +107,7 @@ def parse_input_args(input_args):
         help='Enable legacy API token authentication',
     )
 
-    parser = argparse.ArgumentParser(description='Label studio', parents=[root_parser])
+    parser = argparse.ArgumentParser(description='Yamato', parents=[root_parser])
 
     subparsers = parser.add_subparsers(dest='command', help='Available commands')
     subparsers.required = False
@@ -118,7 +118,7 @@ def parse_input_args(input_args):
 
     subparsers.add_parser('user', help='Print user info', parents=[root_parser])
 
-    parser_init = subparsers.add_parser('init', help='Initialize Label Studio', parents=[root_parser])
+    parser_init = subparsers.add_parser('init', help='Initialize Yamato', parents=[root_parser])
     parser_init.add_argument(
         'project_name', help='Path to directory where project state will be initialized', type=project_name, nargs='?'
     )
@@ -133,7 +133,7 @@ def parse_input_args(input_args):
 
     # start sub-command parser
 
-    parser_start = subparsers.add_parser('start', help='Start Label Studio server', parents=[root_parser])
+    parser_start = subparsers.add_parser('start', help='Start Yamato server', parents=[root_parser])
     parser_start.add_argument('project_name', help='Project name', type=project_name, default='', nargs='?')
     parser_start.add_argument(
         '--init', dest='init', action='store_true', help='Initialize if project is not initialized yet'

@@ -8,12 +8,12 @@ import type { JsonViewerProps } from "./types";
 import { ReaderViewButton } from "./reader-view-button";
 import styles from "./json-viewer.module.css";
 
-// Custom Label Studio theme for json-edit-react
+// Custom Yamato theme for json-edit-react
 // Note: Colors are applied via SCSS using :global selectors because
 // json-edit-react doesn't support CSS variables in theme configuration
 const labelStudioTheme = {
   ...defaultTheme,
-  displayName: "Label Studio",
+  displayName: "Yamato",
   styles: {
     ...defaultTheme.styles,
     container: {
@@ -212,7 +212,7 @@ export const JsonViewer: FC<JsonViewerProps> = ({
     ] as any;
   }, [readerViewThreshold]);
 
-  // Custom icons using Label Studio's icon library
+  // Custom icons using Yamato's icon library
   const customIcons = useMemo(
     () => ({
       copy: <IconCopyOutline width={20} height={20} />,

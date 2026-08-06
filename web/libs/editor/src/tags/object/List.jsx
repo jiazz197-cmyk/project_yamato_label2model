@@ -44,7 +44,7 @@ import Base from "./Base";
  * }
  * @name List
  * @meta_title List Tag displays items of the same type, like articles, search results, etc.
- * @meta_description Customize Label Studio by displaying similar items from task data for machine learning and data science projects.
+ * @meta_description Customize Yamato by displaying similar items from task data for machine learning and data science projects.
  * @param {string} name         Name of the element
  * @param {string} value        Data field containing a JSON with array of objects (id, title, body) to rank
  * @param {string} [title]      Title of the list

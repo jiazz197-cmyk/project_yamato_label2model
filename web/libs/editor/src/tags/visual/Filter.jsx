@@ -23,7 +23,7 @@ import { FF_DEV_3391, isFF } from "../../utils/feature-flags";
  * </View>
  * @name Filter
  * @meta_title Filter Tag for Filter Search
- * @meta_description Customize Label Studio with the Filter tag to filter labels to accelerate labeling for machine learning and data science projects.
+ * @meta_description Customize Yamato with the Filter tag to filter labels to accelerate labeling for machine learning and data science projects.
  * @param {string} [placeholder="Quick Filter"]      - Placeholder text for filter
  * @param {number} [minlength=3]      - Size of the filter
  * @param {string} [style]            - CSS style of the string

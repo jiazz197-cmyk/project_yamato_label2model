@@ -46,7 +46,7 @@
  * }
  * @todo Tag will be deprecated, currently it's removed from docs; don't add @name
  * @meta_title Repeater Tag to duplicate annotation settings
- * @meta_description Customize Label Studio with the Repeater tag to repeat similar data blocks to accelerate labeling for machine learning and data science projects.
+ * @meta_description Customize Yamato with the Repeater tag to repeat similar data blocks to accelerate labeling for machine learning and data science projects.
  * @param {string} on                  - Data field object with array with similar data
  * @param {string} [indexFlag={{idx}}] - Placeholder for array index in params of underlying tags
  * @param {list|pagination} [mode]     - Select display mode between default and paginated
