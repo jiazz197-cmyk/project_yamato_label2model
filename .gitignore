@@ -92,3 +92,5 @@ web/coverage-chunks
 .omo/
 
 .ua/
+
+.claude/
