@@ -90,3 +90,5 @@ web/coverage-chunks
 .cache
 
 .omo/
+
+.ua/
