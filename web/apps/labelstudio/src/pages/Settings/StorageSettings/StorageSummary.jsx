@@ -91,9 +91,6 @@ export const StorageSummary = ({ target, storage, className, storageTypes = [] }
         </DescriptionList.Item>
 
         <Oneof value={storage.type}>
-          <SummaryS3 case={["s3", "s3s"]} storage={storage} />
-          <GSCStorage case="gcs" storage={storage} />
-          <AzureStorage case="azure" storage={storage} />
           <RedisStorage case="redis" storage={storage} />
           <LocalStorage case="localfiles" storage={storage} />
         </Oneof>
@@ -147,18 +144,6 @@ export const StorageSummary = ({ target, storage, className, storageTypes = [] }
       </DescriptionList>
     </div>
   );
-};
-
-const SummaryS3 = ({ storage }) => {
-  return <DescriptionList.Item term="Bucket">{storage.bucket}</DescriptionList.Item>;
-};
-
-const GSCStorage = ({ storage }) => {
-  return <DescriptionList.Item term="Bucket">{storage.bucket}</DescriptionList.Item>;
-};
-
-const AzureStorage = ({ storage }) => {
-  return <DescriptionList.Item term="Container">{storage.container}</DescriptionList.Item>;
 };
 
 const RedisStorage = ({ storage }) => {

@@ -8,6 +8,9 @@ __pycache__
 __generated__
 \#$
 docs/data/
+
+# runtime data
+data/
 etc/
 /src/
 yarn-error.log
@@ -87,3 +90,5 @@ web/coverage-chunks
 .cache
 
 .omo/
+
+.ua/

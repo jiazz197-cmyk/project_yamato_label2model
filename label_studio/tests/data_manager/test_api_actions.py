@@ -4,17 +4,11 @@ import json
 
 import pytest
 from django.db import transaction
-from io_storages.azure_blob.models import (
-    AzureBlobImportStorage,
-    AzureBlobImportStorageLink,
-)
-from io_storages.gcs.models import GCSImportStorage, GCSImportStorageLink
 from io_storages.localfiles.models import (
     LocalFilesImportStorage,
     LocalFilesImportStorageLink,
 )
 from io_storages.redis.models import RedisImportStorage, RedisImportStorageLink
-from io_storages.s3.models import S3ImportStorage, S3ImportStorageLink
 from projects.models import Project
 
 from ..utils import make_annotation, make_prediction, make_task, project_id  # noqa
@@ -108,9 +102,6 @@ def test_action_delete_all_annotations(tasks_count, annotations_count, predictio
 @pytest.mark.parametrize(
     'storage_model, link_model',
     [
-        (AzureBlobImportStorage, AzureBlobImportStorageLink),
-        (GCSImportStorage, GCSImportStorageLink),
-        (S3ImportStorage, S3ImportStorageLink),
         (LocalFilesImportStorage, LocalFilesImportStorageLink),
         (RedisImportStorage, RedisImportStorageLink),
     ],
@@ -180,7 +171,7 @@ def test_action_remove_duplicates_with_annotations(business_client, project_id):
     """
     # Setup
     project = Project.objects.get(pk=project_id)
-    storage = S3ImportStorage.objects.create(project=project)
+    storage = LocalFilesImportStorage.objects.create(project=project)
 
     # task 1: add not a duplicated task
     task_data = {'data': {'image': 'normal.jpg'}}
@@ -200,7 +191,7 @@ def test_action_remove_duplicates_with_annotations(business_client, project_id):
     # task 4: add duplicated task, with storage link and one annotation
     task4 = make_task(task_data, project)
     make_annotation({'result': []}, task4.id)
-    S3ImportStorageLink.objects.create(task=task4, key='duplicated.jpg', storage=storage)
+    LocalFilesImportStorageLink.objects.create(task=task4, key='duplicated.jpg', storage=storage)
 
     # call the "remove duplicated tasks" action
     status = business_client.post(
@@ -215,7 +206,7 @@ def test_action_remove_duplicates_with_annotations(business_client, project_id):
         task2.id,
     ], 'tasks ids wrong'
     assert status.status_code == 200, 'status code wrong'
-    assert S3ImportStorageLink.objects.count() == 1, 'storage links count wrong'
+    assert LocalFilesImportStorageLink.objects.count() == 1, 'storage links count wrong'
     assert project.annotations.count() == 6, 'annotations count wrong'
     assert project.annotations.filter(was_cancelled=True).count() == 1, 'was_cancelled counter wrong'
     assert project.tasks.count() == 2, 'tasks count wrong'

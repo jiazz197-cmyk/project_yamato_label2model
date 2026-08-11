@@ -32,7 +32,7 @@ export const StorageProviderForm = forwardRef<unknown, StorageProviderFormProps>
     ref,
   ) => {
     const modal = useModalControls();
-    const [type, setType] = useState<string | undefined>(storage?.type || storage?.provider || "s3");
+    const [type, setType] = useState<string | undefined>(storage?.type || storage?.provider || "redis");
     const [filesPreview, setFilesPreview] = useState<any[] | null>(null);
     const [connectionChecked, setConnectionChecked] = useState(false);
 
@@ -40,7 +40,7 @@ export const StorageProviderForm = forwardRef<unknown, StorageProviderFormProps>
       resetForm();
       setFilesPreview(null);
       setConnectionChecked(false);
-      setType("s3");
+      setType("redis");
       onClose();
       modal?.hide();
     };
@@ -61,7 +61,7 @@ export const StorageProviderForm = forwardRef<unknown, StorageProviderFormProps>
       ? [
           {
             title: "Configure Connection",
-            schema: getProviderSchema(type || "s3", isEditMode, effectiveTarget),
+            schema: getProviderSchema(type || "redis", isEditMode, effectiveTarget),
           },
           // Only include preview and review steps for import storages
           ...(effectiveTarget === "import"
@@ -72,7 +72,7 @@ export const StorageProviderForm = forwardRef<unknown, StorageProviderFormProps>
           { title: "Select Provider", schema: step1Schema },
           {
             title: "Configure Connection",
-            schema: getProviderSchema(type || "s3", isEditMode, effectiveTarget),
+            schema: getProviderSchema(type || "redis", isEditMode, effectiveTarget),
           },
           // Only include preview and review steps for import storages
           ...(effectiveTarget === "import"
@@ -117,7 +117,7 @@ export const StorageProviderForm = forwardRef<unknown, StorageProviderFormProps>
         ? [
             {
               title: "Configure Connection",
-              schema: getProviderSchema(formData.provider || type || "s3", isEditMode, effectiveTarget),
+              schema: getProviderSchema(formData.provider || type || "redis", isEditMode, effectiveTarget),
             },
             // Only include preview and review steps for import storages
             ...(effectiveTarget === "import"
@@ -128,7 +128,7 @@ export const StorageProviderForm = forwardRef<unknown, StorageProviderFormProps>
             { title: "Select Provider", schema: step1Schema },
             {
               title: "Configure Connection",
-              schema: getProviderSchema(formData.provider || type || "s3", isEditMode, effectiveTarget),
+              schema: getProviderSchema(formData.provider || type || "redis", isEditMode, effectiveTarget),
             },
             // Only include preview and review steps for import storages
             ...(effectiveTarget === "import"
@@ -145,7 +145,7 @@ export const StorageProviderForm = forwardRef<unknown, StorageProviderFormProps>
           resetForm();
           setFilesPreview(null);
           setConnectionChecked(false);
-          setType("s3");
+          setType("redis");
           onHide();
         };
 
@@ -180,7 +180,7 @@ export const StorageProviderForm = forwardRef<unknown, StorageProviderFormProps>
           resetForm();
           setFilesPreview(null);
           setConnectionChecked(false);
-          setType("s3");
+          setType("redis");
           onClose();
           modal?.hide();
         },
@@ -297,7 +297,7 @@ export const StorageProviderForm = forwardRef<unknown, StorageProviderFormProps>
                       });
                     }}
                     handleFieldBlur={handleFieldBlur}
-                    provider={formData.provider || "s3"}
+                    provider={formData.provider || "redis"}
                     isEditMode={isEditMode}
                     target={effectiveTarget}
                   />

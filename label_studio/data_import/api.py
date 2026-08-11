@@ -1005,7 +1005,7 @@ class DownloadStorageData(APIView):
                 return Response(
                     {
                         'detail': 'NGINX mode for uploads is not supported when using local FileSystemStorage. '
-                        'Disable USE_NGINX_FOR_UPLOADS or switch to a cloud storage backend that supports proxy URLs like S3/GCS/Azure.'
+                        'Disable USE_NGINX_FOR_UPLOADS or switch to a cloud storage backend that supports proxy URLs like MinIO/S3.'
                     },
                     status=status.HTTP_400_BAD_REQUEST,
                 )
