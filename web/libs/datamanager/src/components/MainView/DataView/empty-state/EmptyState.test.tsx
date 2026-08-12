@@ -25,15 +25,6 @@ jest.mock("@humansignal/icons", () => ({
   IconCheck: ({ width, height }: any) => <span data-testid="icon-check" width={width} height={height} />,
   IconSearch: ({ width, height }: any) => <span data-testid="icon-search" width={width} height={height} />,
   IconInbox: ({ width, height }: any) => <span data-testid="icon-inbox" width={width} height={height} />,
-  IconCloudProviderS3: ({ width, height, className }: any) => (
-    <span data-testid="icon-cloud-provider-s3" width={width} height={height} className={className} />
-  ),
-  IconCloudProviderGCS: ({ width, height, className }: any) => (
-    <span data-testid="icon-cloud-provider-gcs" width={width} height={height} className={className} />
-  ),
-  IconCloudProviderAzure: ({ width, height, className }: any) => (
-    <span data-testid="icon-cloud-provider-azure" width={width} height={height} className={className} />
-  ),
   IconCloudProviderRedis: ({ width, height, className }: any) => (
     <span data-testid="icon-cloud-provider-redis" width={width} height={height} className={className} />
   ),
@@ -80,7 +71,7 @@ describe("EmptyState Component", () => {
 
       // Check main title and description
       expect(screen.getByText("Import data to get your project started")).toBeInTheDocument();
-      expect(screen.getByText("Connect your cloud storage or upload files from your computer")).toBeInTheDocument();
+      expect(screen.getByText("Connect your storage or upload files from your computer")).toBeInTheDocument();
 
       // Check that storage provider icons are present
       expect(screen.getByTestId("dm-storage-provider-icons")).toBeInTheDocument();
@@ -255,7 +246,7 @@ describe("EmptyState Component", () => {
 
       const label = screen.getByTestId("empty-state-label");
       const title = screen.getByText("Import data to get your project started");
-      const description = screen.getByText("Connect your cloud storage or upload files from your computer");
+      const description = screen.getByText("Connect your storage or upload files from your computer");
 
       expect(label).toHaveAttribute("aria-labelledby", "dm-empty-title");
       expect(label).toHaveAttribute("aria-describedby", "dm-empty-desc");
@@ -310,14 +301,8 @@ describe("EmptyState Component", () => {
       expect(iconsContainer).toBeInTheDocument();
 
       // Check for aria-labels on storage provider containers
-      const s3Container = screen.getByLabelText("Amazon S3");
-      const gcsContainer = screen.getByLabelText("Google Cloud Storage");
-      const azureContainer = screen.getByLabelText("Azure Blob Storage");
       const redisContainer = screen.getByLabelText("Redis Storage");
 
-      expect(s3Container).toBeInTheDocument();
-      expect(gcsContainer).toBeInTheDocument();
-      expect(azureContainer).toBeInTheDocument();
       expect(redisContainer).toBeInTheDocument();
     });
 
@@ -327,11 +312,8 @@ describe("EmptyState Component", () => {
       const iconsContainer = screen.getByTestId("dm-storage-provider-icons");
       const iconContainers = iconsContainer.querySelectorAll("[aria-label]");
 
-      expect(iconContainers).toHaveLength(4);
-      expect(iconContainers[0]).toHaveAttribute("aria-label", "Amazon S3");
-      expect(iconContainers[1]).toHaveAttribute("aria-label", "Google Cloud Storage");
-      expect(iconContainers[2]).toHaveAttribute("aria-label", "Azure Blob Storage");
-      expect(iconContainers[3]).toHaveAttribute("aria-label", "Redis Storage");
+      expect(iconContainers).toHaveLength(1);
+      expect(iconContainers[0]).toHaveAttribute("aria-label", "Redis Storage");
     });
   });
 

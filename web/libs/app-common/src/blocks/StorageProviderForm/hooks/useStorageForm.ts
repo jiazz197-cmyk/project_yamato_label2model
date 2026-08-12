@@ -20,7 +20,7 @@ export const useStorageForm = ({ project, isEditMode, steps, storage, defaultVal
     currentStep: 0,
     formData: {
       project,
-      provider: "s3",
+      provider: "redis",
       title: "",
       use_blob_urls: false,
       recursive_scan: false,
@@ -62,7 +62,7 @@ export const useStorageForm = ({ project, isEditMode, steps, storage, defaultVal
   // Initialize form data with existing storage data in edit mode (only once)
   useEffect(() => {
     if (isEditMode && storage && !isInitialized) {
-      const storageType = storage.type || storage.provider || "s3";
+      const storageType = storage.type || storage.provider || "redis";
 
       // Wait for providers to be available
       if (Object.keys(providerRegistry).length === 0) {
@@ -354,7 +354,7 @@ export const useStorageForm = ({ project, isEditMode, steps, storage, defaultVal
       });
 
       // Check if this field should reset the connection
-      const currentProvider = newFormData.provider || "s3";
+      const currentProvider = newFormData.provider || "redis";
       const providerConfig = getProviderConfig(currentProvider);
       const field = providerConfig?.fields.find((f) => f.name === name);
 
@@ -392,7 +392,7 @@ export const useStorageForm = ({ project, isEditMode, steps, storage, defaultVal
       currentStep: 0,
       formData: {
         project,
-        provider: "s3",
+        provider: "redis",
         title: "",
         use_blob_urls: false,
         recursive_scan: false,

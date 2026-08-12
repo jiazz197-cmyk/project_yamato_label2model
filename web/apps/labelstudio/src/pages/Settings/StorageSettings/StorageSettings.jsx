@@ -2,10 +2,7 @@ import {
   Button,
   EmptyState,
   IconCloudCustom,
-  IconCloudProviderAzure,
-  IconCloudProviderGCS,
   IconCloudProviderRedis,
-  IconCloudProviderS3,
   IconExternal,
   SimpleCard,
   Spinner,
@@ -29,7 +26,7 @@ export const StorageSettings = () => {
   const sourceStorageRef = useRef();
   const targetStorageRef = useRef();
 
-  useUpdatePageTitle(createTitleFromSegments([project?.title, "云存储设置"]));
+  useUpdatePageTitle(createTitleFromSegments([project?.title, "Cloud Storage Settings"]));
 
   // Fetch storage data at parent level
   const sourceStorage = useStorageCard("", project?.id);
@@ -57,11 +54,12 @@ export const StorageSettings = () => {
   return (
     <section className="max-w-[680px]">
       <Typography variant="headline" size="medium" className="mb-base">
-        云存储
+        Cloud Storage
       </Typography>
       {hasAnyStorages && (
         <Typography size="small" className="text-neutral-content-subtler mb-wider">
-          使用云存储或数据库存储作为标注任务的来源，或作为已完成标注的存放目标。
+          Use cloud or database storage as the source for your labeling tasks or the target of your completed
+          annotations.
         </Typography>
       )}
 
@@ -76,8 +74,8 @@ export const StorageSettings = () => {
         <div className="grid grid-cols-2 gap-8">
           <StorageSet
             ref={sourceStorageRef}
-            title="源云存储"
-            buttonLabel="添加源存储"
+            title="Source Cloud Storage"
+            buttonLabel="Add Source Storage"
             rootClass={rootClass}
             storageTypes={sourceStorage.storageTypes}
             storages={sourceStorage.storages}
@@ -89,9 +87,9 @@ export const StorageSettings = () => {
 
           <StorageSet
             ref={targetStorageRef}
-            title="目标云存储"
+            title="Target Cloud Storage"
             target="export"
-            buttonLabel="添加目标存储"
+            buttonLabel="Add Target Storage"
             rootClass={rootClass}
             storageTypes={targetStorage.storageTypes}
             storages={targetStorage.storages}
@@ -110,27 +108,12 @@ export const StorageSettings = () => {
             size="medium"
             variant="primary"
             icon={<IconCloudCustom />}
-            title="添加第一个云存储"
-            description="使用云存储或数据库存储作为标注任务的来源，或作为已完成标注的存放目标。"
+            title="Add your first cloud storage"
+            description="Use cloud or database storage as the source for your labeling tasks or the target of your completed annotations."
             additionalContent={
               <div className="flex items-center justify-center gap-base" data-testid="dm-storage-provider-icons">
-                <Tooltip title="Amazon S3">
-                  <div className="flex items-center justify-center p-2" aria-label="Amazon S3">
-                    <IconCloudProviderS3 width={32} height={32} className="text-neutral-content-subtler" />
-                  </div>
-                </Tooltip>
-                <Tooltip title="Google Cloud Storage">
-                  <div className="flex items-center justify-center p-2" aria-label="Google Cloud Storage">
-                    <IconCloudProviderGCS width={32} height={32} className="text-neutral-content-subtler" />
-                  </div>
-                </Tooltip>
-                <Tooltip title="Azure Blob Storage">
-                  <div className="flex items-center justify-center p-2" aria-label="Azure Blob Storage">
-                    <IconCloudProviderAzure width={32} height={32} className="text-neutral-content-subtler" />
-                  </div>
-                </Tooltip>
-                <Tooltip title="Redis 存储">
-                  <div className="flex items-center justify-center p-2" aria-label="Redis 存储">
+                <Tooltip title="Redis Storage">
+                  <div className="flex items-center justify-center p-2" aria-label="Redis Storage">
                     <IconCloudProviderRedis width={32} height={32} className="text-neutral-content-subtler" />
                   </div>
                 </Tooltip>
@@ -141,18 +124,18 @@ export const StorageSettings = () => {
                 <Button
                   look="primary"
                   data-testid="add-source-storage-button-empty-state"
-                  aria-label="添加源存储"
+                  aria-label="Add Source Storage"
                   onClick={() => sourceStorageRef.current?.openAddModal()}
                 >
-                  添加源存储
+                  Add Source Storage
                 </Button>
                 <Button
                   look="primary"
                   data-testid="add-target-storage-button-empty-state"
-                  aria-label="添加目标存储"
+                  aria-label="Add Target Storage"
                   onClick={() => targetStorageRef.current?.openAddModal()}
                 >
-                  添加目标存储
+                  Add Target Storage
                 </Button>
               </div>
             }
@@ -164,10 +147,10 @@ export const StorageSettings = () => {
                     target="_blank"
                     rel="noopener noreferrer"
                     data-testid="storage-help-link"
-                    aria-label="了解更多云存储信息（在新窗口打开）"
+                    aria-label="Learn more about cloud storage (opens in new window)"
                     className="inline-flex items-center gap-1 hover:underline"
                   >
-                    了解更多
+                    Learn more
                     <IconExternal width={16} height={16} />
                   </a>
                 </Typography>
@@ -180,5 +163,5 @@ export const StorageSettings = () => {
   );
 };
 
-StorageSettings.title = "云存储";
+StorageSettings.title = "Cloud Storage";
 StorageSettings.path = "/storage";

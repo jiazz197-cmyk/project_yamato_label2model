@@ -51,8 +51,8 @@ export const ProviderSelectionStep = ({
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-xl font-semibold">Choose your cloud storage provider</h2>
-        <p className="text-muted-foreground">Select the cloud storage service where your data is stored</p>
+        <h2 className="text-xl font-semibold">Choose your storage provider</h2>
+        <p className="text-muted-foreground">Select the storage service where your data is stored</p>
       </div>
 
       <div className="space-y-4">

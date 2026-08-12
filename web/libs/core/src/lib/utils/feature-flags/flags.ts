@@ -70,12 +70,6 @@ export const FF_SYNCED_BUFFERING = "fflag_fix_front_fit_31_synced_media_bufferin
 export const FF_ENTERPRISE_EMAIL_NOTIFICATIONS = "fflag_feat_front_fit_183_email_notifications_short";
 
 /**
- * New storage providers experience
- * @link https://app.launchdarkly.com/projects/default/flags/fflag_feat_bros_193_new_cloud_storage_providers_short/targeting?env=production&selected-env=production
- */
-export const FF_NEW_STORAGES = "fflag_feat_bros_193_new_cloud_storage_providers_short";
-
-/**
  * Datamanager filter members
  */
 export const FF_DM_FILTER_MEMBERS = "fflag_feat_fit_449_datamanager_filter_members_short";

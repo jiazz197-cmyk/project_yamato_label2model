@@ -2,13 +2,7 @@ import factory
 from core.utils.common import load_func
 from django.conf import settings
 from io_storages.base_models import ImportStorage, ProjectStorageMixin
-from io_storages.models import (
-    AzureBlobExportStorage,
-    AzureBlobImportStorage,
-    GCSImportStorage,
-    RedisImportStorage,
-    S3ImportStorage,
-)
+from io_storages.models import RedisImportStorage
 
 
 class StorageFactory(factory.django.DjangoModelFactory):
@@ -34,57 +28,6 @@ class ProjectStorageMixinFactory(factory.django.DjangoModelFactory):
         abstract = True
 
 
-class AzureBlobStorageMixinFactory(factory.django.DjangoModelFactory):
-    account_name = factory.Faker('word')
-    account_key = factory.Faker('word')
-
-    class Meta:
-        abstract = True
-
-
-class AzureBlobImportStorageBaseFactory(AzureBlobStorageMixinFactory, ImportStorageFactory):
-    class Meta:
-        model = AzureBlobImportStorage
-        abstract = True
-
-
-class AzureBlobImportStorageFactory(AzureBlobImportStorageBaseFactory, ProjectStorageMixinFactory):
-    class Meta:
-        model = AzureBlobImportStorage
-
-
-class S3StorageMixinFactory(factory.django.DjangoModelFactory):
-    class Meta:
-        abstract = True
-
-
-class S3ImportStorageBaseFactory(S3StorageMixinFactory, ImportStorageFactory):
-    class Meta:
-        model = S3ImportStorage
-        abstract = True
-
-
-class S3ImportStorageFactory(S3ImportStorageBaseFactory, ProjectStorageMixinFactory):
-    class Meta:
-        model = S3ImportStorage
-
-
-class GCSStorageMixinFactory(factory.django.DjangoModelFactory):
-    class Meta:
-        abstract = True
-
-
-class GCSImportStorageBaseFactory(GCSStorageMixinFactory, ImportStorageFactory):
-    class Meta:
-        model = GCSImportStorage
-        abstract = True
-
-
-class GCSImportStorageFactory(GCSImportStorageBaseFactory, ProjectStorageMixinFactory):
-    class Meta:
-        model = GCSImportStorage
-
-
 class RedisStorageMixinFactory(factory.django.DjangoModelFactory):
     class Meta:
         abstract = True
@@ -99,8 +42,3 @@ class RedisImportStorageBaseFactory(RedisStorageMixinFactory, ImportStorageFacto
 class RedisImportStorageFactory(RedisImportStorageBaseFactory, ProjectStorageMixinFactory):
     class Meta:
         model = RedisImportStorage
-
-
-class AzureBlobExportStorageFactory(factory.django.DjangoModelFactory):
-    class Meta:
-        model = AzureBlobExportStorage

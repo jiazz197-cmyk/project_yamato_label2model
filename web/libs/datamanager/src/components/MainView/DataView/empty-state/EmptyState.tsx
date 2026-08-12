@@ -5,9 +5,6 @@ import {
   IconCheck,
   IconSearch,
   IconInbox,
-  IconCloudProviderS3,
-  IconCloudProviderGCS,
-  IconCloudProviderAzure,
   IconCloudProviderRedis,
 } from "@humansignal/icons";
 import { Button, IconExternal, Typography, Tooltip } from "@humansignal/ui";
@@ -137,23 +134,8 @@ const renderEmptyStateLayout = ({
 // Storage provider icons component
 const StorageProviderIcons = () => (
   <div className="flex items-center justify-center gap-base mb-wide" data-testid="dm-storage-provider-icons">
-    <Tooltip title="Amazon S3">
-      <div className="flex items-center justify-center p-2" aria-label="Amazon S3">
-        <IconCloudProviderS3 width={32} height={32} className="text-neutral-content-subtler" />
-      </div>
-    </Tooltip>
-    <Tooltip title="Google Cloud Storage">
-      <div className="flex items-center justify-center p-2" aria-label="Google Cloud Storage">
-        <IconCloudProviderGCS width={32} height={32} className="text-neutral-content-subtler" />
-      </div>
-    </Tooltip>
-    <Tooltip title="Azure Blob Storage">
-      <div className="flex items-center justify-center p-2" aria-label="Azure Blob Storage">
-        <IconCloudProviderAzure width={32} height={32} className="text-neutral-content-subtler" />
-      </div>
-    </Tooltip>
-    <Tooltip title="Redis 存储">
-      <div className="flex items-center justify-center p-2" aria-label="Redis 存储">
+    <Tooltip title="Redis Storage">
+      <div className="flex items-center justify-center p-2" aria-label="Redis Storage">
         <IconCloudProviderRedis width={32} height={32} className="text-neutral-content-subtler" />
       </div>
     </Tooltip>
@@ -175,8 +157,8 @@ const DocumentationLink = () => {
         className="inline-flex items-center gap-1"
         data-testid="dm-docs-data-import-link"
       >
-        查看数据导入文档
-        <span className="sr-only"> （在新标签页打开）</span>
+        See docs on importing data
+        <span className="sr-only"> (opens in a new tab)</span>
         <IconExternal width={20} height={20} />
       </a>
     </Typography>
@@ -222,11 +204,11 @@ export const EmptyState: FC<EmptyStateProps> = ({
       icon: <IconSearch />,
       iconBackground: "bg-warning-background",
       iconColor: "text-warning-icon",
-      title: "未找到任务",
-      description: "尝试调整或清除筛选条件以查看更多结果",
+      title: "No tasks found",
+      description: "Try adjusting or clearing the filters to see more results",
       actions: (
         <Button variant="primary" look="outlined" onClick={onClearFilters} data-testid="dm-clear-filters-button">
-          清除筛选
+          Clear Filters
         </Button>
       ),
     });
@@ -240,8 +222,8 @@ export const EmptyState: FC<EmptyStateProps> = ({
     if (userRole === "REVIEWER") {
       return renderEmptyStateLayout({
         icon: <IconCheck />,
-        title: "没有可用于审核或标注的任务",
-        description: "导入到此项目的任务将显示在这里",
+        title: "No tasks available for review or labeling",
+        description: "Tasks imported to this project will appear here",
       });
     }
 
@@ -253,8 +235,8 @@ export const EmptyState: FC<EmptyStateProps> = ({
       if (isAutoDistribution) {
         return renderEmptyStateLayout({
           icon: <IconLsLabeling />,
-          title: "开始标注任务",
-          description: "你标注过的任务将显示在这里",
+          title: "Start labeling tasks",
+          description: "Tasks you've labeled will appear here",
           actions: (
             <Button
               variant="primary"
@@ -263,7 +245,7 @@ export const EmptyState: FC<EmptyStateProps> = ({
               onClick={onLabelAllTasks}
               data-testid="dm-label-all-tasks-button"
             >
-              标注所有任务
+              Label All Tasks
             </Button>
           ),
         });
@@ -272,16 +254,16 @@ export const EmptyState: FC<EmptyStateProps> = ({
       if (isManualDistribution) {
         return renderEmptyStateLayout({
           icon: <IconInbox />,
-          title: "没有可用任务",
-          description: "分配给你的任务将显示在这里",
+          title: "No tasks available",
+          description: "Tasks assigned to you will appear here",
         });
       }
 
       // Fallback for annotators with unknown distribution setting
       return renderEmptyStateLayout({
         icon: <IconInbox width={40} height={40} />,
-        title: "没有可用任务",
-        description: "任务可用时将显示在这里",
+        title: "No tasks available",
+        description: "Tasks will appear here when they become available",
       });
     }
   }
@@ -289,8 +271,8 @@ export const EmptyState: FC<EmptyStateProps> = ({
   // Default case: show import functionality (existing behavior for Owners/Admins/Managers)
   return renderEmptyStateLayout({
     icon: <IconUpload />,
-    title: "导入数据以开始使用你的项目",
-    description: "连接云存储或从你的电脑上传文件",
+    title: "Import data to get your project started",
+    description: "Connect your storage or upload files from your computer",
     testId: "empty-state-label",
     ariaLabelledBy: "dm-empty-title",
     ariaDescribedBy: "dm-empty-desc",
@@ -305,7 +287,7 @@ export const EmptyState: FC<EmptyStateProps> = ({
             onClick={onOpenSourceStorageModal}
             data-testid="dm-connect-source-storage-button"
           >
-            连接云存储
+            Connect Cloud Storage
           </Button>
         )}
 
@@ -317,7 +299,7 @@ export const EmptyState: FC<EmptyStateProps> = ({
             onClick={onOpenImportModal}
             data-testid="dm-import-button"
           >
-            导入
+            Import
           </Button>
         )}
       </>

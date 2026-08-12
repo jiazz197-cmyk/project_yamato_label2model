@@ -294,11 +294,8 @@ class TaskAPI(generics.RetrieveUpdateDestroyAPIView):
             'predictions',
             'annotations__completed_by',
             'project',
-            'io_storages_azureblobimportstoragelink',
-            'io_storages_gcsimportstoragelink',
             'io_storages_localfilesimportstoragelink',
             'io_storages_redisimportstoragelink',
-            'io_storages_s3importstoragelink',
             'file_upload',
             'project__ml_backends',
         )

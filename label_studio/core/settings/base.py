@@ -623,9 +623,6 @@ if (
         )
 
 IO_STORAGES_IMPORT_LINK_NAMES = [
-    'io_storages_s3importstoragelink',
-    'io_storages_gcsimportstoragelink',
-    'io_storages_azureblobimportstoragelink',
     'io_storages_localfilesimportstoragelink',
     'io_storages_redisimportstoragelink',
 ]
@@ -753,7 +750,9 @@ USE_NGINX_FOR_UPLOADS = get_bool_env('USE_NGINX_FOR_UPLOADS', True)
 
 if get_env('MINIO_STORAGE_ENDPOINT') and not get_bool_env('MINIO_SKIP', False):
     CLOUD_FILE_STORAGE_ENABLED = True
-    STORAGES['default']['BACKEND'] = 'storages.backends.s3boto3.S3Boto3Storage'
+    # CustomS3Boto3Storage proxies file URLs through Django (/storage-data/uploaded/),
+    # so clients only need to reach this server, not MinIO directly.
+    STORAGES['default']['BACKEND'] = 'core.storage.CustomS3Boto3Storage'
     AWS_STORAGE_BUCKET_NAME = get_env('MINIO_STORAGE_BUCKET_NAME')
     AWS_ACCESS_KEY_ID = get_env('MINIO_STORAGE_ACCESS_KEY')
     AWS_SECRET_ACCESS_KEY = get_env('MINIO_STORAGE_SECRET_KEY')
@@ -762,7 +761,9 @@ if get_env('MINIO_STORAGE_ENDPOINT') and not get_bool_env('MINIO_SKIP', False):
     # make domain for FileUpload.file
     AWS_S3_SECURE_URLS = False
     AWS_S3_URL_PROTOCOL = 'http:' if HOSTNAME.startswith('http://') else 'https:'
-    AWS_S3_CUSTOM_DOMAIN = HOSTNAME.replace('http://', '').replace('https://', '') + '/data'
+    # only set a custom domain when a public hostname is configured;
+    # an empty HOSTNAME would produce a malformed URL like https:///data/...
+    AWS_S3_CUSTOM_DOMAIN = HOSTNAME.replace('http://', '').replace('https://', '') + '/data' if HOSTNAME else ''
 
 if get_env('STORAGE_TYPE') == 's3':
     CLOUD_FILE_STORAGE_ENABLED = True
@@ -784,48 +785,11 @@ if get_env('STORAGE_TYPE') == 's3':
         AWS_S3_VERIFY = False
     AWS_S3_SIGNATURE_VERSION = get_env('STORAGE_AWS_S3_SIGNATURE_VERSION', None)
 
-if get_env('STORAGE_TYPE') == 'azure':
-    CLOUD_FILE_STORAGE_ENABLED = True
-    STORAGES['default']['BACKEND'] = 'core.storage.CustomAzureStorage'
-    AZURE_ACCOUNT_NAME = get_env('STORAGE_AZURE_ACCOUNT_NAME')
-    AZURE_ACCOUNT_KEY = get_env('STORAGE_AZURE_ACCOUNT_KEY')
-    AZURE_CONTAINER = get_env('STORAGE_AZURE_CONTAINER_NAME')
-    AZURE_URL_EXPIRATION_SECS = int(get_env('STORAGE_AZURE_URL_EXPIRATION_SECS', '86400'))
-    AZURE_LOCATION = get_env('STORAGE_AZURE_FOLDER', default='')
-
-if get_env('STORAGE_TYPE') == 'gcs':
-    CLOUD_FILE_STORAGE_ENABLED = True
-    STORAGES['default']['BACKEND'] = 'core.storage.AlternativeGoogleCloudStorage'
-    GS_PROJECT_ID = get_env('STORAGE_GCS_PROJECT_ID')
-    GS_BUCKET_NAME = get_env('STORAGE_GCS_BUCKET_NAME')
-    GS_EXPIRATION = timedelta(seconds=int(get_env('STORAGE_GCS_EXPIRATION_SECS', '86400')))
-    GS_LOCATION = get_env('STORAGE_GCS_FOLDER', default='')
-    GS_CUSTOM_ENDPOINT = get_env('STORAGE_GCS_ENDPOINT')
-
 CSRF_TRUSTED_ORIGINS = get_env('CSRF_TRUSTED_ORIGINS', [])
 if CSRF_TRUSTED_ORIGINS:
     CSRF_TRUSTED_ORIGINS = CSRF_TRUSTED_ORIGINS.split(',')
 
-# Custom S3 endpoints on these domains will get detailed error reporting
-S3_TRUSTED_STORAGE_DOMAINS = get_env_list(
-    'S3_TRUSTED_STORAGE_DOMAINS',
-    [
-        'amazonaws.com',
-        'scw.cloud',
-        'yandexcloud.net',
-        'digitaloceanspaces.com',
-        'orange-business.com',
-        'computecanada.ca',
-        'cloudflarestorage.com',
-        'wasabisys.com',
-        'oracle.com',
-        'amazon.com',
-        'appdomain.cloud',
-    ],
-)
-
 REAL_HOSTNAME = os.getenv('HOSTNAME')  # we have to use getenv, because we don't use LABEL_STUDIO_ prefix
-GCS_CLOUD_STORAGE_FORCE_DEFAULT_CREDENTIALS = get_bool_env('GCS_CLOUD_STORAGE_FORCE_DEFAULT_CREDENTIALS', False)
 PUBLIC_API_DOCS = get_bool_env('PUBLIC_API_DOCS', False)
 
 # By default, we disallow filters with foreign keys in data manager for security reasons.
@@ -909,11 +873,6 @@ LABEL_STUDIO_ENABLE_LEGACY_API_TOKEN = get_bool_env('LABEL_STUDIO_ENABLE_LEGACY_
 RESOLVER_PROXY_BUFFER_SIZE = int(get_env('RESOLVER_PROXY_BUFFER_SIZE', 512 * 1024))
 RESOLVER_PROXY_TIMEOUT = int(get_env('RESOLVER_PROXY_TIMEOUT', 20))
 RESOLVER_PROXY_MAX_RANGE_SIZE = int(get_env('RESOLVER_PROXY_MAX_RANGE_SIZE', 8 * 1024 * 1024))
-RESOLVER_PROXY_GCS_DOWNLOAD_URL = get_env(
-    'RESOLVER_PROXY_GCS_DOWNLOAD_URL',
-    'https://storage.googleapis.com/download/storage/v1/b/{bucket_name}/o/{blob_name}?alt=media',
-)
-RESOLVER_PROXY_GCS_HTTP_TIMEOUT = int(get_env('RESOLVER_PROXY_GCS_HTTP_TIMEOUT', 5))
 RESOLVER_PROXY_ENABLE_ETAG_CACHE = get_bool_env('RESOLVER_PROXY_ENABLE_ETAG_CACHE', True)
 RESOLVER_PROXY_CACHE_TIMEOUT = int(get_env('RESOLVER_PROXY_CACHE_TIMEOUT', 3600))
 
