@@ -12,7 +12,7 @@
   {
     breadcrumbs: [
       {
-        title: "Account & Settings"
+        title: "账号设置"
       }
     ],
   }
@@ -103,7 +103,7 @@
   <div class="forms">
     <form action="{% url 'user-detail' pk=user.pk %}" method="patch" class="user__info">
       <input type="hidden" name="_method" value="patch"/>
-      <header>Your Avatar</header>
+      <header>您的头像</header>
       <div class="user-pic {{ user.avatar|yesno:'can_delete,can_upload' }}">
           <div class="userpic userpic--big">
             {% if user.avatar %}
@@ -119,29 +119,29 @@
 
           <div class="controls">
             <button class="lsf-button-ls lsf-button-ls_look_danger" name="delete-avatar" type="button">
-              Delete
+              删除
             </button>
 
-            <input class="file-input" type="file" name="avatar" value="Choose"
+            <input class="file-input" type="file" name="avatar" value="上传"
                   accept="image/png, image/jpeg, image/jpg"/>
           </div>
       </div>
-      <header>Personal Information</header>
+      <header>个人信息</header>
       <ul>
         <li class="field">
-          <label for="email">E-mail</label>
+          <label for="email">邮箱</label>
           <input type="text" class="lsf-input-ls" id="email" name="email" value="{{user.email}}" disabled />
         </li>
         <li class="field">
-          <label for="first_name">First Name</label>
+          <label for="first_name">名</label>
           <input type="text" class="lsf-input-ls" id="first_name" name="first_name" value="{{user.first_name}}" />
         </li>
         <li class="field">
-          <label for="last_name">Last Name</label>
+          <label for="last_name">姓</label>
           <input type="text" class="lsf-input-ls" id="last_name" name="last_name" value="{{user.last_name}}" />
         </li>
         <li class="field">
-          <label for="phone">Phone</label>
+          <label for="phone">电话</label>
           <input type="text" class="lsf-input-ls" id="phone" name="phone" value="{{user.phone}}" />
           <!-- <span>We'll send you sms with code if you change your number</span>
           <span class="error">Incorrect phone number!</span> -->
@@ -152,25 +152,25 @@
 
       </div>
       <footer>
-        <p class="secondary">Registered {{ user.date_joined|date:"M j, Y" }}, user ID {{ user.id }}</p>
-        <button class="lsf-button-ls lsf-button-ls_look_primary" onclick="smart_submit()">Save</button>
+        <p class="secondary">注册时间 {{ user.date_joined|date:"Y年m月d日" }}，用户 ID {{ user.id }}</p>
+        <button class="lsf-button-ls lsf-button-ls_look_primary" onclick="smart_submit()">保存</button>
       </footer>
     </form>
 
     <!-- Token -->
     <form action="" class="access_token__info">
-      <header>Access Token</header>
+      <header>访问令牌</header>
       <div class="field field--wide">
-        <label for="access_token">Use this token to authenticate with our API:</label>
+        <label for="access_token">使用此令牌进行API认证：</label>
         <input id="access_token" class="lsf-input-ls" name="access_token" type="text" value="{{token}}" readonly />
         <p class="actions">
-          <button type="button" class="blinking-status lsf-button-ls" data-copy="access_token">Copy</button>
-          <button type="button" class="blinking-status lsf-button-ls" name="renew">Renew</button>
+          <button type="button" class="blinking-status lsf-button-ls" data-copy="access_token">复制</button>
+          <button type="button" class="blinking-status lsf-button-ls" name="renew">刷新</button>
         </p>
       </div>
       <!-- Example -->
       <div class="field field--wide">
-        <label for="example_fetch">Example fetch projects data:</label>
+        <label for="example_fetch">获取项目数据示例：</label>
         <textarea id="example_fetch" class="example_code ls-textarea" type="text" readonly
                   style="height: 92px; font-size: 14px; padding: 9px 16px">
           {% if settings.HOSTNAME %}
@@ -180,7 +180,7 @@
           {% endif %}
         </textarea>
         <p class="actions">
-          <button type="button" class="blinking-status lsf-button-ls" data-copy="example_fetch">Copy</button>
+          <button type="button" class="blinking-status lsf-button-ls" data-copy="example_fetch">复制</button>
 
           {% block api_docs %}
           <a
@@ -188,7 +188,7 @@
             href="https://labelstud.io/guide/api.html"
             target="_blank"
           >
-            Documentation
+            文档
           </a>
           {% endblock %}
         </p>
@@ -201,21 +201,21 @@
       <header>
         {{ user.active_organization.title }}
         <br>
-        <sub>Your active organization</sub>
+        <sub>当前组织</sub>
       </header>
 
       <table>
         {% with user.get_pretty_role as role %}
           {% if role %}
-            <tr><td>Your role</td><td>{{ user.get_pretty_role }}</td></tr>
+            <tr><td>您的角色</td><td>{{ user.get_pretty_role }}</td></tr>
           {% endif %}
         {% endwith %}
-        <tr><td>Annotations completed by you</td><td>{{ user.active_organization_annotations.count }}</td></tr>
-        <tr><td>Projects contributed by you</td><td>{{ user.active_organization_contributed_project_number }}</td></tr>
+        <tr><td>您完成的标注数</td><td>{{ user.active_organization_annotations.count }}</td></tr>
+        <tr><td>您参与的项目数</td><td>{{ user.active_organization_contributed_project_number }}</td></tr>
         <tr><td></td><td></td></tr>
-        <tr><td style="min-width: 75px">Organization ID</td><td>{{ user.active_organization.id }}</td></tr>
-        <tr><td>Organization owner</td><td>{{ user.active_organization.created_by }}</td></tr>
-        <tr><td>Organization created at</td><td>{{ user.active_organization.created_at }}</td></tr>
+        <tr><td style="min-width: 75px">组织ID</td><td>{{ user.active_organization.id }}</td></tr>
+        <tr><td>组织所有者</td><td>{{ user.active_organization.created_by }}</td></tr>
+        <tr><td>组织创建时间</td><td>{{ user.active_organization.created_at }}</td></tr>
       </table>
 
     </form>

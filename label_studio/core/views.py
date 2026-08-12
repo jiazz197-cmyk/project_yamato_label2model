@@ -150,30 +150,21 @@ def samples_paragraphs(request):
 
 
 def heidi_tips(request):
-    """Fetch live tips from github raw liveContent.json to avoid caching and client side CORS issues"""
-    url = 'https://raw.githubusercontent.com/HumanSignal/label-studio/refs/heads/develop/web/apps/labelstudio/src/components/HeidiTips/liveContent.json'
+    """Return local liveContent.json for self-hosted deployment"""
+    import json
+    import os
 
-    response = None
+    # Serve from local file instead of fetching from GitHub
+    local_path = os.path.join(
+        os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))),
+        'web', 'apps', 'labelstudio', 'src', 'components', 'HeidiTips', 'liveContent.json'
+    )
     try:
-        response = requests.get(
-            url,
-            headers={'Cache-Control': 'no-cache', 'Content-Type': 'application/json', 'Accept': 'application/json'},
-            timeout=5,
-        )
-        # Raise an exception for bad status codes to avoid caching
-        response.raise_for_status()
-    # Catch all exceptions and return either the status code if there was a response, or default to 404 if there are network issues
-    # This is done this way to catch thrown exceptions from the request itself which will occur for air-gapped environments
+        with open(local_path, 'r', encoding='utf-8') as f:
+            content = json.load(f)
+        return HttpResponse(json.dumps(content), content_type='application/json')
     except Exception:
-        # Any other HTTP error will return the error code, and other errors like connection/timeout errors will be a 404
-        content = {}
-        status_code = 404
-        if response is not None:
-            content['detail'] = response.reason
-            status_code = response.status_code
-        return HttpResponse(json.dumps(content), content_type='application/json', status=status_code)
-
-    return HttpResponse(response.content, content_type='application/json')
+        return HttpResponse('{}', content_type='application/json', status=404)
 
 
 def static_file_with_host_resolver(path_on_disk, content_type):

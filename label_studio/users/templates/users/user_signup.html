@@ -9,7 +9,7 @@
   >
     {% csrf_token %}
     <div>
-      <input type="text" class="lsf-input-ls" name="email" id="email" placeholder="Email" value="{{ form.data.email }}">
+      <input type="text" class="lsf-input-ls" name="email" id="email" placeholder="邮箱" value="{{ form.data.email }}">
       {% if user_form.errors.email %}
         <ul class="field_errors">
           {% for error in user_form.errors.email %}
@@ -19,7 +19,7 @@
       {% endif %}
       </div>
     <div>
-      <input type="password" class="lsf-input-ls" name="password" id="password" placeholder="Password">
+      <input type="password" class="lsf-input-ls" name="password" id="password" placeholder="密码">
       {% if user_form.errors.password %}
         <ul class="field_errors">
           {% for error in user_form.errors.password %}
@@ -36,9 +36,7 @@
         <input name="allow_newsletters_visual" id="allow_newsletters_visual"
                type="checkbox" style="width: auto" checked="true"
                onchange="document.getElementById('allow_newsletters').value=document.getElementById('allow_newsletters_visual').checked">
-        Get the latest news from Heidi
-        <img src="{{ settings.HOSTNAME }}{% static 'images/heidi.png' %}" alt="Heidi"
-             width="25" style="display: inline; margin: 0; position: relative; top: 5px; left: 0px">
+        订阅Yamato最新消息
 
       </label>
     </div>
@@ -50,7 +48,7 @@
         </p>
       {% endfor %}
     {% endif %}
-    <p><button type="submit" aria-label="Create Account" class="lsf-button-ls lsf-button-ls_look_primary">Create Account</button></p>
+    <p><button type="submit" aria-label="创建账号" class="lsf-button-ls lsf-button-ls_look_primary">创建账号</button></p>
   </form>
 
 {% endblock %}

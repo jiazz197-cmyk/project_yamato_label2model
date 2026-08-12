@@ -79,59 +79,6 @@ body {
   color: var(--color-neutral-content);
 }
 
-.login_page_new_ui .tips {
-  max-width: 520px;
-  border-radius: 8px;
-  border: 1px solid var(--color-neutral-border);
-  background: var(--color-neutral-surface);
-  box-shadow: 0 2px 6px 0 rgb(var(--color-neutral-shadow) / 20%);
-  padding: 16px;
-  margin: 18vh 60px 0 60px;
-  position: relative;
-  z-index: 3;
-}
-
-.login_page_new_ui .tips:after {
-  content: '';
-  width: 115px;
-  height: 83px;
-  position: absolute;
-  bottom: -72px;
-  left: 16px;
-  fill: var(--color-neutral-border);
-  background: url('../images/heidi-tip.svg') no-repeat center center;
-}
-
-.login_page_new_ui .tips .title {
-  font-size: 16px;
-  font-style: normal;
-  font-weight: bold;
-  line-height: 24px;
-  letter-spacing: 0.15px;
-  margin-bottom: 8px;
-}
-
-.login_page_new_ui .tips .description {
-  font-size: .875rem;
-  font-style: normal;
-  font-weight: 400;
-  line-height: 20px;
-  letter-spacing: 0.25px;
-}
-
-.login_page_new_ui .tips .description a {
-  color: var(--color-primary-content);
-  font-size: .875rem;
-  font-style: normal;
-  font-weight: 500;
-  line-height: 20px;
-  text-decoration: underline;
-}
-
-.login_page_new_ui .tips .description a:hover {
-  text-decoration: none;
-}
-
 .login_page_new_ui .right {
   display: flex;
   flex-direction: column;

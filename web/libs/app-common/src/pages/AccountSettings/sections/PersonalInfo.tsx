@@ -61,7 +61,7 @@ export const PersonalInfo = () => {
       });
 
       if (!response.$meta.ok) {
-        toast?.show({ message: response?.response?.detail ?? "Error updating avatar", type: ToastType.error });
+        toast?.show({ message: response?.response?.detail ?? "更新头像失败", type: ToastType.error });
       } else {
         refetchUser();
       }
@@ -86,7 +86,7 @@ export const PersonalInfo = () => {
 
       refetchUser();
       if (!response?.$meta.ok) {
-        toast?.show({ message: response?.response?.detail ?? "Error updating user", type: ToastType.error });
+        toast?.show({ message: response?.response?.detail ?? "更新用户信息失败", type: ToastType.error });
       }
     },
     [user?.id],
@@ -117,7 +117,7 @@ export const PersonalInfo = () => {
           </form>
           {user?.avatar && (
             <Button type="submit" variant="negative" look="outlined" size="medium" onClick={deleteUserAvatar}>
-              Delete
+              删除
             </Button>
           )}
         </div>
@@ -125,7 +125,7 @@ export const PersonalInfo = () => {
           <div className={styles.flexRow}>
             <div className={styles.flex1}>
               <Input
-                label="First Name"
+                label="名"
                 value={fname}
                 onChange={(e: React.KeyboardEvent<HTMLInputElement>) => setFname(e.currentTarget.value)}
                 name="first_name"
@@ -133,7 +133,7 @@ export const PersonalInfo = () => {
             </div>
             <div className={styles.flex1}>
               <Input
-                label="Last Name"
+                label="姓"
                 value={lname}
                 onChange={(e: React.KeyboardEvent<HTMLInputElement>) => setLname(e.currentTarget.value)}
                 name="last_name"
@@ -142,11 +142,11 @@ export const PersonalInfo = () => {
           </div>
           <div className={styles.flexRow}>
             <div className={styles.flex1}>
-              <Input label="E-mail" type="email" readOnly={true} value={user?.email ?? ""} />
+              <Input label="邮箱" type="email" readOnly={true} value={user?.email ?? ""} />
             </div>
             <div className={styles.flex1}>
               <Input
-                label="Phone"
+                label="电话"
                 type="phone"
                 onChange={(e: React.KeyboardEvent<HTMLInputElement>) => setPhone(e.currentTarget.value)}
                 value={phone}

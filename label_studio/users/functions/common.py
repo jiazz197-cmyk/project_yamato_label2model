@@ -67,6 +67,8 @@ def save_user(request, next_page, user_form):
     else:
         org = Organization.create_organization(created_by=user, title='Yamato')
     user.active_organization = org
+    from users.forms import FOUND_US_ELABORATE
+
     user.save(update_fields=['active_organization'])
 
     request.advanced_json = {
@@ -76,7 +78,7 @@ def save_user(request, next_page, user_form):
         'new-user': 1,
         'how_find_us': user_form.cleaned_data.get('how_find_us', ''),
     }
-    if user_form.cleaned_data.get('how_find_us', '') == 'Other':
+    if user_form.cleaned_data.get('how_find_us', '') == FOUND_US_ELABORATE:
         request.advanced_json['elaborate'] = user_form.cleaned_data.get('elaborate', '')
 
     redirect_url = next_page if next_page else reverse('projects:project-index')

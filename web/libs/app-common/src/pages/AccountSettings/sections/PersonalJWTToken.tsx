@@ -111,11 +111,11 @@ export function PersonalJWTToken() {
   const revoke = useCallback(
     async (token: string) => {
       confirm({
-        title: "Revoke Token",
-        body: `Are you sure you want to delete this access token? Any application using this token will need a new token to be able to access ${
+        title: "撤销令牌",
+        body: `确定要删除此访问令牌吗？使用此令牌的任何应用程序将需要新令牌才能访问 ${
           window?.APP_SETTINGS?.app_name || "Yamato"
         }`,
-        okText: "Revoke",
+        okText: "撤销",
         buttonLook: "negative",
         onOk: async () => {
           await revokeToken.mutateAsync({ token });
@@ -134,7 +134,7 @@ export function PersonalJWTToken() {
     setDialogOpened(true);
     modal({
       visible: true,
-      title: "New Auth Token",
+      title: "新建认证令牌",
       style: { width: 680 },
       body: CreateTokenForm,
       closeOnClickOutside: false,
@@ -149,10 +149,10 @@ export function PersonalJWTToken() {
     <div className={styles.personalAccessToken}>
       <div className={tokensListClassName}>
         {tokens.isLoading ? (
-          <div>loading...</div>
+          <div>加载中...</div>
         ) : tokens.isSuccess && tokens.data && tokens.data.length ? (
           <div>
-            <Label text="Access Token" className={styles.label} />
+            <Label text="访问令牌" className={styles.label} />
             <div className="flex flex-col gap-2">
               {tokens.data.map((token, index) => {
                 return (
@@ -160,13 +160,13 @@ export function PersonalJWTToken() {
                     <div className={styles.tokenWrapper}>
                       <div className={styles.expirationDate}>
                         {token.expires_at
-                          ? `Expires on ${format(new Date(token.expires_at), "MMM dd, yyyy HH:mm")}`
-                          : "Personal access token"}
+                          ? `过期时间：${format(new Date(token.expires_at), "yyyy年MM月dd日 HH:mm")}`
+                          : "个人访问令牌"}
                       </div>
                       <div className={styles.tokenString}>{token.token}</div>
                     </div>
                     <Button variant="negative" look="outlined" onClick={() => revoke(token.token)}>
-                      Revoke
+                      撤销
                     </Button>
                   </div>
                 );
@@ -174,13 +174,13 @@ export function PersonalJWTToken() {
             </div>
           </div>
         ) : tokens.isError ? (
-          <div>Unable to load tokens list</div>
+          <div>无法加载令牌列表</div>
         ) : null}
       </div>
-      <Tooltip title="You can only have one active token" disabled={!disallowAddingTokens}>
+      <Tooltip title="您只能拥有一个活跃令牌" disabled={!disallowAddingTokens}>
         <div style={{ width: "max-content" }}>
           <Button disabled={disallowAddingTokens || dialogOpened} onClick={openDialog}>
-            Create New Token
+            创建新令牌
           </Button>
         </div>
       </Tooltip>
@@ -198,24 +198,24 @@ function CreateTokenForm() {
 
   return (
     <div className="flex flex-col gap-2">
-      <p>Copy your new access token from below and keep it secure. </p>
+      <p>复制您的新访问令牌并妥善保管。</p>
 
       <div className="flex items-end w-full gap-2">
         <Input
-          label="Access Token"
+          label="访问令牌"
           labelProps={{ className: "flex-1", rawClassName: "flex-1" }}
           className="w-full"
           readOnly
           value={data ?? ""}
         />
         <Button onClick={() => copy()} disabled={copied} variant="neutral" look="outlined">
-          {copied ? "Copied!" : "Copy"}
+          {copied ? "已复制！" : "复制"}
         </Button>
       </div>
 
       {data?.expires_at && (
         <div>
-          <Label text="Token Expiry Date" />
+          <Label text="令牌过期日期" />
           {data && format(new Date(data?.expires_at), "MMM dd, yyyy HH:mm z")}
         </div>
       )}
@@ -225,11 +225,10 @@ function CreateTokenForm() {
           <CalloutIcon>
             <IconWarning />
           </CalloutIcon>
-          <CalloutTitle>Manage your access tokens securely</CalloutTitle>
+          <CalloutTitle>安全管理您的访问令牌</CalloutTitle>
         </CalloutHeader>
         <CalloutContent>
-          Do not share this key with anyone. If you suspect any keys have been compromised, you should revoke them and
-          create new ones.
+          请勿与任何人共享此密钥。如果您怀疑任何密钥已被泄露，应立即撤销并创建新的密钥。
         </CalloutContent>
       </Callout>
     </div>

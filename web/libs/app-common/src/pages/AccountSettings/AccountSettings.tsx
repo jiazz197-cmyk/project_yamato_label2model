@@ -35,11 +35,11 @@ const AccountSettingsSection = () => {
 
   // Update page title to reflect the current section
   const pageTitleText = useMemo(() => {
-    if (!currentSection) return "My Account";
+    if (!currentSection) return "我的账号";
 
     // If title is a string, use it directly
     if (typeof currentSection.title === "string") {
-      return createTitleFromSegments([currentSection.title, "My Account"]);
+      return createTitleFromSegments([currentSection.title, "我的账号"]);
     }
 
     // For non-string titles (like JSX elements), derive from the section ID
@@ -48,7 +48,7 @@ const AccountSettingsSection = () => {
       .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
       .join(" ");
 
-    return createTitleFromSegments([titleFromId, "My Account"]);
+    return createTitleFromSegments([titleFromId, "我的账号"]);
   }, [currentSection]);
 
   useUpdatePageTitle(pageTitleText);
@@ -123,12 +123,12 @@ const AccountSettingsPage = () => {
   );
 };
 
-AccountSettingsPage.title = "My Account";
+AccountSettingsPage.title = "我的账号";
 AccountSettingsPage.path = "/user/account";
 AccountSettingsPage.exact = false;
 AccountSettingsPage.routes = () => [
   {
-    title: () => "My Account",
+    title: () => "我的账号",
     path: "/account",
     component: () => <Redirect to={AccountSettingsPage.path} />,
   },
