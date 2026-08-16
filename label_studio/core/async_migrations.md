@@ -1,4 +1,4 @@
-# Async Migrations in Label Studio
+# Async Migrations in Yamato
 
 ## Overview
 

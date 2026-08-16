@@ -7,9 +7,6 @@ interface ReviewStepProps {
 export const ReviewStep = ({ formData, filesPreview, formatSize }: ReviewStepProps) => {
   const getProviderDisplayName = (provider: string) => {
     const providerMap: Record<string, string> = {
-      s3: "Amazon S3",
-      gcp: "Google Cloud Storage",
-      azure: "Azure Blob Storage",
       redis: "Redis",
       localfiles: "Local Files",
     };

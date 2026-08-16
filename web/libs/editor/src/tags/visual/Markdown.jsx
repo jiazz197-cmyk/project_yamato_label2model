@@ -33,7 +33,7 @@ import { guidGenerator } from "../../utils/unique";
  * </View>
  * @name Markdown
  * @meta_title Markdown Tag for Rendering Markdown Text
- * @meta_description Customize Label Studio with the Markdown tag to display formatted markdown text content for machine learning and data science projects.
+ * @meta_description Customize Yamato with the Markdown tag to display formatted markdown text content for machine learning and data science projects.
  * @param {string} value - Markdown text content, either static text or field name in task data (e.g., $markdown_field)
  * @param {string} [style] - CSS style string
  * @param {string} [className] - Class name of the CSS style to apply

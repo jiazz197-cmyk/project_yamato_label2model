@@ -83,7 +83,7 @@ export const GeneralSettings = () => {
                     label={
                       <>
                         Uncertainty sampling{" "}
-                        <Tooltip title="Available on Label Studio Enterprise">
+                        <Tooltip title="Available on Yamato Enterprise">
                           <Badge
                             variant="enterprise"
                             icon={<IconSpark />}

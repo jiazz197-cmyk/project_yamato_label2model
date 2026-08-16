@@ -11,7 +11,7 @@ export const StorageForm = forwardRef(({ onSubmit, target, project, rootClass, s
   /**@type {import('react').RefObject<Form>} */
   const api = useContext(ApiContext);
   const formRef = ref ?? useRef();
-  const [type, setType] = useState(storage?.type ?? storageTypes?.[0]?.name ?? "s3");
+  const [type, setType] = useState(storage?.type ?? storageTypes?.[0]?.name ?? "redis");
   const [checking, setChecking] = useState(false);
   const [connectionValid, setConnectionValid] = useState(null);
   const [formFields, setFormFields] = useState([]);

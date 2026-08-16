@@ -18,7 +18,7 @@ export const formStateAtom = atom<FormState>({
   currentStep: 0,
   formData: {
     project: 0,
-    provider: "s3",
+    provider: "redis",
     title: "",
     use_blob_urls: false,
     recursive_scan: false,

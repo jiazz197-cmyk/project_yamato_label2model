@@ -72,9 +72,6 @@ Add your provider to the registry in `providers/index.ts`:
 import { myProvider } from "./myProvider";
 
 export const providerRegistry: Record<string, ProviderConfig> = {
-  s3: s3Provider,
-  gcp: gcpProvider,
-  azure: azureProvider,
   redis: redisProvider,
   localfiles: localFilesProvider,
   myprovider: myProvider, // Add your provider here
@@ -406,20 +403,13 @@ import { StorageProviderForm } from '@humansignal/app-common';
 
 // Define custom default values for different providers
 const customDefaults = {
-  s3: {
-    region: "us-west-2",
-    bucket: "my-default-bucket",
+  redis: {
+    path: "default-path",
     prefix: "data/",
   },
-  gcp: {
-    project_id: "my-default-project",
-    bucket: "my-default-bucket",
+  localfiles: {
+    path: "/tmp",
     prefix: "annotations/",
-  },
-  azure: {
-    container: "my-default-container",
-    account_name: "myaccount",
-    prefix: "exports/",
   },
 };
 
@@ -435,9 +425,8 @@ function MyStorageForm() {
       target="import"
       project={123}
       storageTypes={[
-        { title: "Amazon S3", name: "s3" },
-        { title: "Google Cloud Storage", name: "gcp" },
-        { title: "Azure Blob Storage", name: "azure" },
+        { title: "Redis", name: "redis" },
+        { title: "Local Files", name: "localfiles" },
       ]}
       providers={providerRegistry}
       defaultValues={customDefaults}
@@ -448,8 +437,8 @@ function MyStorageForm() {
 ```
 
 In this example:
-- When a user selects "S3", the form will be pre-filled with `region: "us-west-2"`, `bucket: "my-default-bucket"`, and `prefix: "data/"`
-- When a user selects "GCP", the form will be pre-filled with `project_id: "my-default-project"`, `bucket: "my-default-bucket"`, and `prefix: "annotations/"`
+- When a user selects "Redis", the form will be pre-filled with `path: "default-path"` and `prefix: "data/"`
+- When a user selects "Local Files", the form will be pre-filled with `path: "/tmp"` and `prefix: "annotations/"`
 - Custom defaults take precedence over any defaults defined in the provider schemas
 
 ## Example: Using Read-Only Fields

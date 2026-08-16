@@ -32,7 +32,7 @@ import { sanitizeHtml } from "../../utils/html";
  * </View>
  * @name Label
  * @meta_title Label Tag for Single Label Tags
- * @meta_description Customize Label Studio with the Label tag to assign a single label to regions in a task for machine learning and data science projects.
+ * @meta_description Customize Yamato with the Label tag to assign a single label to regions in a task for machine learning and data science projects.
  * @param {string} value                    - Value of the label
  * @param {boolean} [selected=false]        - Whether to preselect this label
  * @param {number} [maxUsages]              - Maximum number of times this label can be used per task

@@ -4,12 +4,7 @@
 {% block content %}
   {{ block.super }}
   <script nonce="{{request.csp_nonce}}">
-    gaClientIdTrackingIframe('users.signup.view');
-    // Give time for `ls_gaclient_id` to be set
-    setTimeout(() => {
-      const ls_gaclient_id = sessionStorage.getItem('ls_gaclient_id');
-      __lsa('users.signup.view', { ls_gaclient_id });
-    }, 2000);
+    __lsa('users.signup.view');
   </script>
 {% endblock %}
 
@@ -44,7 +39,7 @@
         {% endif %}
       </div>
       <div class="input-wrapper">
-        <label>How did you hear about Label Studio?</label>
+        <label>How did you hear about Yamato?</label>
         <select class="lsf-select-ls" name="how_find_us" id="how_find_us">
           <option disabled value="" {% if not form.data.how_find_us %}selected{% endif %}>Select an option</option>
           {% for choice in found_us_options %}
@@ -57,17 +52,7 @@
         <input class="lsf-input-ls" name="elaborate" id="elaborate" {% if user_form.data.how_find_us == elaborate %}value="{{ user_form.data.elaborate }}"{% endif %}>
         </select>
       </div>
-      <div class="form-group">
-        <input name="allow_newsletters" id="allow_newsletters" type="hidden" value="{% if user_form.data.allow_newsletters == 'false' %}false{% else %}true{% endif %}">
-        <input name="allow_newsletters_visual" id="allow_newsletters_visual" class="lsf-checkbox-ls"
-                type="checkbox" style="width: auto" {% if user_form.data.allow_newsletters == 'false' %}{% else %}checked="checked{% endif %}"
-                onchange="document.getElementById('allow_newsletters').value=document.getElementById('allow_newsletters_visual').checked">
-        <label for="allow_newsletters_visual" style="display: inline-block; cursor: pointer;">
-          Get the latest news from Heidi
-          <img src="{{ settings.HOSTNAME }}{% static 'images/heidi.png' %}" alt="Heidi"
-              width="25" style="position: absolute; right: -2.5em; top: -.25rem;">
-        </label>
-      </div>
+      <input name="allow_newsletters" type="hidden" value="false">
 
       {% if form.non_field_errors %}
         {% for error in form.non_field_errors %}

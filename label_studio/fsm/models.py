@@ -1,5 +1,5 @@
 """
-FSM Base Model for Label Studio.
+FSM Base Model for Yamato.
 
 This module contains only FsmHistoryStateModel - the base class that models
 inherit from to get FSM integration. State model definitions are in state_models.py

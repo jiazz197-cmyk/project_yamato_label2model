@@ -15,7 +15,7 @@ import { parseValue } from "../../utils/data";
  * </View>
  * @name Pdf
  * @meta_title Pdf Tag to Display PDF Documents
- * @meta_description Customize Label Studio by displaying PDF files in tasks for machine learning and data science projects.
+ * @meta_description Customize Yamato by displaying PDF files in tasks for machine learning and data science projects.
  * @param {string} value Data field value containing the URL to the PDF
  */
 const Model = types

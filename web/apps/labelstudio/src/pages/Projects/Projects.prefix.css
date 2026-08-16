@@ -63,11 +63,6 @@
   flex-direction: column;
   align-items: center;
 
-  &__heidi {
-    height: 12rem;
-    margin-top: 6rem;
-  }
-
   &__header {
     font-size: 32px;
     font-weight: 700;

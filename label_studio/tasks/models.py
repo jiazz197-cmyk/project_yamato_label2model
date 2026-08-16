@@ -63,7 +63,7 @@ class Task(TaskMixin, FsmHistoryStateModel):
         null=False,
         help_text='User imported or uploaded data for a task. Data is formatted according to '
         'the project label config. You can find examples of data for your project '
-        'on the Import page in the Label Studio Data Manager UI.',
+        'on the Import page in the Yamato Data Manager UI.',
     )
 
     meta = JSONField(
@@ -554,13 +554,7 @@ class Task(TaskMixin, FsmHistoryStateModel):
         if storage_link:
             return storage_link.storage
 
-        # or try global storage settings (only s3 for now)
-        elif get_env('USE_DEFAULT_S3_STORAGE', default=False, is_bool=True):
-            # TODO: this is used to access global environment storage settings.
-            # We may use more than one and non-default S3 storage (like GCS, Azure)
-            from io_storages.s3.models import S3ImportStorage
-
-            return S3ImportStorage()
+        
 
     @property
     def completed_annotations(self):

@@ -19,7 +19,6 @@ dependencies = [
     "attr (==0.3.1)",
     "attrs (>=19.2.0)",
     "pyyaml (>=6.0.0)",
-    "azure-storage-blob (>=12.6.0)",
     "boto3 (>=1.28.58,<2.0.0)",
     "botocore (>=1.39.3,<2.0.0)",
     "bleach (>=6.4.0,<6.5.0)",
@@ -62,7 +61,6 @@ dependencies = [
     "sentry-sdk (>=2.16.0)",
     "launchdarkly-server-sdk (==8.2.1)",
     "python-json-logger (==2.0.4)",
-    "google-cloud-storage (>=3.8.0,<4.0.0)",
     "google-cloud-logging (>=3.10.0,<4.0.0)",
     "django-csp (==3.7)",
     "openai (>=1.10.0,<2.0.0)",
@@ -80,7 +78,7 @@ dependencies = [
 Repository = "https://github.com/HumanSignal/label-studio"
 
 [project.scripts]
-label-studio = "label_studio.server:main"
+yamato = "label_studio.server:main"
 
 [project.optional-dependencies]
 uwsgi = ['pyuwsgi (==2.0.28.post1)', 'uwsgitop (==0.12)']

@@ -25,10 +25,6 @@ business_client = ls_tests_conftest.business_client
 
 # Storage-related fixtures to mock cloud providers for import storages
 aws_credentials = ls_tests_conftest.aws_credentials
-s3 = ls_tests_conftest.s3
-s3_with_images = ls_tests_conftest.s3_with_images
-gcs_client = ls_tests_conftest.gcs_client
-azure_client = ls_tests_conftest.azure_client
 
 
 @pytest.fixture(autouse=True, scope='function')

@@ -10,7 +10,7 @@ User = get_user_model()
 
 
 class TestSDKPredictionValidation:
-    """Comprehensive tests for prediction validation using Label Studio SDK"""
+    """Comprehensive tests for prediction validation using Yamato SDK"""
 
     @pytest.fixture(autouse=True)
     def setup(self, django_db_setup, django_db_blocker):

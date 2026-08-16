@@ -6,7 +6,7 @@ import { guidGenerator } from "../../utils/unique";
 import { sanitizeHtml } from "../../utils/html";
 
 /**
- * The `Style` tag is used in combination with the View tag to apply custom CSS properties to the labeling interface. See the [CSS Reference](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference) on the MDN page for a full list of available properties that you can reference. You can also adjust default Label Studio CSS classes. Use the browser developer tools to inspect the element on the UI and locate the class name, then specify that class name in the `Style` tag.
+ * The `Style` tag is used in combination with the View tag to apply custom CSS properties to the labeling interface. See the [CSS Reference](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference) on the MDN page for a full list of available properties that you can reference. You can also adjust default Yamato CSS classes. Use the browser developer tools to inspect the element on the UI and locate the class name, then specify that class name in the `Style` tag.
  *
  * @example
  * <!-- Use CSS styling to make a header appear with a red background on the labeling interface -->
@@ -44,7 +44,7 @@ import { sanitizeHtml } from "../../utils/html";
  *   </View>
  * </View>
  * @example
- * <!-- Adjust the default CSS styling in Label Studio to surround each radio button choice with a solid green border -->
+ * <!-- Adjust the default CSS styling in Yamato to surround each radio button choice with a solid green border -->
  * <View>
  * <Style>
  *   .ant-radio-wrapper {border: 2px solid green;}
@@ -57,7 +57,7 @@ import { sanitizeHtml } from "../../utils/html";
  * </View>
  * @name Style
  * @meta_title Style Tag to use CSS Styles
- * @meta_description Customize Label Studio with CSS styles to modify the labeling interface for machine learning and data science projects.
+ * @meta_description Customize Yamato with CSS styles to modify the labeling interface for machine learning and data science projects.
  * @param {string} `.<className>`  - Reference the className specified in the View tag to apply to a section of the labeling configuration.
  * @param {string} [CSS property]  - CSS property and value to apply.
  */

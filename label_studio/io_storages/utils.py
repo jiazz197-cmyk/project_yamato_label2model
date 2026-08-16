@@ -24,7 +24,7 @@ class BucketURI:
     scheme: str
 
 
-def get_uri_via_regex(data, prefixes=('s3', 'gs')) -> tuple[Union[str, None], Union[str, None]]:
+def get_uri_via_regex(data, prefixes=()) -> tuple[Union[str, None], Union[str, None]]:
     data = str(data).strip()
     middle_check = False
 

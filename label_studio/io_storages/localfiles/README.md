@@ -2,7 +2,7 @@
 
 ## Overview
 
-Local Files storage lets self-hosted Label Studio read media (images, audio, video, documents) directly from the server's filesystem and write annotation results back to disk. It's designed for air-gapped environments or workflows where data cannot leave the host machine.
+Local Files storage lets self-hosted Yamato read media (images, audio, video, documents) directly from the server's filesystem and write annotation results back to disk. It's designed for air-gapped environments or workflows where data cannot leave the host machine.
 
 **Three core operations:**
 1. **Import/Sync** – scan a directory, create tasks pointing to local files

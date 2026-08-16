@@ -26,7 +26,7 @@ import ControlBase from "./Base";
  * @name VideoVectorLabels
  * @regions VideoVectorRegion
  * @meta_title VideoVectorLabels Tag for Video Vector Annotation
- * @meta_description Customize Label Studio with the VideoVectorLabels tag for labeled vector annotation on video.
+ * @meta_description Customize Yamato with the VideoVectorLabels tag for labeled vector annotation on video.
  * @param {string} name Name of tag
  * @param {string} toName Name of video to label
  * @param {single|multiple=} [choice=single] Configure whether you can select one or multiple labels

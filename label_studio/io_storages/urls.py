@@ -10,32 +10,7 @@ from io_storages.all_api import (
     AllImportStorageTypesAPI,
 )
 from io_storages.api import ImportStorageListFilesAPI
-from io_storages.azure_blob.api import (
-    AzureBlobExportStorageDetailAPI,
-    AzureBlobExportStorageFormLayoutAPI,
-    AzureBlobExportStorageListAPI,
-    AzureBlobExportStorageSyncAPI,
-    AzureBlobExportStorageValidateAPI,
-    AzureBlobImportStorageDetailAPI,
-    AzureBlobImportStorageFormLayoutAPI,
-    AzureBlobImportStorageListAPI,
-    AzureBlobImportStorageSerializer,
-    AzureBlobImportStorageSyncAPI,
-    AzureBlobImportStorageValidateAPI,
-)
-from io_storages.gcs.api import (
-    GCSExportStorageDetailAPI,
-    GCSExportStorageFormLayoutAPI,
-    GCSExportStorageListAPI,
-    GCSExportStorageSyncAPI,
-    GCSExportStorageValidateAPI,
-    GCSImportStorageDetailAPI,
-    GCSImportStorageFormLayoutAPI,
-    GCSImportStorageListAPI,
-    GCSImportStorageSerializer,
-    GCSImportStorageSyncAPI,
-    GCSImportStorageValidateAPI,
-)
+
 from io_storages.localfiles.api import (
     LocalFilesExportStorageDetailAPI,
     LocalFilesExportStorageFormLayoutAPI,
@@ -63,19 +38,7 @@ from io_storages.redis.api import (
     RedisImportStorageSyncAPI,
     RedisImportStorageValidateAPI,
 )
-from io_storages.s3.api import (
-    S3ExportStorageDetailAPI,
-    S3ExportStorageFormLayoutAPI,
-    S3ExportStorageListAPI,
-    S3ExportStorageSyncAPI,
-    S3ExportStorageValidateAPI,
-    S3ImportStorageDetailAPI,
-    S3ImportStorageFormLayoutAPI,
-    S3ImportStorageListAPI,
-    S3ImportStorageSerializer,
-    S3ImportStorageSyncAPI,
-    S3ImportStorageValidateAPI,
-)
+
 
 app_name = 'storages'
 
@@ -86,54 +49,7 @@ _api_urlpatterns = [
     path('export', AllExportStorageListAPI.as_view(), name='export-storage-list'),
     path('types', AllImportStorageTypesAPI.as_view(), name='storage-types'),
     path('export/types', AllExportStorageTypesAPI.as_view(), name='export-storage-types'),
-    # Amazon S3
-    path('s3/', S3ImportStorageListAPI.as_view(), name='storage-s3-list'),
-    path('s3/<int:pk>', S3ImportStorageDetailAPI.as_view(), name='storage-s3-detail'),
-    path('s3/<int:pk>/sync', S3ImportStorageSyncAPI.as_view(), name='storage-s3-sync'),
-    path('s3/validate', S3ImportStorageValidateAPI.as_view(), name='storage-s3-validate'),
-    path('s3/form', S3ImportStorageFormLayoutAPI.as_view(), name='storage-s3-form'),
-    path(
-        's3/files',
-        ImportStorageListFilesAPI().as_view(serializer_class=S3ImportStorageSerializer),
-        name='storage-s3-list-files',
-    ),
-    path('export/s3', S3ExportStorageListAPI.as_view(), name='export-storage-s3-list'),
-    path('export/s3/<int:pk>', S3ExportStorageDetailAPI.as_view(), name='export-storage-s3-detail'),
-    path('export/s3/<int:pk>/sync', S3ExportStorageSyncAPI.as_view(), name='export-storage-s3-sync'),
-    path('export/s3/validate', S3ExportStorageValidateAPI.as_view(), name='export-storage-s3-validate'),
-    path('export/s3/form', S3ExportStorageFormLayoutAPI.as_view(), name='export-storage-s3-form'),
-    # Microsoft Azure
-    path('azure/', AzureBlobImportStorageListAPI.as_view(), name='storage-azure-list'),
-    path('azure/<int:pk>', AzureBlobImportStorageDetailAPI.as_view(), name='storage-azure-detail'),
-    path('azure/<int:pk>/sync', AzureBlobImportStorageSyncAPI.as_view(), name='storage-azure-sync'),
-    path('azure/validate', AzureBlobImportStorageValidateAPI.as_view(), name='storage-azure-validate'),
-    path('azure/form', AzureBlobImportStorageFormLayoutAPI.as_view(), name='storage-azure-form'),
-    path(
-        'azure/files',
-        ImportStorageListFilesAPI().as_view(serializer_class=AzureBlobImportStorageSerializer),
-        name='storage-azure-list-files',
-    ),
-    path('export/azure', AzureBlobExportStorageListAPI.as_view(), name='export-storage-azure-list'),
-    path('export/azure/<int:pk>', AzureBlobExportStorageDetailAPI.as_view(), name='export-storage-azure-detail'),
-    path('export/azure/<int:pk>/sync', AzureBlobExportStorageSyncAPI.as_view(), name='export-storage-azure-sync'),
-    path('export/azure/validate', AzureBlobExportStorageValidateAPI.as_view(), name='export-storage-azure-validate'),
-    path('export/azure/form', AzureBlobExportStorageFormLayoutAPI.as_view(), name='export-storage-azure-form'),
-    # Google Cloud Storage
-    path('gcs/', GCSImportStorageListAPI.as_view(), name='storage-gcs-list'),
-    path('gcs/<int:pk>', GCSImportStorageDetailAPI.as_view(), name='storage-gcs-detail'),
-    path('gcs/<int:pk>/sync', GCSImportStorageSyncAPI.as_view(), name='storage-gcs-sync'),
-    path('gcs/validate', GCSImportStorageValidateAPI.as_view(), name='storage-gcs-validate'),
-    path('gcs/form', GCSImportStorageFormLayoutAPI.as_view(), name='storage-gcs-form'),
-    path(
-        'gcs/files',
-        ImportStorageListFilesAPI().as_view(serializer_class=GCSImportStorageSerializer),
-        name='storage-gcs-list-files',
-    ),
-    path('export/gcs', GCSExportStorageListAPI.as_view(), name='export-storage-gcs-list'),
-    path('export/gcs/<int:pk>', GCSExportStorageDetailAPI.as_view(), name='export-storage-gcs-detail'),
-    path('export/gcs/<int:pk>/sync', GCSExportStorageSyncAPI.as_view(), name='export-storage-gcs-sync'),
-    path('export/gcs/validate', GCSExportStorageValidateAPI.as_view(), name='export-storage-gcs-validate'),
-    path('export/gcs/form', GCSExportStorageFormLayoutAPI.as_view(), name='export-storage-gcs-form'),
+    
     # Redis DB
     path('redis/', RedisImportStorageListAPI.as_view(), name='storage-redis-list'),
     path('redis/<int:pk>', RedisImportStorageDetailAPI.as_view(), name='storage-redis-detail'),

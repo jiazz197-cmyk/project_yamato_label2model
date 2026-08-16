@@ -1,7 +1,7 @@
 """This file and its contents are licensed under the Apache License 2.0. Please see the included NOTICE for copyright information and LICENSE for a copy of the license."""
 
 """
-Django Base settings for Label Studio.
+Django Base settings for Yamato.
 
 For more information on this file, see
 https://docs.djangoproject.com/en/3.1/topics/settings/
@@ -389,8 +389,8 @@ RQ_FAILED_JOB_TTL = int(get_env('RQ_FAILED_JOB_TTL', 30 * 24 * 60 * 60))
 
 # drf-spectacular settings for OpenAPI 3.0 schema generation
 SPECTACULAR_SETTINGS = {
-    'TITLE': 'Label Studio API',
-    'DESCRIPTION': 'Label Studio API for data annotation and labeling',
+    'TITLE': 'Yamato API',
+    'DESCRIPTION': 'Yamato API for data annotation and labeling',
     'VERSION': '',
     'SERVE_INCLUDE_SCHEMA': False,
     'COMPONENT_SPLIT_REQUEST': True,
@@ -407,11 +407,11 @@ SPECTACULAR_SETTINGS = {
     'SERVERS': [
         {
             'url': HOSTNAME,
-            'description': 'Label Studio',
+            'description': 'Yamato',
         },
     ],
-    'CONTACT': {'url': 'https://labelstud.io'},
-    'X_LOGO': {'url': '../../static/icons/logo-black.svg'},
+    'CONTACT': {'url': 'https://yamato.local'},
+    'X_LOGO': {'url': '../../static/icons/logo.svg'},
     'ENUM_ADD_EXPLICIT_BLANK_NULL_CHOICE': False,
 }
 
@@ -553,7 +553,7 @@ RANDOM_NEXT_TASK_SAMPLE_SIZE = int(get_env('RANDOM_NEXT_TASK_SAMPLE_SIZE', 50))
 TASK_API_PAGE_SIZE_MAX = int(get_env('TASK_API_PAGE_SIZE_MAX', 0)) or None
 
 # Email backend
-FROM_EMAIL = get_env('FROM_EMAIL', 'Label Studio <hello@labelstud.io>')
+FROM_EMAIL = get_env('FROM_EMAIL', 'Yamato <noreply@yamato.local>')
 EMAIL_BACKEND = get_env('EMAIL_BACKEND', 'django.core.mail.backends.dummy.EmailBackend')
 
 ENABLE_LOCAL_FILES_STORAGE = get_bool_env('ENABLE_LOCAL_FILES_STORAGE', default=True)
@@ -596,6 +596,7 @@ DATA_UNDEFINED_NAME = '$undefined$'
 LICENSE = {}
 VERSIONS = {}
 VERSION_EDITION = 'Community'
+PRODUCT_NAME = "Yamato"
 LATEST_VERSION_CHECK = get_bool_env('LATEST_VERSION_CHECK', True)
 VERSIONS_CHECK_TIME = 0
 ALLOW_ORGANIZATION_WEBHOOKS = get_bool_env('ALLOW_ORGANIZATION_WEBHOOKS', False)
@@ -622,9 +623,6 @@ if (
         )
 
 IO_STORAGES_IMPORT_LINK_NAMES = [
-    'io_storages_s3importstoragelink',
-    'io_storages_gcsimportstoragelink',
-    'io_storages_azureblobimportstoragelink',
     'io_storages_localfilesimportstoragelink',
     'io_storages_redisimportstoragelink',
 ]
@@ -727,7 +725,7 @@ FEATURE_FLAGS_OFFLINE = get_bool_env('FEATURE_FLAGS_OFFLINE', True)
 FEATURE_FLAGS_DEFAULT_VALUE = False
 
 # Whether to send analytics telemetry data. Fall back to old lowercase name for legacy compatibility.
-COLLECT_ANALYTICS = get_bool_env('COLLECT_ANALYTICS', get_bool_env('collect_analytics', True))
+COLLECT_ANALYTICS = get_bool_env('COLLECT_ANALYTICS', get_bool_env('collect_analytics', False))
 
 # Strip harmful content from SVG files by default
 SVG_SECURITY_CLEANUP = get_bool_env('SVG_SECURITY_CLEANUP', False)
@@ -752,7 +750,9 @@ USE_NGINX_FOR_UPLOADS = get_bool_env('USE_NGINX_FOR_UPLOADS', True)
 
 if get_env('MINIO_STORAGE_ENDPOINT') and not get_bool_env('MINIO_SKIP', False):
     CLOUD_FILE_STORAGE_ENABLED = True
-    STORAGES['default']['BACKEND'] = 'storages.backends.s3boto3.S3Boto3Storage'
+    # CustomS3Boto3Storage proxies file URLs through Django (/storage-data/uploaded/),
+    # so clients only need to reach this server, not MinIO directly.
+    STORAGES['default']['BACKEND'] = 'core.storage.CustomS3Boto3Storage'
     AWS_STORAGE_BUCKET_NAME = get_env('MINIO_STORAGE_BUCKET_NAME')
     AWS_ACCESS_KEY_ID = get_env('MINIO_STORAGE_ACCESS_KEY')
     AWS_SECRET_ACCESS_KEY = get_env('MINIO_STORAGE_SECRET_KEY')
@@ -761,7 +761,9 @@ if get_env('MINIO_STORAGE_ENDPOINT') and not get_bool_env('MINIO_SKIP', False):
     # make domain for FileUpload.file
     AWS_S3_SECURE_URLS = False
     AWS_S3_URL_PROTOCOL = 'http:' if HOSTNAME.startswith('http://') else 'https:'
-    AWS_S3_CUSTOM_DOMAIN = HOSTNAME.replace('http://', '').replace('https://', '') + '/data'
+    # only set a custom domain when a public hostname is configured;
+    # an empty HOSTNAME would produce a malformed URL like https:///data/...
+    AWS_S3_CUSTOM_DOMAIN = HOSTNAME.replace('http://', '').replace('https://', '') + '/data' if HOSTNAME else ''
 
 if get_env('STORAGE_TYPE') == 's3':
     CLOUD_FILE_STORAGE_ENABLED = True
@@ -783,48 +785,11 @@ if get_env('STORAGE_TYPE') == 's3':
         AWS_S3_VERIFY = False
     AWS_S3_SIGNATURE_VERSION = get_env('STORAGE_AWS_S3_SIGNATURE_VERSION', None)
 
-if get_env('STORAGE_TYPE') == 'azure':
-    CLOUD_FILE_STORAGE_ENABLED = True
-    STORAGES['default']['BACKEND'] = 'core.storage.CustomAzureStorage'
-    AZURE_ACCOUNT_NAME = get_env('STORAGE_AZURE_ACCOUNT_NAME')
-    AZURE_ACCOUNT_KEY = get_env('STORAGE_AZURE_ACCOUNT_KEY')
-    AZURE_CONTAINER = get_env('STORAGE_AZURE_CONTAINER_NAME')
-    AZURE_URL_EXPIRATION_SECS = int(get_env('STORAGE_AZURE_URL_EXPIRATION_SECS', '86400'))
-    AZURE_LOCATION = get_env('STORAGE_AZURE_FOLDER', default='')
-
-if get_env('STORAGE_TYPE') == 'gcs':
-    CLOUD_FILE_STORAGE_ENABLED = True
-    STORAGES['default']['BACKEND'] = 'core.storage.AlternativeGoogleCloudStorage'
-    GS_PROJECT_ID = get_env('STORAGE_GCS_PROJECT_ID')
-    GS_BUCKET_NAME = get_env('STORAGE_GCS_BUCKET_NAME')
-    GS_EXPIRATION = timedelta(seconds=int(get_env('STORAGE_GCS_EXPIRATION_SECS', '86400')))
-    GS_LOCATION = get_env('STORAGE_GCS_FOLDER', default='')
-    GS_CUSTOM_ENDPOINT = get_env('STORAGE_GCS_ENDPOINT')
-
 CSRF_TRUSTED_ORIGINS = get_env('CSRF_TRUSTED_ORIGINS', [])
 if CSRF_TRUSTED_ORIGINS:
     CSRF_TRUSTED_ORIGINS = CSRF_TRUSTED_ORIGINS.split(',')
 
-# Custom S3 endpoints on these domains will get detailed error reporting
-S3_TRUSTED_STORAGE_DOMAINS = get_env_list(
-    'S3_TRUSTED_STORAGE_DOMAINS',
-    [
-        'amazonaws.com',
-        'scw.cloud',
-        'yandexcloud.net',
-        'digitaloceanspaces.com',
-        'orange-business.com',
-        'computecanada.ca',
-        'cloudflarestorage.com',
-        'wasabisys.com',
-        'oracle.com',
-        'amazon.com',
-        'appdomain.cloud',
-    ],
-)
-
 REAL_HOSTNAME = os.getenv('HOSTNAME')  # we have to use getenv, because we don't use LABEL_STUDIO_ prefix
-GCS_CLOUD_STORAGE_FORCE_DEFAULT_CREDENTIALS = get_bool_env('GCS_CLOUD_STORAGE_FORCE_DEFAULT_CREDENTIALS', False)
 PUBLIC_API_DOCS = get_bool_env('PUBLIC_API_DOCS', False)
 
 # By default, we disallow filters with foreign keys in data manager for security reasons.
@@ -908,11 +873,6 @@ LABEL_STUDIO_ENABLE_LEGACY_API_TOKEN = get_bool_env('LABEL_STUDIO_ENABLE_LEGACY_
 RESOLVER_PROXY_BUFFER_SIZE = int(get_env('RESOLVER_PROXY_BUFFER_SIZE', 512 * 1024))
 RESOLVER_PROXY_TIMEOUT = int(get_env('RESOLVER_PROXY_TIMEOUT', 20))
 RESOLVER_PROXY_MAX_RANGE_SIZE = int(get_env('RESOLVER_PROXY_MAX_RANGE_SIZE', 8 * 1024 * 1024))
-RESOLVER_PROXY_GCS_DOWNLOAD_URL = get_env(
-    'RESOLVER_PROXY_GCS_DOWNLOAD_URL',
-    'https://storage.googleapis.com/download/storage/v1/b/{bucket_name}/o/{blob_name}?alt=media',
-)
-RESOLVER_PROXY_GCS_HTTP_TIMEOUT = int(get_env('RESOLVER_PROXY_GCS_HTTP_TIMEOUT', 5))
 RESOLVER_PROXY_ENABLE_ETAG_CACHE = get_bool_env('RESOLVER_PROXY_ENABLE_ETAG_CACHE', True)
 RESOLVER_PROXY_CACHE_TIMEOUT = int(get_env('RESOLVER_PROXY_CACHE_TIMEOUT', 3600))
 
@@ -932,7 +892,7 @@ QS_ITERATOR_DEFAULT_CHUNK_SIZE = int(get_env('QS_ITERATOR_DEFAULT_CHUNK_SIZE', 1
 # Max number of users to display in the Data Manager in Annotators/Reviewers/Comment Authors, etc
 DM_MAX_USERS_TO_DISPLAY = int(get_env('DM_MAX_USERS_TO_DISPLAY', 10))
 
-# Base FSM (Finite State Machine) Configuration for Label Studio
+# Base FSM (Finite State Machine) Configuration for Yamato
 FSM_CACHE_TTL = 300  # Cache TTL in seconds (5 minutes)
 FSM_SYNC_PROJECT_STATE = 'fsm.project_transitions.sync_project_state'
 FSM_INFERENCE_FUNCTION = 'fsm.state_inference._get_or_infer_state'

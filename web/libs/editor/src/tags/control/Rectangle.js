@@ -21,7 +21,7 @@ import { ToolManagerMixin } from "../../mixins/ToolManagerMixin";
  * </View>
  * @name Rectangle
  * @meta_title Rectangle Tag for Adding Rectangle Bounding Box to Images
- * @meta_description Customize Label Studio with the Rectangle tag to add rectangle bounding boxes to images for machine learning and data science projects.
+ * @meta_description Customize Yamato with the Rectangle tag to add rectangle bounding boxes to images for machine learning and data science projects.
  * @param {string} name                   - Name of the element
  * @param {string} toName                 - Name of the image to label
  * @param {float=} [opacity=0.6]          - Opacity of rectangle

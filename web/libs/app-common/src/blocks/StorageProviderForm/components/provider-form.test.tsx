@@ -29,7 +29,6 @@ const createTestProvider = (): ProviderConfig => ({
       options: [
         { value: "pat", label: "Personal Access Token" },
         { value: "sp", label: "Service Principal" },
-        { value: "azure_sp", label: "Azure Service Principal" },
       ],
       schema: z.string(),
     },
@@ -45,14 +44,7 @@ const createTestProvider = (): ProviderConfig => ({
       type: "text",
       label: "Client ID",
       schema: z.string().optional(),
-      visibleWhen: { field: "auth_type", value: ["sp", "azure_sp"] },
-    },
-    {
-      name: "tenant_id",
-      type: "text",
-      label: "Tenant ID",
-      schema: z.string().optional(),
-      visibleWhen: { field: "auth_type", value: "azure_sp" },
+      visibleWhen: { field: "auth_type", value: ["sp"] },
     },
     {
       name: "always_visible",
@@ -66,7 +58,6 @@ const createTestProvider = (): ProviderConfig => ({
     { fields: ["auth_type"] },
     { fields: ["token"] },
     { fields: ["client_id"] },
-    { fields: ["tenant_id"] },
     { fields: ["always_visible"] },
   ],
 });
@@ -105,19 +96,8 @@ describe("ProviderForm visibleWhen", () => {
     expect(screen.queryByText("Access Token")).not.toBeInTheDocument();
     // client_id should be visible in SP mode (matches array value)
     expect(screen.getByText("Client ID")).toBeInTheDocument();
-    // tenant_id should NOT be visible in SP mode (only azure_sp)
+    // tenant_id should NOT be visible in SP mode
     expect(screen.queryByText("Tenant ID")).not.toBeInTheDocument();
-  });
-
-  it("shows both client_id and tenant_id when auth_type is 'azure_sp'", () => {
-    render(<ProviderForm {...defaultProps} formData={{ auth_type: "azure_sp" }} />);
-
-    // token should NOT be visible in Azure SP mode
-    expect(screen.queryByText("Access Token")).not.toBeInTheDocument();
-    // client_id should be visible (matches array value)
-    expect(screen.getByText("Client ID")).toBeInTheDocument();
-    // tenant_id should be visible (exact match)
-    expect(screen.getByText("Tenant ID")).toBeInTheDocument();
   });
 
   it("hides fields when visibleWhen condition is not met", () => {

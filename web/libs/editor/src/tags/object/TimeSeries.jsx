@@ -50,7 +50,7 @@ import { ff } from "@humansignal/core";
  *   </TimeSeriesLabels>
  * </View>
  * @example
- * <!--Labeling configuration for time series data stored in the task field `ts` in Label Studio JSON format. The time field is stored as a date in the `timeformat` field and formatted as a full date on the plot (by default). -->
+ * <!--Labeling configuration for time series data stored in the task field `ts` in Yamato JSON format. The time field is stored as a date in the `timeformat` field and formatted as a full date on the plot (by default). -->
  * <View>
  *   <TimeSeries name="device" value="$ts" timeColumn="time" timeFormat="%m/%d/%Y %H:%M:%S">
  *      <Channel column="sensor1" />
@@ -59,10 +59,10 @@ import { ff } from "@humansignal/core";
  * </View>
  * @name TimeSeries
  * @meta_title Time Series Tags for Time Series Data
- * @meta_description Customize Label Studio with the TimeSeries tag to annotate time series data for machine learning and data science projects.
+ * @meta_description Customize Yamato with the TimeSeries tag to annotate time series data for machine learning and data science projects.
  * @param {string} name Name of the element
  * @param {string} value Key used to look up the data, either URLs for your time-series if valueType=url, otherwise expects JSON
- * @param {url|json} [valueType=url] Format of time series data provided. If set to "url" then Label Studio loads value references inside `value` key, otherwise it expects JSON.
+ * @param {url|json} [valueType=url] Format of time series data provided. If set to "url" then Yamato loads value references inside `value` key, otherwise it expects JSON.
  * @param {string} [sync] Object name to sync with.
  * @param {string} [cursorColor] Color of the playback cursors used in sync (hex or any SVG-compatible color string)
  * @param {string} [timeColumn] Column name or index that provides temporal values. If your time series data has no temporal column then one is automatically generated.

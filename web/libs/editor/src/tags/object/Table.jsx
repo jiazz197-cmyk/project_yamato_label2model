@@ -19,7 +19,7 @@ import { parseTypeAndOption, parseValue } from "../../utils/data";
  * </View>
  * @name Table
  * @meta_title Table Tag to Display Keys & Values in Tables
- * @meta_description Customize Label Studio by displaying key-value pairs in tasks for machine learning and data science projects.
+ * @meta_description Customize Yamato by displaying key-value pairs in tasks for machine learning and data science projects.
  * @param {string} value Data field value containing JSON type for Table
  * @param {string} [valueType] Value to define the data type in Table
  */

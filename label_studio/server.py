@@ -172,7 +172,7 @@ def _create_user(input_args, config):
     org = Organization.objects.first()
     if not org:
         org = Organization.create_organization(
-            created_by=user, title='Label Studio', legacy_api_tokens_enabled=input_args.enable_legacy_api_token
+            created_by=user, title='Yamato', legacy_api_tokens_enabled=input_args.enable_legacy_api_token
         )
     else:
         org.add_user(user)
@@ -252,7 +252,7 @@ def _get_free_port(port, debug):
             if port - original_port >= 1000:
                 raise ConnectionError(
                     '\n*** WARNING! ***\n Could not find an available port\n'
-                    + ' to launch label studio. \n Last tested port was '
+                    + ' to launch Yamato. \n Last tested port was '
                     + str(port)
                     + '\n****************\n'
                 )
@@ -337,7 +337,7 @@ def main():
     if input_args.command == 'version' or input_args.version:
         from label_studio import __version__
 
-        print('\nLabel Studio version:', __version__, '\n')
+        print('\nYamato version:', __version__, '\n')
         print(json.dumps(versions, indent=4))
 
     # init
@@ -350,9 +350,9 @@ def main():
         _init(input_args, config)
 
         print('')
-        print('Label Studio has been successfully initialized.')
+        print('Yamato has been successfully initialized.')
         if input_args.command != 'start' and input_args.project_name:
-            print('Start the server: label-studio start ' + input_args.project_name)
+            print('Start the server: yamato start ' + input_args.project_name)
             return
 
     # start with migrations from old projects, '.' project_name means 'label-studio start' without project name
@@ -390,7 +390,7 @@ def main():
                 print(
                     Fore.LIGHTYELLOW_EX
                     + '\n*** WARNING! ***\n'
-                    + f'Project {input_args.project_name} migrated to Label Studio Database\n'
+                    + f'Project {input_args.project_name} migrated to Yamato Database\n'
                     + "YOU DON'T NEED THIS FOLDER ANYMORE"
                     + '\n****************\n'
                     + Fore.WHITE
@@ -404,7 +404,7 @@ def main():
                 )
                 return
 
-    # on `start` command, launch browser if --no-browser is not specified and start label studio server
+    # on `start` command, launch browser if --no-browser is not specified and start Yamato server
     if input_args.command == 'start' or input_args.command is None:
         from label_studio.core.utils.common import start_browser
 
@@ -416,7 +416,7 @@ def main():
         key_file = input_args.key_file or config.get('key')
         if cert_file or key_file:
             logger.error(
-                "Label Studio doesn't support SSL web server with cert and key.\nUse nginx or other servers for it."
+                "Yamato doesn't support SSL web server with cert and key.\nUse nginx or other servers for it."
             )
             return
 

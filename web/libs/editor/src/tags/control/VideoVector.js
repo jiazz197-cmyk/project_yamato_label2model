@@ -30,7 +30,7 @@ import { customTypes } from "../../core/CustomTypes";
  * </View>
  * @name VideoVector
  * @meta_title VideoVector Tag for Video Vector Annotation
- * @meta_description Customize Label Studio with the VideoVector tag for vector annotation on video frames.
+ * @meta_description Customize Yamato with the VideoVector tag for vector annotation on video frames.
  * @param {string} name Name of the element
  * @param {string} toName Name of the element to control (video)
  * @param {number} [opacity=0.2] Opacity of vector
