@@ -94,3 +94,5 @@ web/coverage-chunks
 .ua/
 
 .claude/
+
+AGENTS.md
