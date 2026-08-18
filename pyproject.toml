@@ -155,6 +155,7 @@ quote-style = "single"
 
 packages = [
     { include = "label_studio" },
+    { include = "training" },
 ]
 include = [
     { path = "web/dist/libs/datamanager/**/*", format = ["sdist", "wheel"] },
