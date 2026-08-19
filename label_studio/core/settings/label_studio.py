@@ -86,3 +86,14 @@ if REDIS_ENABLED:
         }
         for q in ('critical', 'high', 'default', 'low')
     }
+    CELERY_BROKER_URL = f'redis://{_REDIS_HOST}:{_REDIS_PORT}/{_REDIS_DB}'
+
+# === Training (Sub-Issue 2) ===
+LOCAL_MODEL_ROOT = get_env('LOCAL_MODEL_ROOT', os.path.join(BASE_DATA_DIR, 'models'))
+os.makedirs(LOCAL_MODEL_ROOT, exist_ok=True)
+TRAINING_ARTIFACTS_STORAGE_PREFIX = get_env('TRAINING_ARTIFACTS_STORAGE_PREFIX', 'trained')
+TRAINING_UPLOAD_MAX_SIZE = int(get_env('TRAINING_UPLOAD_MAX_SIZE', 2 * 1024 ** 3))
+TRAINING_UPLOAD_CHUNK_SIZE = int(get_env('TRAINING_UPLOAD_CHUNK_SIZE', 8 * 1024 ** 2))
+TRAINING_SAMPLE_SIZE = int(get_env('TRAINING_SAMPLE_SIZE', 100))
+PREDICTOR_PORT = int(get_env('PREDICTOR_PORT', 8990))
+TRAINING_PROGRESS_REDIS_CHANNEL = get_env('TRAINING_PROGRESS_REDIS_CHANNEL', 'training:progress')

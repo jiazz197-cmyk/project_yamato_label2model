@@ -72,6 +72,13 @@ dependencies = [
     ## HumanSignal repo dependencies :start
     "label-studio-sdk @ https://github.com/HumanSignal/label-studio-sdk/archive/54d1aeca71fe7b572c8028e7fe82c4b54457e8f0.zip",
     ## HumanSignal repo dependencies :end
+    "torch (>=2.13.0,<3.0.0)",
+    "scikit-learn (>=1.9.0,<2.0.0) ; python_version >= \"3.11\"",
+    "transformers (>=5.15.0,<6.0.0) ; python_version >= \"3.11\"",
+    "joblib (>=1.5.3,<2.0.0) ; python_version >= \"3.11\"",
+    "celery (>=5.3,<6.0) ; python_version >= \"3.11\"",
+    "fastapi (>=0.141.1,<0.142.0) ; python_version >= \"3.11\"",
+    "uvicorn[standard] (>=0.52.3,<0.53.0) ; python_version >= \"3.11\""
 ]
 
 [project.urls]
@@ -179,6 +186,7 @@ requires-poetry = '>=2.0.0,<3.0.0'
 
 [tool.poetry.dependencies]
 python = ">=3.10,<4"
+torch = {source = "pytorch-cpu"}
 
 [tool.poetry.group.test.dependencies]
 pytest = "7.2.2"
@@ -202,6 +210,11 @@ factory-boy = "^3.3.3"
 [tool.poetry.group.build.dependencies]
 twine = ">=6.1.0"
 packaging = ">=24.2"
+
+[[tool.poetry.source]]
+name = "pytorch-cpu"
+url = "https://download.pytorch.org/whl/cpu"
+priority = "explicit"
 
 [build-system]
 requires = ['poetry-core (>=2.0.0,<3.0.0)']
