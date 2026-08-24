@@ -86,3 +86,27 @@ if REDIS_ENABLED:
         }
         for q in ('critical', 'high', 'default', 'low')
     }
+    # Celery 任务队列的 broker/result backend 地址。
+    # 复用上面同一份 Redis 连接（RQ_QUEUES 与 Celery 共用），
+    # 由 .env 的 REDIS_HOST/REDIS_PORT/REDIS_DB 派生；REDIS_DB 缺省为 0。
+    # 仅当 REDIS_ENABLED=True 时定义——celery_app.py 侧用 getattr 兜底。
+    CELERY_BROKER_URL = f'redis://{_REDIS_HOST}:{_REDIS_PORT}/{_REDIS_DB}'
+
+# === Training (Sub-Issue 2) ===
+# 本地预置模型根目录：上传的模型与训练产物统一存放于此
+# （模型只走本地盘，不经 MinIO；默认 data/models 相对项目根解析）。
+LOCAL_MODEL_ROOT = get_env('LOCAL_MODEL_ROOT', os.path.join(BASE_DATA_DIR, 'models'))
+# 与 base.py 中 MEDIA_ROOT 同款模式：settings 加载期即建目录，避免运行时缺失。
+os.makedirs(LOCAL_MODEL_ROOT, exist_ok=True)
+# 训练产物子目录名：完整产物路径为 <LOCAL_MODEL_ROOT>/<该前缀>/<job_id>/。
+TRAINING_ARTIFACTS_STORAGE_PREFIX = get_env('TRAINING_ARTIFACTS_STORAGE_PREFIX', 'trained')
+# 单模型上传大小上限（字节，默认 2GB，百 MB 级模型留余量；todo 17 分片上传使用）。
+TRAINING_UPLOAD_MAX_SIZE = int(get_env('TRAINING_UPLOAD_MAX_SIZE', 2 * 1024 ** 3))
+# 分片上传每片大小（字节，默认 8MB；todo 17 使用）。
+TRAINING_UPLOAD_CHUNK_SIZE = int(get_env('TRAINING_UPLOAD_CHUNK_SIZE', 8 * 1024 ** 2))
+# Sample subset 随机取样数（todo 5 数据集子集提取使用）。
+TRAINING_SAMPLE_SIZE = int(get_env('TRAINING_SAMPLE_SIZE', 100))
+# FastAPI predictor 侧车监听端口（todo 9 runpredictionservice 使用）。
+PREDICTOR_PORT = int(get_env('PREDICTOR_PORT', 8990))
+# Redis pub/sub 进度推送 channel 前缀：实际 channel 为 <前缀>:<job_id>（todo 8/9 使用）。
+TRAINING_PROGRESS_REDIS_CHANNEL = get_env('TRAINING_PROGRESS_REDIS_CHANNEL', 'training:progress')
