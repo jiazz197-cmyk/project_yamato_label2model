@@ -2,6 +2,7 @@ from django.conf import settings
 from django.db import models
 
 from ml_models.models import SkillNames
+from training.utils import validate_local_model_path
 
 
 class BaseModel(models.Model):
@@ -36,10 +37,14 @@ class BaseModel(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def validate_local_path(self):
-        """校验 local_path 存在且含框架期望文件。Sub-Issue 3 实现，此处仅声明签名。"""
-        # HF: 目录含 config.json + 权重文件 (pytorch_model.bin / model.safetensors)
-        # sklearn: 目录含 model.pkl
-        raise NotImplementedError('Implemented in Sub-Issue 3')
+        """校验 local_path 存在且含框架期望文件（委托 utils.validate_local_model_path）。"""
+        validate_local_model_path(self.local_path, self.framework)
+
+    def save(self, *args, **kwargs):
+        """保存前校验：仅 is_active=True 时校验本地路径（is_active=False 可先存占位再补文件）。"""
+        if self.is_active:
+            self.validate_local_path()
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return f'{self.name} ({self.framework})'
