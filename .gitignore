@@ -96,3 +96,5 @@ web/coverage-chunks
 .claude/
 
 AGENTS.md
+
+training/tests/__pycache__/
