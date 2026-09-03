@@ -110,3 +110,5 @@ TRAINING_SAMPLE_SIZE = int(get_env('TRAINING_SAMPLE_SIZE', 100))
 PREDICTOR_PORT = int(get_env('PREDICTOR_PORT', 8990))
 # Redis pub/sub 进度推送 channel 前缀：实际 channel 为 <前缀>:<job_id>（todo 8/9 使用）。
 TRAINING_PROGRESS_REDIS_CHANNEL = get_env('TRAINING_PROGRESS_REDIS_CHANNEL', 'training:progress')
+# YOLO 数据集 train/val 切分比例；样本 <2 时退化为单 train 集。
+TRAINING_YOLO_VAL_SPLIT = float(get_env('TRAINING_YOLO_VAL_SPLIT', 0.2))

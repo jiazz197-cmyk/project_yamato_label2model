@@ -11,6 +11,7 @@ class BaseModel(models.Model):
     class Framework(models.TextChoices):
         HUGGINGFACE = 'HF', 'HuggingFace Transformers'
         SKLEARN = 'SKLEARN', 'scikit-learn'
+        YOLO = 'YOLO', 'Ultralytics YOLO'
 
     name = models.CharField(max_length=255, unique=True)
     task_type = models.CharField(

@@ -14,8 +14,11 @@ from django.core.exceptions import ValidationError
 
 TASK_TYPE_TEXT_CLASSIFICATION = 'TextClassification'
 TASK_TYPE_NER = 'NamedEntityRecognition'
+TASK_TYPE_OBJECT_DETECTION = 'ObjectDetection'
+TASK_TYPE_INSTANCE_SEGMENTATION = 'InstanceSegmentation'
 FRAMEWORK_HF = 'HF'
 FRAMEWORK_SKLEARN = 'SKLEARN'
+FRAMEWORK_YOLO = 'YOLO'
 
 # scan_local_models 跳过的保留目录名：Sub-Issue 17 上传暂存目录、Sub-Issue 6 训练产物目录，均非基模。
 _SKIP_DIR_NAMES = {'uploads', 'trained'}
@@ -38,12 +41,18 @@ def _has_hf_weights(path):
     return False
 
 
+def _has_yolo_weights(path):
+    """YOLO 权重文件是否存在：目录含 ``*.pt`` 即视为存在（只查文件，不加载）。"""
+    return bool(glob.glob(os.path.join(path, '*.pt')))
+
+
 def validate_local_model_path(path, framework):
     """校验 ``path`` 为存在的目录且含框架期望文件；失败抛 ``ValidationError``。
 
     - ``HF``：目录含 ``config.json`` 且存在权重文件（``pytorch_model.bin`` 或
       ``model.safetensors``，含分片通配）。
     - ``SKLEARN``：目录含 ``model.pkl``（只查存在性，不加载内容）。
+    - ``YOLO``：目录含 ``*.pt``（只查存在性，不加载内容）。
     - 其他 framework：抛 ``ValidationError``。
     """
     if not path or not os.path.isdir(path):
@@ -59,16 +68,21 @@ def validate_local_model_path(path, framework):
     elif framework == FRAMEWORK_SKLEARN:
         if not os.path.isfile(os.path.join(path, 'model.pkl')):
             raise ValidationError(f'sklearn model missing model.pkl in: {path}')
+    elif framework == FRAMEWORK_YOLO:
+        if not _has_yolo_weights(path):
+            raise ValidationError(f'YOLO model missing .pt file in: {path}')
     else:
         raise ValidationError(f'Unknown framework: {framework}')
 
 
 def _detect_framework(dirpath):
-    """探测一级子目录的框架：有 ``config.json`` → HF，否则有 ``model.pkl`` → SKLEARN，否则 None。"""
+    """探测一级子目录的框架：``config.json`` → HF，否则 ``model.pkl`` → SKLEARN，否则 ``*.pt`` → YOLO。"""
     if os.path.isfile(os.path.join(dirpath, 'config.json')):
         return FRAMEWORK_HF
     if os.path.isfile(os.path.join(dirpath, 'model.pkl')):
         return FRAMEWORK_SKLEARN
+    if glob.glob(os.path.join(dirpath, '*.pt')):
+        return FRAMEWORK_YOLO
     return None
 
 
@@ -133,6 +147,7 @@ def scan_local_models(root):
     - ``root`` 空 / 非目录 → 返回 ``[]``。
     - 不递归，按名字排序，跳过隐藏目录（``.`` 开头）与保留名 ``uploads``/``trained``。
     - 每项：``{name, framework, local_path, task_type_guess}``；无法识别框架的目录跳过。
+    - YOLO 目录不推断 task_type（避免加载 torch），``task_type_guess`` 返回 ``None``。
     """
     if not root or not os.path.isdir(root):
         return []
@@ -157,8 +172,10 @@ def scan_local_models(root):
 
         if framework == FRAMEWORK_HF:
             task_type_guess = _guess_hf_task_type(os.path.join(dirpath, 'config.json'))
-        else:  # FRAMEWORK_SKLEARN（_detect_framework 只返回这两个框架值）
+        elif framework == FRAMEWORK_SKLEARN:
             task_type_guess = _guess_sklearn_task_type(os.path.join(dirpath, 'model.pkl'))
+        else:  # FRAMEWORK_YOLO：扫描期不加载 torch，task_type 由用户显式选择
+            task_type_guess = None
 
         results.append(
             {

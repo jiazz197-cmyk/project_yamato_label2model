@@ -39,7 +39,10 @@ class BaseModelFactory(factory.django.DjangoModelFactory):
         try:
             os.makedirs(_MODEL_ROOT, exist_ok=True)
             d = tempfile.mkdtemp(prefix='bm_', dir=_MODEL_ROOT)
-            Path(d, 'model.pkl').write_bytes(b'dummy')
+            if self.framework == BaseModel.Framework.YOLO:
+                Path(d, 'yolov8n.pt').write_bytes(b'dummy')
+            else:
+                Path(d, 'model.pkl').write_bytes(b'dummy')
             return d
         except OSError:
             # 测试进程被禁止新建文件时使用预置的共享目录（只读校验路径）。
