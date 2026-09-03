@@ -1,7 +1,7 @@
 from django.conf import settings
 from django.db import models
-
 from ml_models.models import SkillNames
+
 from training.utils import validate_local_model_path
 
 
@@ -11,6 +11,7 @@ class BaseModel(models.Model):
     class Framework(models.TextChoices):
         HUGGINGFACE = 'HF', 'HuggingFace Transformers'
         SKLEARN = 'SKLEARN', 'scikit-learn'
+        YOLO = 'YOLO', 'Ultralytics YOLO'
 
     name = models.CharField(max_length=255, unique=True)
     task_type = models.CharField(
@@ -45,6 +46,10 @@ class BaseModel(models.Model):
         if self.is_active:
             self.validate_local_path()
         super().save(*args, **kwargs)
+
+    def has_permission(self, user):
+        """服务器预置（organization 为空）基模全员可见；其余仅同组织成员。"""
+        return self.organization_id is None or user.active_organization_id == self.organization_id
 
     def __str__(self):
         return f'{self.name} ({self.framework})'
@@ -90,6 +95,10 @@ class TrainingJob(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     started_at = models.DateTimeField(null=True, blank=True)
     completed_at = models.DateTimeField(null=True, blank=True)
+
+    def has_permission(self, user):
+        """仅同组织成员可访问。"""
+        return user.active_organization_id == self.organization_id
 
     def __str__(self):
         return f'TrainingJob #{self.id} ({self.base_model.name} -> {self.project})'
@@ -151,6 +160,10 @@ class TestRun(models.Model):
             raise ValidationError('training_job 和 base_model 不能同时设置（二选一）')
         if not self.training_job and not self.base_model:
             raise ValidationError('training_job 和 base_model 必须设置其一（二选一）')
+
+    def has_permission(self, user):
+        """仅同组织成员可访问。"""
+        return user.active_organization_id == self.organization_id
 
     def __str__(self):
         target = self.training_job or self.base_model

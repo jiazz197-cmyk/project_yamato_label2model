@@ -33,7 +33,7 @@ Redis 必须从运行本机可访问。当前 `.env` 配置的 Redis 地址为 `
 poetry install
 ```
 
-`poetry install` 会安装 `pyproject.toml` 中声明的所有依赖，包括 `torch`、`transformers`、`scikit-learn`、`joblib`、`celery`、`fastapi`、`uvicorn` 等训练相关包。
+`poetry install` 会安装 `pyproject.toml` 中声明的所有依赖，包括 `torch`、`transformers`、`scikit-learn`、`joblib`、`celery`、`fastapi`、`uvicorn`、`ultralytics` 等训练相关包。
 
 ## 三进程启动
 
@@ -74,7 +74,7 @@ poetry run python label_studio/manage.py runpredictionservice --port 8990
 
 ## 环境变量配置
 
-训练功能通过以下 7 个环境变量控制行为。所有变量可在 `.env` 中设置，未设置时使用默认值。
+训练功能通过以下 8 个环境变量控制行为。所有变量可在 `.env` 中设置，未设置时使用默认值。
 
 | 环境变量 | 默认值 | 用途 |
 |----------|--------|------|
@@ -85,13 +85,14 @@ poetry run python label_studio/manage.py runpredictionservice --port 8990
 | TRAINING_SAMPLE_SIZE | 100 | Sample subset 随机取样数 |
 | PREDICTOR_PORT | 8990 | FastAPI predictor 侧车监听端口 |
 | TRAINING_PROGRESS_REDIS_CHANNEL | `training:progress` | Redis pub/sub 进度推送 channel 前缀 |
+| TRAINING_YOLO_VAL_SPLIT | `0.2` | YOLO 数据集 train/val 切分比例；样本 <2 时退化为单 train 集 |
 
 ## 健康检查
 
 ### 依赖导入冒烟测试
 
 ```powershell
-poetry run python -c "import torch, transformers, sklearn, joblib, celery, fastapi, uvicorn"
+poetry run python -c "import torch, transformers, sklearn, joblib, celery, fastapi, uvicorn, ultralytics"
 ```
 
 无输出即表示所有依赖包可正常导入。
@@ -120,6 +121,51 @@ Celery worker 启动后，日志中应出现以下标志：
 - ** ---------- .> default         exchange=default(direct) key=default
 - *** --- * ---
 --- ***** -----
+```
+
+## YOLO 系列模型
+
+YOLO（Ultralytics）作为第三训练框架，支持目标检测（detect）与实例分割（segment）。
+
+### 基模目录结构
+
+服务器预置 YOLO 基模以**目录**形式放在 `LOCAL_MODEL_ROOT` 下，目录内直接放置一个或多个 `.pt` 文件：
+
+```text
+<LOCAL_MODEL_ROOT>/
+└── yolov8n/
+    ├── yolov8n.pt
+    └── yolov8n-seg.pt
+```
+
+`scan_local_models` 会自动把含 `*.pt` 的目录识别为 `YOLO`；由于扫描期不加载 torch，
+`task_type_guess` 返回 `None`，创建/上传模型时需由用户显式选择 `ObjectDetection` 或
+`InstanceSegmentation`。
+
+### 标注类型与 class 映射
+
+- 目标检测：Label Studio `RectangleLabels`，region value 为 `x/y/width/height`（0–100 百分比）。
+- 实例分割：Label Studio `PolygonLabels`，region value 的 `points` 为 0–100 百分比。
+- class 映射来自 label_config 中 `RectangleLabels`/`PolygonLabels` 的 `<Label value=...>` 出现顺序。
+- 不支持 BrushLabels/位图掩码、旋转框（OBB）、分类/关键点/姿态。
+
+### 训练与测试
+
+- 训练入口通过 `training.adapters.yolo_adapter.train` 调用 `YOLO(<本地目录>/*.pt)`，
+  只传本地绝对路径，严禁传 `yolov8n.pt` 等在线权重名。
+- 训练数据由 `training.yolo.build_yolo_dataset` 转为 `data.yaml + images/ + labels/`。
+- 训练产物保留在 `<LOCAL_MODEL_ROOT>/trained/<job_id>/`，含 `best.pt`、`last.pt`、`data.yaml`。
+- 测试与预测从产物 `best.pt`（或零样本基模目录内 `.pt`）加载，不联网。
+
+### 指标
+
+- 训练/测试回写 `mAP50`、`mAP50-95`、`precision`、`recall`。
+- YOLO 检测/分割不做文本分类式 2D `confusion_matrix`。
+
+### Windows PowerShell 健康检查
+
+```powershell
+poetry run python -c "import ultralytics"
 ```
 
 ## 故障排查
