@@ -4,6 +4,9 @@
 import os
 import sys
 
+# 把项目根目录加入 sys.path，使 training/（根目录）可作为顶层包导入
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
 if __name__ == '__main__':
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'core.settings.label_studio')
     # os.environ.setdefault('DEBUG', 'True')

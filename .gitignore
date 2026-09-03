@@ -94,3 +94,12 @@ web/coverage-chunks
 .ua/
 
 .claude/
+
+AGENTS.md
+
+training/tests/__pycache__/
+
+# 本地模型测试临时目录（training/tests/factories.py 运行时生成）
+.test_models/
+
+docs/project-intro-brief.md

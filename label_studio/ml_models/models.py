@@ -19,6 +19,8 @@ logger = logging.getLogger(__name__)
 class SkillNames(models.TextChoices):
     TEXT_CLASSIFICATION = 'TextClassification', _('TextClassification')
     NAMED_ENTITY_RECOGNITION = 'NamedEntityRecognition', _('NamedEntityRecognition')
+    OBJECT_DETECTION = 'ObjectDetection', _('ObjectDetection')
+    INSTANCE_SEGMENTATION = 'InstanceSegmentation', _('InstanceSegmentation')
 
 
 def validate_string_list(value):
