@@ -244,7 +244,6 @@ INSTALLED_APPS = [
     'ml_model_providers',
     'jwt_auth',
     'session_policy',
-    'training',
 ]
 
 MIDDLEWARE = [

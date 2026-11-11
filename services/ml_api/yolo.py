@@ -320,7 +320,7 @@ def build_yolo_dataset(project, tasks, workdir, mode, val_split=None):
     """构造 YOLO 数据集目录并返回数据集元信息。
 
     - ``mode``: ``'detect'`` 或 ``'segment'``。
-    - ``val_split``: train/val 比例；``None`` 时读取 Django settings
+    - ``val_split``: train/val 比例；``None`` 时读取环境变量
       ``TRAINING_YOLO_VAL_SPLIT``，默认 0.2。
     - 样本 < 2 时不生成 val 集。
     """
@@ -332,10 +332,8 @@ def build_yolo_dataset(project, tasks, workdir, mode, val_split=None):
 
     if val_split is None:
         try:
-            from django.conf import settings as django_settings
-
-            val_split = float(getattr(django_settings, 'TRAINING_YOLO_VAL_SPLIT', 0.2))
-        except Exception:
+            val_split = float(os.environ.get('TRAINING_YOLO_VAL_SPLIT', '0.2'))
+        except (TypeError, ValueError):
             val_split = 0.2
     val_split = float(val_split)
 

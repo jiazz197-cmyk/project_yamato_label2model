@@ -1,4 +1,4 @@
-"""trainer-worker 容器健康检查：确认 RQ worker 已注册到 Redis。"""
+"""ml-worker 容器健康检查：确认 RQ worker 已注册到 Redis。"""
 
 import os
 import sys

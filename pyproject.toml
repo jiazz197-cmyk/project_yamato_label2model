@@ -72,9 +72,9 @@ dependencies = [
     ## HumanSignal repo dependencies :start
     "label-studio-sdk @ https://github.com/HumanSignal/label-studio-sdk/archive/54d1aeca71fe7b572c8028e7fe82c4b54457e8f0.zip",
     ## HumanSignal repo dependencies :end
-    # --- 训练/ML 依赖已拆分到 trainer 镜像 ---
+    # --- 训练/ML 依赖已拆分到 ml 镜像 ---
     # torch / torchvision / ultralytics / fastapi / uvicorn 不再进入 Django app 环境，
-    # 由 trainer 镜像单独安装（见 services/requirements-trainer.txt 与 Dockerfile 的 trainer 阶段）。
+    # 由 ml 镜像单独安装（见 services/requirements-ml.txt 与 Dockerfile 的 ml 阶段）。
 ]
 
 [project.urls]
@@ -158,7 +158,7 @@ quote-style = "single"
 
 packages = [
     { include = "label_studio" },
-    { include = "training" },
+    { include = "services" },
 ]
 include = [
     { path = "web/dist/libs/datamanager/**/*", format = ["sdist", "wheel"] },

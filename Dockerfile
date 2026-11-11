@@ -165,8 +165,9 @@ WORKDIR /label-studio
 COPY --chown=app:app . .
 COPY --from=web --chown=app:app /build/web/dist ./web/dist
 COPY --chown=app:app docker/docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
+COPY --chown=app:app docker/ml-api-start.sh /usr/local/bin/ml-api-start.sh
 
-RUN chmod +x /usr/local/bin/docker-entrypoint.sh \
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh /usr/local/bin/ml-api-start.sh \
     && mkdir -p data /models \
     && chown app:app /label-studio \
     && chown -R app:app data /models
@@ -250,4 +251,5 @@ EXPOSE 8991
 HEALTHCHECK --interval=15s --timeout=5s --start-period=60s --retries=5 \
     CMD curl -fsS http://127.0.0.1:8991/health || exit 1
 
-CMD ["uvicorn", "services.ml_api.app:app", "--host", "0.0.0.0", "--port", "8991"]
+# 先执行 Alembic 表结构引导，再启动 FastAPI（见 docker/ml-api-start.sh）
+CMD ["ml-api-start.sh"]

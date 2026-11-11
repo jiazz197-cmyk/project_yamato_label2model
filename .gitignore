@@ -97,11 +97,6 @@ web/coverage-chunks
 
 AGENTS.md
 
-training/tests/__pycache__/
-
-# 本地模型测试临时目录（training/tests/factories.py 运行时生成）
-.test_models/
-
 docs/project-intro-brief.md
 # 容器化模型目录（保留目录本身，内容不入库）
 models/*

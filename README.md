@@ -6,7 +6,7 @@
 >
 > 默认 `docker compose up -d` 只启动 **5 个服务**：`postgres`、`redis`、`minio`、`app`、`web`。源码通过 bind mount 挂进容器，**改代码即时生效**（Django `runserver` 自动重载 + webpack dev server HMR），不需要重建镜像。只有依赖清单、Dockerfile 或前端构建配置变化时才需要重建。
 >
-> 训练/推理侧车在 `ml` profile 中按需启动（`docker compose --profile ml up -d`），共 **7 个服务**：再加 `ml-api`、`ml-worker`。当前训练任务与推理接口是 501 占位，真实 YOLO 训练由 yolo-3 落地。
+> 训练/推理侧车在 `ml` profile 中按需启动（`docker compose --profile ml up -d`），共 **7 个服务**：再加 `ml-api`、`ml-worker`。训练域（BaseModel / TrainingJob / `/api/training/`）已完整迁移到 FastAPI：Django 只保留登录态与组织上下文并转发请求，表结构由 ml-api 启动时的 Alembic 引导维护；真实 YOLO 训练执行与推理仍由 yolo-3 落地（对应接口返回 501）。
 >
 > 推荐使用 **VS Code Dev Containers**：打开仓库后执行 `Dev Containers: Reopen in Container`，环境、端口和扩展一次配好；命令行方式作为备选。
 
@@ -17,7 +17,7 @@
 | 后端 | Django 5.1 + DRF，Python 3.12 |
 | 数据与中间件 | PostgreSQL 16、Redis 7（django-rq / RQ 队列）、MinIO（S3 兼容对象存储） |
 | 前端 | React 18 + TypeScript + Nx monorepo（`web/`）；webpack dev server HMR |
-| 训练/推理编排 | FastAPI（`services/ml_api`，端口 8991）+ RQ worker（`ml-worker`）；Ultralytics YOLO（torch / torchvision） |
+| 训练/推理编排 | FastAPI（`services/ml_api`，端口 8991）+ SQLAlchemy/Alembic + RQ worker（`ml-worker`）；Ultralytics YOLO（torch / torchvision） |
 | 运行方式 | Docker Engine + Docker Compose v2；根目录单 Dockerfile 多阶段构建；可选 VS Code Dev Containers |
 
 ## 快速开始（推荐：VS Code Dev Containers）
@@ -124,9 +124,9 @@ make docker-admin-org EMAIL=<你的邮箱>
 
 | 服务 | 挂载 |
 |---|---|
-| `app` | `./label_studio` → `/label-studio/label_studio`；`./training` → `/label-studio/training`；`./services` → `/label-studio/services`；`appdata` → `/label-studio/data`；`./models` → `/models` |
+| `app` | `./label_studio` → `/label-studio/label_studio`；`appdata` → `/label-studio/data`；`./models` → `/models` |
 | `web` | `./web/apps`、`./web/libs`、`./web/tools`、`./web/scripts` → 对应容器目录（`node_modules` 与构建配置来自镜像） |
-| `ml-api` | `./services`、`./training` → 对应目录；`./models` → `/models` |
+| `ml-api` | `./services` → `/label-studio/services`；`./models` → `/models` |
 | `ml-worker` | 同 `ml-api` |
 | `postgres` | 命名卷 `pgdata` → `/var/lib/postgresql/data` |
 | `redis` | 命名卷 `redisdata` → `/data` |
@@ -136,10 +136,10 @@ make docker-admin-org EMAIL=<你的邮箱>
 
 | 改动 | 是否需要重建镜像 | 生效方式 |
 |---|---|---|
-| `label_studio/`、`training/` 下的 Python 源码 | 否 | `app` 的 `runserver` 自动重载（日志出现 `Watching for file changes with StatReloader`） |
+| `label_studio/` 下的 Python 源码 | 否 | `app` 的 `runserver` 自动重载（日志出现 `Watching for file changes with StatReloader`） |
 | Django 模板、静态资源 | 否 | 由 `runserver` 直接服务 |
 | `web/apps`、`web/libs`、`web/tools`、`web/scripts` 下的前端源码 | 否 | `web` 容器 HMR 自动编译，刷新或热更新即可 |
-| `services/` 下的 ml-api / jobs 源码 | 否 | `ml-api` 的 `uvicorn --reload` 自动重载；`ml-worker` 需重启容器以加载新代码 |
+| `services/` 下的 ml-api / jobs / 迁移源码 | 否 | `ml-api` 的 `uvicorn --reload` 自动重载；Alembic 迁移改动需重启 `ml-api` 触发引导；`ml-worker` 需重启容器以加载新代码 |
 | `web/package.json`、`web/yarn.lock` | **是** | 重建 `web`（以及 `app`，因为 app 内含 `web/dist`） |
 | `web/webpack.config.js`、`nx.json`、`tsconfig*.json` 等前端构建配置 | **是** | 重建 `web`；这些文件不在挂载范围内 |
 | `pyproject.toml`、`poetry.lock`、`poetry.toml` | **是** | `make dev-rebuild`（构建 `app` + `web`） |
@@ -149,7 +149,8 @@ make docker-admin-org EMAIL=<你的邮箱>
 | `.env` 中构建参数（`YARN_REGISTRY`、`POETRY_PYPI_URL`、`TORCH_*`、`APT_MIRROR` 等） | **是** | 重建对应镜像（`make dev-rebuild` / `make ml-rebuild`） |
 | `.devcontainer/devcontainer.json` | 否 | VS Code 重新 Reopen in Container |
 | `./models` 下的基模/产物 | 否 | 直接挂载可见 |
-| 数据库结构（migrations） | 否 | `app` 启动时自动 `migrate`，或 `make docker-migrate-dev` |
+| Django 表结构（`label_studio/*/migrations`） | 否 | `app` 启动时自动 `migrate`，或 `make docker-migrate-dev` |
+| 训练域表结构（`services/ml_api/migrations`） | 否 | `ml-api` 启动时自动执行 Alembic 引导（新库建表 / 旧库 stamp） |
 
 常用重建命令：
 
@@ -180,18 +181,20 @@ docker compose build web   # 只重建 web
 - 工作目录 `/label-studio`，远程用户 `app`；`overrideCommand: false` 表示沿用 compose 中 app 的启动命令（`runserver`）。
 - 需要在容器里使用 ml profile 时，建议在**宿主机终端**执行 `docker compose --profile ml up -d`（devcontainer 不默认启动 ml 服务）。
 
-## 训练 / 推理架构与 legacy 边界
+## 训练 / 推理架构
 
-- **Django（`app`）**：负责标注、项目、用户/组织与鉴权，以及页面渲染。
-- **`services/ml_api`（FastAPI，8991）**：新的训练/推理编排入口，`ml-api` 与 `ml-worker` 共用 ml 镜像。
-  - `GET /health`：健康检查，无需鉴权，返回 `{"status":"UP","service":"ml-api"}`。
-  - `GET /api/training/queue`：查询 `training` 队列长度，需要内部令牌。
-  - `POST /api/training/jobs`、`GET /api/training/jobs/{job_id}`、`POST /api/training/jobs/{job_id}/cancel`、`POST /api/predictions`：目前返回 `501 Not Implemented` 占位，真实 YOLO 训练/推理由 yolo-3 落地。
-  - 内部鉴权头为 `X-Internal-Token`，对应环境变量 `ML_API_INTERNAL_TOKEN`（为空时回退 `TRAINER_INTERNAL_TOKEN`）；`/docs`、`/redoc`、`/openapi.json` 均关闭。
-- **`ml-worker`**：RQ worker，队列 `training`；当前只注册了 `services.ml_api.jobs.ping`（返回 `pong`）与占位的 `execute_training_job`（调用即 `NotImplementedError`）。
-- **原 `predictor` 已合并进 `ml-api`**；旧的 `trainer` / `trainer-worker` / `predictor` 服务已删除，不再使用。
-- **Django `training/` app 暂保留（legacy）**：模型与 `/api/training/` 接口仍在，但本轮不再扩展；完整迁移/删除是下一阶段。不要在新功能里继续依赖它。
-- 本轮**不实现真实 YOLO 训练/推理**，只打通开发环境、服务编排、HMR 与占位接口。
+- **Django（`app`）**：只负责标注、项目、用户/组织、鉴权与页面渲染。`/api/training/` 保留原 URL 与响应结构，但只做**薄网关**：带上 `X-Internal-Token`、`X-User-Id`、`X-Organization-Id` 转发给 ml-api，不再直接读写训练表，也没有训练模型/序列化器。
+- **`services/ml_api`（FastAPI，8991）**：训练域唯一入口，`ml-api` 与 `ml-worker` 共用 ml 镜像。
+  - `GET /health`：健康检查，无需鉴权。
+  - `GET /api/training/base-models`、`GET /api/training/base-models/{id}`、`GET /api/training/base-models/scan`：基模列表/详情/本地目录扫描。
+  - `GET/POST /api/training/jobs`、`GET/PATCH /api/training/jobs/{id}`：任务查询/创建/取消（`PATCH {"action":"cancel"}`）。
+  - `GET /api/training/queue`：`training` 队列长度。
+  - `POST /api/predictions`：预标注推理占位，返回 501（yolo-3）。
+  - 内部鉴权头 `X-Internal-Token`（对应 `ML_API_INTERNAL_TOKEN`，为空时回退 `TRAINER_INTERNAL_TOKEN`）；`/docs`、`/redoc`、`/openapi.json` 关闭。
+- **持久化**：训练域使用 SQLAlchemy + Alembic，表名/列名沿用原 Django 表（`training_base_model`、`training_job`），存量库无需搬数据。`ml-api` 启动脚本 `docker/ml-api-start.sh` 先执行 `services/ml_api/db_bootstrap.py`：新库 `upgrade head` 建表；已有表但没有 `alembic_version` 的旧库自动 `stamp head`，不重建、不丢数据。
+- **`ml-worker`**：RQ worker，队列 `training`；当前注册 `services.ml_api.jobs.ping`（返回 `pong`）与占位的 `execute_training_job`（调用即 `NotImplementedError`）。
+- **真实 YOLO 训练/推理未实现**：任务创建后只落库为 `Pending`，不会自动入队执行；执行链路由 yolo-3 接入。原 `training/yolo.py`、`training/adapters/yolo_adapter.py` 已迁入 `services/ml_api/`，不再依赖 Django。
+- **原 `predictor` 已合并进 `ml-api`**；`trainer` / `trainer-worker` / `predictor` 服务均已删除。
 
 模型与产物目录：宿主机 `./models` 绑定到容器 `/models`，由 `app`、`ml-api`、`ml-worker` 共享；基模放 `./models/<模型名>/*.pt`，训练产物默认写到 `/models/trained/<job_id>/`（即宿主机 `./models/trained/<job_id>/`）。
 
@@ -270,6 +273,24 @@ curl -s -o /dev/null -w '%{http_code}\n' \
   -X POST -H "X-Internal-Token: $TOKEN" -H 'Content-Type: application/json' -d '{}' \
   http://localhost:8991/api/predictions
 # 预期：501
+
+训练域端到端（Django 网关 → ml-api，需 ml profile 已启动；下面用第一个超级用户的 API Token）：
+
+```bash
+docker compose exec -T app python label_studio/manage.py shell -c "
+from django.test import Client
+from users.models import User
+from organizations.models import Organization
+user = User.objects.filter(is_superuser=True).first()
+org = Organization.objects.get(pk=user.active_organization_id)
+org.jwt.legacy_api_tokens_enabled = True
+org.jwt.save()
+client = Client(HTTP_AUTHORIZATION=f'Token {user.reset_token().key}')
+print('base-models', client.get('/api/training/base-models/').status_code)
+print('scan', client.get('/api/training/base-models/scan/').status_code)
+"
+# 预期：两个请求均 200；若 ml profile 未启动，网关返回 503
+```
 ```
 
 RQ 入队 ping 并取结果（`ml-worker` 已在 ml profile 中运行）：
@@ -363,7 +384,8 @@ ls models/
 | `make docker-createsuperuser` | 在 `app` 内创建超级用户 |
 | `make docker-admin-org EMAIL=<邮箱>` | 为超级用户补组织（命令行创建后必须执行） |
 | `make docker-shell` | 在 `app` 内进入 Django shell_plus |
-| `make docker-test` | 在 `app` 内运行训练相关测试 |
+| `make docker-test` | 在 ml 镜像内运行训练域（FastAPI/SQLAlchemy）测试 |
+| `make docker-test-gateway` | 在 `app` 内运行 Django `/api/training/` 网关测试 |
 | `make docker-config` | `docker compose config -q` 校验编排文件 |
 
 旧命令名 `docker-build` / `docker-up` / `docker-up-build` / `docker-down` / `docker-down-clean` / `docker-ps` / `docker-logs` 仍作为别名保留。
@@ -372,7 +394,7 @@ ls models/
 
 ### 什么时候需要重建镜像？
 
-只改 `label_studio/`、`training/`、`services/`、`web/apps`、`web/libs` 等**挂载目录内的源码**时不需要重建；改依赖清单、Dockerfile、`web/package.json`/`yarn.lock`、`webpack.config.js`/`tsconfig` 等**烘焙进镜像的文件**时需要重建。完整矩阵见上文「改什么 / 是否重建」。
+只改 `label_studio/`、`services/`、`web/apps`、`web/libs` 等**挂载目录内的源码**时不需要重建；改依赖清单、Dockerfile、`web/package.json`/`yarn.lock`、`webpack.config.js`/`tsconfig` 等**烘焙进镜像的文件**时需要重建。完整矩阵见上文「改什么 / 是否重建」。
 
 ### HMR 不生效 / 页面样式没更新
 
@@ -478,7 +500,7 @@ python docker/ensure_admin_org.py <你的邮箱>
 python label_studio/manage.py runserver 0.0.0.0:8080
 ```
 
-说明：app 依赖不再包含 torch/ultralytics/fastapi/uvicorn；需要本地调试 ml-api / ml-worker 时，额外安装 `services/requirements-ml.txt` 与对应 torch，或直接使用容器。Django `training/` app 为 legacy，仅保留兼容。
+说明：app 依赖不再包含 torch/ultralytics/fastapi/uvicorn；需要本地调试 ml-api / ml-worker / 训练域测试时，额外安装 `services/requirements-ml.txt` 与对应 torch，或直接使用容器。训练域已不在 Django 侧，Django 只保留 `/api/training/` 网关。
 
 ## 致谢
 

@@ -161,8 +161,6 @@ services:
       - ./models:/models
       # 开发时源码直接来自宿主机，改完即时生效（runserver autoreload）
       - ./label_studio:/label-studio/label_studio
-      - ./training:/label-studio/training
-      - ./services:/label-studio/services
     depends_on:
       postgres:
         condition: service_healthy
@@ -216,17 +214,10 @@ services:
     image: yamato/label-studio-ml:dev
     restart: unless-stopped
     command:
-      - uvicorn
-      - services.ml_api.app:app
-      - --host
-      - 0.0.0.0
-      - --port
-      - "8991"
+      - ml-api-start.sh
       - --reload
       - --reload-dir
       - /label-studio/services
-      - --reload-dir
-      - /label-studio/training
     environment:
       <<: *common-env
       RUN_STARTUP_TASKS: "0"
@@ -235,8 +226,9 @@ services:
     volumes:
       - ./models:/models
       - ./services:/label-studio/services
-      - ./training:/label-studio/training
     depends_on:
+      postgres:
+        condition: service_healthy
       redis:
         condition: service_healthy
     healthcheck:
@@ -261,7 +253,6 @@ services:
     volumes:
       - ./models:/models
       - ./services:/label-studio/services
-      - ./training:/label-studio/training
     depends_on:
       redis:
         condition: service_healthy

@@ -22,7 +22,7 @@
         docker-ps docker-logs docker-config docker-build-ml docker-up-ml \
         docker-ps-ml docker-logs-ml docker-migrate-dev docker-makemigrations-dev \
         docker-collectstatic-dev docker-createsuperuser docker-admin-org docker-shell \
-        docker-test run-dev migrate-dev makemigrations-dev shell-dev \
+        docker-test docker-test-gateway run-dev migrate-dev makemigrations-dev shell-dev \
         frontend-install frontend-setup frontend-dev frontend-watch frontend-build \
         frontend-storybook-serve test update-urls fmt fmt-all fmt-check fmt-check-all \
         configure-hooks generate-swagger
@@ -111,8 +111,13 @@ docker-admin-org:
 docker-shell:
 	docker compose exec app python label_studio/manage.py shell_plus
 
+# 训练域（FastAPI ml-api）测试：SQLAlchemy + TestClient，跑在 ml 镜像里
 docker-test:
-	docker compose exec app bash -lc "cd label_studio && DJANGO_DB=sqlite pytest -c pytest.ini -v -m 'not integration_tests' ../training/tests"
+	docker compose --profile ml run --rm ml-api bash -lc "cd /label-studio && pytest -c services/pytest.ini -v services/tests"
+
+# Django 侧仅剩 /api/training/ 网关，测试转发/鉴权/状态码映射
+docker-test-gateway:
+	docker compose exec app bash -lc "cd label_studio && DJANGO_DB=sqlite pytest --import-mode=importlib -c pytest.ini -v -m 'not integration_tests' tests/test_training_proxy.py"
 
 env-setup:
 	@if [ ! -f .env ]; then cp .env.example .env && echo "已生成 .env（可选，compose 有内置开发默认值）"; fi

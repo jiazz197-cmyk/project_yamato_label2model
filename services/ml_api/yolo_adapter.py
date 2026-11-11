@@ -13,7 +13,7 @@ try:
 except ImportError:  # 未安装时仍允许模块被导入，训练调用时会再次尝试
     YOLO = None
 
-from training.yolo import build_yolo_dataset
+from services.ml_api.yolo import build_yolo_dataset
 
 
 def _find_pt(local_path):
@@ -33,15 +33,10 @@ def _artifact_path(job):
     existing = job.get('artifact_path') if isinstance(job, dict) else getattr(job, 'artifact_path', None)
     if existing:
         return existing
-    try:
-        from django.conf import settings
-
-        root = getattr(settings, 'LOCAL_MODEL_ROOT', None)
-        prefix = getattr(settings, 'TRAINING_ARTIFACTS_STORAGE_PREFIX', 'trained')
-        if root:
-            return os.path.join(str(root), str(prefix), str(_job_id(job)))
-    except Exception:
-        pass
+    root = os.environ.get('LOCAL_MODEL_ROOT', '')
+    prefix = os.environ.get('TRAINING_ARTIFACTS_STORAGE_PREFIX', 'trained')
+    if root:
+        return os.path.join(root, prefix, str(_job_id(job)))
     return os.path.abspath(os.path.join('trained', str(_job_id(job))))
 
 

@@ -1,0 +1,304 @@
+"""训练域 FastAPI 接口测试（TestClient + SQLite，无外部服务）。
+
+覆盖：内部令牌、组织隔离、BaseModel 可见性、TrainingJob 创建/查询/取消、
+项目过滤与扫描接口。真实 YOLO 执行不在本套测试范围（yolo-3）。
+"""
+
+import pytest
+from fastapi.testclient import TestClient
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
+from sqlalchemy.pool import StaticPool
+
+from services.ml_api.app import app
+from services.ml_api.db import get_session
+from services.ml_api.models import Base, BaseModel, ProjectRef, TrainingJob
+
+ORG_A = 1
+ORG_B = 2
+PROJECT_A = 101
+PROJECT_B = 202
+USER_ID = 9
+
+
+@pytest.fixture
+def session_factory():
+    """内存 SQLite：StaticPool 保证 TestClient 线程共用同一连接。"""
+    engine = create_engine(
+        'sqlite+pysqlite://',
+        connect_args={'check_same_thread': False},
+        poolclass=StaticPool,
+        future=True,
+    )
+    Base.metadata.create_all(engine)
+    factory = sessionmaker(bind=engine, autoflush=False, expire_on_commit=False)
+    yield factory
+    engine.dispose()
+
+
+@pytest.fixture
+def seed(session_factory):
+    """两个组织、两个项目、四个基模（A/全局/B/停用）。"""
+    with session_factory() as session:
+        session.add_all(
+            [
+                ProjectRef(id=PROJECT_A, organization_id=ORG_A),
+                ProjectRef(id=PROJECT_B, organization_id=ORG_B),
+            ]
+        )
+        models = {
+            'base_a': BaseModel(
+                name='base-a',
+                task_type='ObjectDetection',
+                framework='YOLO',
+                local_path='/models/a',
+                default_config={'epochs': 100},
+                is_active=True,
+                organization_id=ORG_A,
+            ),
+            'base_b': BaseModel(
+                name='base-b',
+                task_type='ObjectDetection',
+                framework='YOLO',
+                local_path='/models/b',
+                default_config={},
+                is_active=True,
+                organization_id=ORG_B,
+            ),
+            'base_global': BaseModel(
+                name='base-global',
+                task_type='InstanceSegmentation',
+                framework='YOLO',
+                local_path='/models/global',
+                default_config={},
+                is_active=True,
+                organization_id=None,
+            ),
+            'base_inactive': BaseModel(
+                name='base-inactive',
+                task_type='ObjectDetection',
+                framework='YOLO',
+                local_path='/models/inactive',
+                default_config={},
+                is_active=False,
+                organization_id=ORG_A,
+            ),
+        }
+        session.add_all(models.values())
+        session.commit()
+        return {key: value.id for key, value in models.items()}
+
+
+@pytest.fixture
+def client(session_factory, monkeypatch):
+    """带组织 A 上下文的内部客户端。"""
+    monkeypatch.setenv('ML_API_INTERNAL_TOKEN', 'test-token')
+
+    def override_session():
+        session = session_factory()
+        try:
+            yield session
+        finally:
+            session.close()
+
+    app.dependency_overrides[get_session] = override_session
+    with TestClient(app) as test_client:
+        test_client.headers.update(
+            {
+                'X-Internal-Token': 'test-token',
+                'X-Organization-Id': str(ORG_A),
+                'X-User-Id': str(USER_ID),
+            }
+        )
+        yield test_client
+    app.dependency_overrides.pop(get_session, None)
+
+
+def _create_job(client, base_model_id, project=PROJECT_A, **overrides):
+    payload = {
+        'project': project,
+        'base_model': base_model_id,
+        'train_subset': 'HasGT',
+        'hyperparams': {'epochs': 10},
+    }
+    payload.update(overrides)
+    return client.post('/api/training/jobs', json=payload)
+
+
+# ---------------------------------------------------------------------------
+# 鉴权
+# ---------------------------------------------------------------------------
+
+
+def test_missing_or_wrong_token_401(client):
+    assert client.get('/api/training/base-models', headers={'X-Internal-Token': 'wrong'}).status_code == 401
+    with TestClient(app) as anonymous:
+        assert anonymous.get('/api/training/base-models').status_code == 401
+
+
+def test_prediction_placeholder_501(client):
+    response = client.post('/api/predictions', json={})
+    assert response.status_code == 501
+    assert response.json()['todo'] == 'yolo-3'
+
+
+# ---------------------------------------------------------------------------
+# BaseModel
+# ---------------------------------------------------------------------------
+
+
+def test_list_base_models_includes_global_and_own_org(client, seed):
+    response = client.get('/api/training/base-models')
+    assert response.status_code == 200
+    ids = {item['id'] for item in response.json()}
+    assert seed['base_a'] in ids
+    assert seed['base_global'] in ids
+    assert seed['base_b'] not in ids
+    assert seed['base_inactive'] not in ids
+
+
+def test_list_base_models_without_organization_only_global(client, seed):
+    response = client.get('/api/training/base-models', headers={'X-Organization-Id': ''})
+    assert response.status_code == 200
+    assert {item['id'] for item in response.json()} == {seed['base_global']}
+
+
+def test_cross_org_base_model_detail_403(client, seed):
+    response = client.get(f"/api/training/base-models/{seed['base_b']}")
+    assert response.status_code == 403
+
+
+def test_global_base_model_detail_visible(client, seed):
+    response = client.get(f"/api/training/base-models/{seed['base_global']}")
+    assert response.status_code == 200
+    payload = response.json()
+    assert payload['name'] == 'base-global'
+    assert payload['organization'] is None
+
+
+def test_missing_base_model_404(client):
+    assert client.get('/api/training/base-models/999999').status_code == 404
+
+
+def test_scan_local_models(client, tmp_path, monkeypatch):
+    model_dir = tmp_path / 'yolov8'
+    model_dir.mkdir()
+    (model_dir / 'yolov8n.pt').write_bytes(b'dummy')
+    monkeypatch.setenv('LOCAL_MODEL_ROOT', str(tmp_path))
+
+    response = client.get('/api/training/base-models/scan')
+    assert response.status_code == 200
+    assert response.json() == [
+        {'name': 'yolov8', 'framework': 'YOLO', 'local_path': str(model_dir)}
+    ]
+
+
+# ---------------------------------------------------------------------------
+# TrainingJob
+# ---------------------------------------------------------------------------
+
+
+def test_create_training_job(client, seed, session_factory):
+    response = _create_job(client, seed['base_a'])
+    assert response.status_code == 201, response.text
+    payload = response.json()
+    assert payload['status'] == 'Pending'
+    assert payload['train_subset'] == 'HasGT'
+    assert payload['hyperparams'] == {'epochs': 10}
+    assert payload['metrics'] == {}
+    assert payload['artifact_path'] is None
+    assert payload['model_version'] == ''
+    assert payload['base_model'] == seed['base_a']
+    assert payload['project'] == PROJECT_A
+
+    with session_factory() as session:
+        job = session.get(TrainingJob, payload['id'])
+        assert job is not None
+        assert job.organization_id == ORG_A
+        assert job.created_by_id == USER_ID
+
+
+def test_create_job_invalid_base_model_400(client, seed):
+    response = _create_job(client, 999999)
+    assert response.status_code == 400
+
+
+def test_create_job_invalid_project_400(client, seed):
+    response = _create_job(client, seed['base_a'], project=999999)
+    assert response.status_code == 400
+    # 保持 DRF 的字段级错误结构（不是 FastAPI 的 {"detail": ...}）
+    assert list(response.json()) == ['project']
+
+
+def test_create_job_invalid_train_subset_400(client, seed):
+    response = _create_job(client, seed['base_a'], train_subset='Nope')
+    assert response.status_code == 400
+
+
+def test_cross_org_project_403(client, seed):
+    response = _create_job(client, seed['base_a'], project=PROJECT_B)
+    assert response.status_code == 403
+
+
+def test_cross_org_base_model_in_job_403(client, seed):
+    response = _create_job(client, seed['base_b'])
+    assert response.status_code == 403
+
+
+def test_get_job_detail(client, seed):
+    job_id = _create_job(client, seed['base_a']).json()['id']
+    response = client.get(f'/api/training/jobs/{job_id}')
+    assert response.status_code == 200
+    assert response.json()['id'] == job_id
+
+
+def test_cross_org_job_detail_403(client, seed):
+    job_id = _create_job(client, seed['base_a']).json()['id']
+    response = client.get(f'/api/training/jobs/{job_id}', headers={'X-Organization-Id': str(ORG_B)})
+    assert response.status_code == 403
+
+
+def test_cancel_training_job(client, seed, session_factory):
+    job_id = _create_job(client, seed['base_a']).json()['id']
+    response = client.patch(f'/api/training/jobs/{job_id}', json={'action': 'cancel'})
+    assert response.status_code == 200, response.text
+    assert response.json()['status'] == 'Canceled'
+
+    with session_factory() as session:
+        assert session.get(TrainingJob, job_id).status == 'Canceled'
+
+
+def test_cancel_rejects_other_fields(client, seed):
+    job_id = _create_job(client, seed['base_a']).json()['id']
+    response = client.patch(f'/api/training/jobs/{job_id}', json={'status': 'Running'})
+    assert response.status_code == 403
+
+
+def test_jobs_list_project_filter(client, seed):
+    job_a = _create_job(client, seed['base_a']).json()['id']
+    response = client.get('/api/training/jobs', params={'project': PROJECT_A})
+    assert response.status_code == 200
+    assert [item['id'] for item in response.json()] == [job_a]
+
+
+def test_jobs_list_invalid_project_param_404(client, seed):
+    response = client.get('/api/training/jobs', params={'project': 'abc'})
+    assert response.status_code == 404
+
+
+def test_jobs_list_project_filter_other_org_403(client, seed):
+    response = client.get('/api/training/jobs', params={'project': PROJECT_B})
+    assert response.status_code == 403
+
+
+def test_removed_test_run_routes_404(client):
+    assert client.get('/api/training/test-runs/').status_code == 404
+    assert client.get('/api/training/test-runs/1/').status_code == 404
+
+
+def test_queue_endpoint(client, monkeypatch):
+    """队列接口在 Redis 不可用时返回 503（不依赖真实 Redis）。"""
+    monkeypatch.setenv('REDIS_HOST', '127.0.0.1')
+    monkeypatch.setenv('REDIS_PORT', '1')
+    response = client.get('/api/training/queue')
+    assert response.status_code == 503
