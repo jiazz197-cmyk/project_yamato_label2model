@@ -1,0 +1,287 @@
+# 开发环境编排（dev-first）。
+# 生产编排、反向代理与 GPU 发布流水线属于 infra-3，不在本文件范围。
+#
+# 默认只启动：postgres / redis / minio / app / web（5 个）。
+#   - app / ml-api / ml-worker 的源码通过 bind mount 挂进容器，改代码即时生效；
+#   - 镜像只负责依赖与工具链，只有依赖清单 / Dockerfile 变化才需要重建；
+#   - trainer / worker 等训练侧车在 ml profile 中按需启动。
+#
+# 所有变量都带开发默认值：不复制 .env 也能直接 `docker compose up -d`。
+name: yamato-label-studio
+
+# 应用与 ML 侧车共享的基础环境变量
+x-common-env: &common-env
+  DJANGO_SETTINGS_MODULE: core.settings.label_studio
+  DJANGO_DB: postgresql
+  BASE_DATA_DIR: /label-studio/data
+  LOCAL_MODEL_ROOT: /models
+  HOST: ${HOST:-http://localhost:8080}
+  DEBUG: ${DEBUG:-1}
+  LOG_LEVEL: ${LOG_LEVEL:-INFO}
+  SECRET_KEY: ${SECRET_KEY:-dev-only-secret-key-change-me}
+  COLLECT_ANALYTICS: "0"
+  # 前端 HMR（web 服务）：Django 会把前端资源指向 8010
+  FRONTEND_HMR: ${FRONTEND_HMR:-1}
+  FRONTEND_HOSTNAME: ${FRONTEND_HOSTNAME:-http://localhost:8010}
+  DJANGO_HOSTNAME: ${DJANGO_HOSTNAME:-http://localhost:8080}
+  # PostgreSQL
+  POSTGRE_HOST: postgres
+  POSTGRE_PORT: "5432"
+  POSTGRE_USER: ${POSTGRES_USER:-labelstudio}
+  POSTGRE_PASSWORD: ${POSTGRES_PASSWORD:-labelstudio}
+  POSTGRE_NAME: ${POSTGRES_DB:-labelstudio}
+  # Redis / django-rq
+  REDIS_ENABLED: "1"
+  REDIS_HOST: redis
+  REDIS_PORT: "6379"
+  REDIS_DB: ${REDIS_DB:-0}
+  RQ_DEFAULT_TIMEOUT: ${RQ_DEFAULT_TIMEOUT:-180}
+  RQ_LONG_JOB_TIMEOUT: ${RQ_LONG_JOB_TIMEOUT:-86400}
+  # MinIO（bucket 由 app 启动时自动创建）
+  MINIO_STORAGE_ENDPOINT: ${MINIO_STORAGE_ENDPOINT:-http://minio:9000}
+  MINIO_STORAGE_BUCKET_NAME: ${MINIO_STORAGE_BUCKET_NAME:-labelstudio}
+  MINIO_STORAGE_ACCESS_KEY: ${MINIO_ROOT_USER:-minioadmin}
+  MINIO_STORAGE_SECRET_KEY: ${MINIO_ROOT_PASSWORD:-minioadmin}
+  # FastAPI 训练/推理编排服务
+  ML_API_URL: ${ML_API_URL:-http://ml-api:8991}
+  ML_API_INTERNAL_TOKEN: ${ML_API_INTERNAL_TOKEN:-dev-only-ml-api-token-change-me}
+  # 训练参数
+  TRAINING_ARTIFACTS_STORAGE_PREFIX: ${TRAINING_ARTIFACTS_STORAGE_PREFIX:-trained}
+  TRAINING_UPLOAD_MAX_SIZE: ${TRAINING_UPLOAD_MAX_SIZE:-2147483648}
+  TRAINING_UPLOAD_CHUNK_SIZE: ${TRAINING_UPLOAD_CHUNK_SIZE:-8388608}
+  TRAINING_SAMPLE_SIZE: ${TRAINING_SAMPLE_SIZE:-100}
+  TRAINING_PROGRESS_REDIS_CHANNEL: ${TRAINING_PROGRESS_REDIS_CHANNEL:-training:progress}
+  TRAINING_YOLO_VAL_SPLIT: ${TRAINING_YOLO_VAL_SPLIT:-0.2}
+
+# app 镜像：依赖 + 前端产物；开发时源码通过 volume 覆盖
+x-app-build: &app-build
+  context: .
+  target: app
+  args:
+    APP_UID: ${APP_UID:-1000}
+    APP_GID: ${APP_GID:-1000}
+    POETRY_PYPI_URL: ${POETRY_PYPI_URL:-https://pypi.tuna.tsinghua.edu.cn/simple}
+    YARN_REGISTRY: ${YARN_REGISTRY:-https://registry.npmmirror.com}
+    APT_MIRROR: ${APT_MIRROR:-http://mirrors.tuna.tsinghua.edu.cn}
+
+# web-dev 镜像：node + node_modules；源码目录通过 volume 覆盖
+x-web-build: &web-build
+  context: .
+  target: web-dev
+  args:
+    YARN_REGISTRY: ${YARN_REGISTRY:-https://registry.npmmirror.com}
+    APT_MIRROR: ${APT_MIRROR:-http://mirrors.tuna.tsinghua.edu.cn}
+
+# ml 镜像：app + torch/ultralytics；ml-api / ml-worker 共用
+x-ml-build: &ml-build
+  context: .
+  target: ml
+  args:
+    APP_UID: ${APP_UID:-1000}
+    APP_GID: ${APP_GID:-1000}
+    POETRY_PYPI_URL: ${POETRY_PYPI_URL:-https://pypi.tuna.tsinghua.edu.cn/simple}
+    YARN_REGISTRY: ${YARN_REGISTRY:-https://registry.npmmirror.com}
+    ML_PIP_INDEX_URL: ${ML_PIP_INDEX_URL:-https://pypi.tuna.tsinghua.edu.cn/simple}
+    TORCH_INDEX_URL: ${TORCH_INDEX_URL:-https://mirrors.nju.edu.cn/pytorch/whl/cpu}
+    TORCH_VERSION: ${TORCH_VERSION:-2.11.0}
+    TORCHVISION_VERSION: ${TORCHVISION_VERSION:-0.26.0}
+    APT_MIRROR: ${APT_MIRROR:-http://mirrors.tuna.tsinghua.edu.cn}
+
+services:
+  postgres:
+    image: postgres:16.15-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-labelstudio}
+      POSTGRES_USER: ${POSTGRES_USER:-labelstudio}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-labelstudio}
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U \"$${POSTGRES_USER}\" -d \"$${POSTGRES_DB}\""]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 20s
+    networks:
+      - yamato-net
+
+  redis:
+    image: redis:7.4.12-alpine
+    restart: unless-stopped
+    command: ["redis-server", "--appendonly", "yes"]
+    ports:
+      - "${REDIS_PORT:-6379}:6379"
+    volumes:
+      - redisdata:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+    networks:
+      - yamato-net
+
+  minio:
+    image: ${MINIO_IMAGE:-pgsty/minio:RELEASE.2026-08-04T00-00-00Z}
+    restart: unless-stopped
+    command: ["server", "/data", "--console-address", ":9001"]
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER:-minioadmin}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD:-minioadmin}
+    ports:
+      - "${MINIO_PORT:-9000}:9000"
+      - "${MINIO_CONSOLE_PORT:-9001}:9001"
+    volumes:
+      - miniodata:/data
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS http://127.0.0.1:9000/minio/health/live || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 15
+      start_period: 20s
+    networks:
+      - yamato-net
+
+  app:
+    build: *app-build
+    image: yamato/label-studio-app:dev
+    restart: unless-stopped
+    command: ["python", "label_studio/manage.py", "runserver", "0.0.0.0:8080"]
+    environment:
+      <<: *common-env
+      RUN_STARTUP_TASKS: "1"
+    ports:
+      - "${APP_PORT:-8080}:8080"
+    volumes:
+      - appdata:/label-studio/data
+      - ./models:/models
+      # 开发时源码直接来自宿主机，改完即时生效（runserver autoreload）
+      - ./label_studio:/label-studio/label_studio
+      - ./training:/label-studio/training
+      - ./services:/label-studio/services
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      minio:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS http://127.0.0.1:8080/health/ || exit 1"]
+      interval: 15s
+      timeout: 5s
+      retries: 10
+      start_period: 120s
+    networks:
+      - yamato-net
+
+  # 前端 HMR 开发服务器（node_modules 已烘焙在 web-dev 镜像中）
+  web:
+    build: *web-build
+    image: yamato/label-studio-web-dev:dev
+    restart: unless-stopped
+    working_dir: /build/web
+    command: ["yarn", "dev", "--host", "0.0.0.0"]
+    environment:
+      FRONTEND_HMR: "true"
+      FRONTEND_HOSTNAME: ${FRONTEND_HOSTNAME:-http://localhost:8010}
+      # webpack-dev-server 的代理目标：容器内访问 Django 用服务名 app
+      DJANGO_HOSTNAME: ${DJANGO_HOSTNAME:-http://app:8080}
+      NX_DAEMON: "false"
+      NODE_OPTIONS: --max-old-space-size=8192
+    ports:
+      - "${WEB_PORT:-8010}:8010"
+    volumes:
+      - ./web/apps:/build/web/apps
+      - ./web/libs:/build/web/libs
+      - ./web/tools:/build/web/tools
+      - ./web/scripts:/build/web/scripts
+    healthcheck:
+      test: ["CMD-SHELL", "node -e \"fetch('http://127.0.0.1:8010/react-app/').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))\""]
+      interval: 15s
+      timeout: 5s
+      retries: 20
+      start_period: 300s
+    networks:
+      - yamato-net
+
+  # FastAPI 训练/推理编排（训练执行占位，真实 YOLO 由 yolo-3 落地）
+  ml-api:
+    profiles: ["ml"]
+    build: *ml-build
+    image: yamato/label-studio-ml:dev
+    restart: unless-stopped
+    command:
+      - uvicorn
+      - services.ml_api.app:app
+      - --host
+      - 0.0.0.0
+      - --port
+      - "8991"
+      - --reload
+      - --reload-dir
+      - /label-studio/services
+      - --reload-dir
+      - /label-studio/training
+    environment:
+      <<: *common-env
+      RUN_STARTUP_TASKS: "0"
+    ports:
+      - "${ML_API_PORT:-8991}:8991"
+    volumes:
+      - ./models:/models
+      - ./services:/label-studio/services
+      - ./training:/label-studio/training
+    depends_on:
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS http://127.0.0.1:8991/health || exit 1"]
+      interval: 15s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+    networks:
+      - yamato-net
+
+  ml-worker:
+    profiles: ["ml"]
+    build: *ml-build
+    image: yamato/label-studio-ml:dev
+    restart: unless-stopped
+    command: ["rq", "worker", "training", "--url", "redis://redis:6379/0", "--name", "ml-worker"]
+    environment:
+      <<: *common-env
+      RUN_STARTUP_TASKS: "0"
+      RQ_WORKER_NAME: ml-worker
+    volumes:
+      - ./models:/models
+      - ./services:/label-studio/services
+      - ./training:/label-studio/training
+    depends_on:
+      redis:
+        condition: service_healthy
+      ml-api:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "python", "docker/healthcheck-worker.py"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    networks:
+      - yamato-net
+
+volumes:
+  pgdata:
+  miniodata:
+  appdata:
+  redisdata:
+
+networks:
+  yamato-net:
+    driver: bridge

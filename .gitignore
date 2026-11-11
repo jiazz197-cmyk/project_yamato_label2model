@@ -103,3 +103,9 @@ training/tests/__pycache__/
 .test_models/
 
 docs/project-intro-brief.md
+# 容器化模型目录（保留目录本身，内容不入库）
+models/*
+!models/.gitkeep
+
+# DSH 本地运行状态
+.dsh/

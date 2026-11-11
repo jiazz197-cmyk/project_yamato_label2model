@@ -1,0 +1,47 @@
+{
+  "name": "yamato-dev",
+  "dockerComposeFile": [
+    "../docker-compose.yml"
+  ],
+  "service": "app",
+  "runServices": [
+    "postgres",
+    "redis",
+    "minio",
+    "app",
+    "web"
+  ],
+  "workspaceFolder": "/label-studio",
+  "remoteUser": "app",
+  "overrideCommand": false,
+  "shutdownAction": "stopCompose",
+  "forwardPorts": [
+    8080,
+    8010,
+    8991,
+    9000,
+    9001,
+    5432,
+    6379
+  ],
+  "postCreateCommand": "python label_studio/manage.py migrate --noinput",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-python.python",
+        "ms-python.vscode-pylance",
+        "charliermarsh.ruff",
+        "dbaeumer.vscode-eslint",
+        "esbenp.prettier-vscode",
+        "biomejs.biome"
+      ],
+      "settings": {
+        "python.defaultInterpreterPath": "/usr/local/bin/python",
+        "python.analysis.extraPaths": [
+          "/label-studio/label_studio"
+        ],
+        "editor.formatOnSave": false
+      }
+    }
+  }
+}

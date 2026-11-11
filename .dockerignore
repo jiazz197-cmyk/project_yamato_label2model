@@ -1,0 +1,61 @@
+# 版本控制与本地开发工具
+.git
+.gitignore
+.github
+.gitlab-ci.yml
+.agents
+.devcontainer
+.claude
+.omo
+.ua
+.vscode
+.idea
+
+# 环境变量（.env.example 保留在仓库，但不进镜像）
+.env
+.env.*
+!.env.example
+
+# 文档与本地说明
+docs
+AGENTS.md
+CLAUDE.local.md
+*.md
+!README.md
+
+# 前端依赖与构建产物（镜像内重新构建）
+web/node_modules
+web/dist
+web/.nx
+.nx
+**/node_modules
+**/dist
+
+# Python 本地环境与缓存
+.venv
+venv
+**/__pycache__
+**/*.pyc
+*.egg-info
+.pytest_cache
+.ruff_cache
+.mypy_cache
+
+# 运行时数据
+data
+mydata
+models
+tmp
+.test_models
+*.sqlite3
+label_studio.sqlite3
+label_studio/core/media
+label_studio/core/export
+label_studio/core/downloads
+label_studio/core/static_build
+
+# 日志与临时文件
+*.log
+*.swp
+*.swo
+.DS_Store
