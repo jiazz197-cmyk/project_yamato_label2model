@@ -1,6 +1,6 @@
-"""Training REST API 测试（Sub-Issue 4）。
+"""Training REST API 测试（YOLO-only 收敛后）。
 
-运行方式（Windows，从 label_studio/ 目录）：
+运行方式（从 label_studio/ 目录，仓库根同一 pytest.ini）：
     $env:DJANGO_DB='sqlite'
     poetry run pytest -c pytest.ini ../training/tests/test_api.py
 
@@ -66,7 +66,7 @@ def project(business_client):
 
 @pytest.fixture
 def base_model(business_client):
-    """组织 A 的基模（SKLEARN，真实临时目录）。"""
+    """组织 A 的 YOLO 基模（真实临时目录 + 占位 .pt）。"""
     from training.tests.factories import BaseModelFactory
 
     return BaseModelFactory.create(organization=business_client.organization, created_by=business_client.user)
@@ -92,68 +92,36 @@ def test_list_base_models_other_org_hidden(business_client, other_client, base_m
 
 
 @pytest.mark.django_db
+def test_cross_org_base_model_detail_403(business_client, other_client, base_model):
+    """组织 B GET 组织 A 的 base-models/<pk>/ → 403（对象级权限）。"""
+    response = other_client.get(f'/api/training/base-models/{base_model.id}/')
+    assert response.status_code == 403
+
+
+@pytest.mark.django_db
 def test_create_training_job(business_client, project, base_model):
-    """POST /api/training/jobs → 201、status=Pending、celery_task_id 非空。"""
+    """POST /api/training/jobs → 201、status=Pending、不再返回 celery 字段。"""
     response = business_client.post(
         '/api/training/jobs/',
         data={
             'project': project.id,
             'base_model': base_model.id,
             'train_subset': 'HasGT',
-            'hyperparams': {'max_iter': 100},
+            'hyperparams': {'epochs': 10},
         },
         format='json',
     )
     assert response.status_code == 201, response.content
     data = response.json()
     assert data['status'] == 'Pending'
-    assert data['celery_task_id']
-
-
-@pytest.mark.django_db
-def test_create_test_run_with_base_model(business_client, project, base_model):
-    """POST /api/training/test-runs（base_model_id 零样本）→ 201。"""
-    response = business_client.post(
-        '/api/training/test-runs/',
-        data={
-            'project': project.id,
-            'base_model_id': base_model.id,
-            'test_subset': 'Sample',
-        },
-        format='json',
-    )
-    assert response.status_code == 201, response.content
-    data = response.json()
-    assert data['status'] == 'Pending'
-    assert data['celery_task_id']
-
-
-@pytest.mark.django_db
-def test_create_test_run_with_training_job(business_client, project, base_model):
-    """POST /api/training/test-runs（training_job_id 训练产物测试）→ 201。"""
-    from training.models import TrainingJob
-
-    job = TrainingJob.objects.create(
-        base_model=base_model,
-        project=project,
-        organization=business_client.organization,
-        created_by=business_client.user,
-    )
-    response = business_client.post(
-        '/api/training/test-runs/',
-        data={
-            'project': project.id,
-            'training_job_id': job.id,
-            'test_subset': 'All',
-        },
-        format='json',
-    )
-    assert response.status_code == 201, response.content
+    assert 'celery_task_id' not in data
+    assert data['artifact_path'] in (None, '')
+    assert data['metrics'] == {}
 
 
 @pytest.mark.django_db
 def test_unauthenticated_post_401(business_client, project, base_model):
-    """未登录 POST → 401（DRF NotAuthenticated）。"""
+    """未登录 POST → 401（DRF 默认 IsAuthenticated）。"""
     from rest_framework.test import APIClient
 
     anon = APIClient()
@@ -215,41 +183,28 @@ def test_cross_org_post_job_403(business_client, other_client, project, base_mod
 
 
 @pytest.mark.django_db
-def test_test_run_xor_validation(business_client, project, base_model):
-    """base_model_id 与 training_job_id 同给或都不给 → 400。"""
-    # 都不给
-    response = business_client.post(
-        '/api/training/test-runs/',
-        data={'project': project.id, 'test_subset': 'HasGT'},
-        format='json',
-    )
-    assert response.status_code == 400
+def test_cross_org_base_model_in_job_403(business_client, other_client, project):
+    """组织 A POST 使用组织 B 的 base_model → 403。"""
+    from training.tests.factories import BaseModelFactory
 
-    # 都给
-    from training.models import TrainingJob
-
-    job = TrainingJob.objects.create(
-        base_model=base_model,
-        project=project,
-        organization=business_client.organization,
-        created_by=business_client.user,
+    other_base_model = BaseModelFactory.create(
+        organization=other_client.organization, created_by=other_client.user
     )
     response = business_client.post(
-        '/api/training/test-runs/',
+        '/api/training/jobs/',
         data={
             'project': project.id,
-            'base_model_id': base_model.id,
-            'training_job_id': job.id,
-            'test_subset': 'HasGT',
+            'base_model': other_base_model.id,
+            'train_subset': 'HasGT',
         },
         format='json',
     )
-    assert response.status_code == 400
+    assert response.status_code == 403
 
 
 @pytest.mark.django_db
 def test_cancel_training_job(business_client, project, base_model):
-    """PATCH action=cancel → 200 且 status=Canceled（Sub-Issue 4 cancel seam）。"""
+    """PATCH action=cancel → 200 且 status=Canceled。"""
     from training.models import TrainingJob
 
     response = business_client.post(
@@ -313,3 +268,18 @@ def test_scan_local_models(business_client):
     response = business_client.get('/api/training/base-models/scan/')
     assert response.status_code == 200, response.content
     assert isinstance(response.json(), list)
+
+
+@pytest.mark.django_db
+def test_test_run_endpoints_removed(business_client):
+    """TestRun 清理后，test-runs 路由不再存在 → 404。"""
+    assert business_client.get('/api/training/test-runs/').status_code == 404
+    assert business_client.get('/api/training/test-runs/1/').status_code == 404
+
+
+def test_no_training_permission_points():
+    """core.permissions 中不再新增 training.* 权限点。"""
+    from core.permissions import AllPermissions
+
+    names = {name for name, _ in AllPermissions()}
+    assert not any(name.startswith('training_') for name in names)

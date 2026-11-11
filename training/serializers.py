@@ -1,14 +1,13 @@
-"""Training REST API 序列化器（BaseModel / TrainingJob / TestRun）。
+"""Training REST API 序列化器（BaseModel / TrainingJob）。
 
 - BaseModelSerializer：只读（列表/详情均不提供写入端点）。
 - TrainingJobSerializer：写字段仅 base_model/project/train_subset/hyperparams。
-- TestRunSerializer：project 必填；base_model_id 与 training_job_id 二选一（write_only）。
 """
 
 from projects.models import Project
 from rest_framework import serializers
 
-from training.models import BaseModel, TestRun, TrainingJob
+from training.models import BaseModel, TrainingJob
 
 
 class BaseModelSerializer(serializers.ModelSerializer):
@@ -60,7 +59,6 @@ class TrainingJobSerializer(serializers.ModelSerializer):
             'metrics',
             'artifact_path',
             'model_version',
-            'celery_task_id',
             'error_message',
             'created_at',
             'started_at',
@@ -72,54 +70,8 @@ class TrainingJobSerializer(serializers.ModelSerializer):
             'metrics',
             'artifact_path',
             'model_version',
-            'celery_task_id',
             'error_message',
             'created_at',
             'started_at',
             'completed_at',
         ]
-
-
-class TestRunSerializer(serializers.ModelSerializer):
-    project = serializers.PrimaryKeyRelatedField(queryset=Project.objects.all())
-    base_model_id = serializers.PrimaryKeyRelatedField(
-        source='base_model', queryset=BaseModel.objects.all(), required=False, write_only=True
-    )
-    training_job_id = serializers.PrimaryKeyRelatedField(
-        source='training_job', queryset=TrainingJob.objects.all(), required=False, write_only=True
-    )
-
-    class Meta:
-        model = TestRun
-        fields = [
-            'id',
-            'project',
-            'base_model_id',
-            'training_job_id',
-            'test_subset',
-            'status',
-            'metrics',
-            'celery_task_id',
-            'error_message',
-            'created_at',
-            'started_at',
-            'completed_at',
-        ]
-        read_only_fields = [
-            'id',
-            'status',
-            'metrics',
-            'celery_task_id',
-            'error_message',
-            'created_at',
-            'started_at',
-            'completed_at',
-        ]
-
-    def validate(self, attrs):
-        """base_model_id 与 training_job_id 必须二选一。"""
-        base_model = attrs.get('base_model')
-        training_job = attrs.get('training_job')
-        if (base_model is None) == (training_job is None):
-            raise serializers.ValidationError('base_model_id 和 training_job_id 必须二选一')
-        return attrs

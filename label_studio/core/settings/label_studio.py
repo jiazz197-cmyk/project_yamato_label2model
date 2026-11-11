@@ -86,13 +86,8 @@ if REDIS_ENABLED:
         }
         for q in ('critical', 'high', 'default', 'low')
     }
-    # Celery 任务队列的 broker/result backend 地址。
-    # 复用上面同一份 Redis 连接（RQ_QUEUES 与 Celery 共用），
-    # 由 .env 的 REDIS_HOST/REDIS_PORT/REDIS_DB 派生；REDIS_DB 缺省为 0。
-    # 仅当 REDIS_ENABLED=True 时定义——celery_app.py 侧用 getattr 兜底。
-    CELERY_BROKER_URL = f'redis://{_REDIS_HOST}:{_REDIS_PORT}/{_REDIS_DB}'
 
-# === Training (Sub-Issue 2) ===
+# === Training ===
 # 本地预置模型根目录：上传的模型与训练产物统一存放于此
 # （模型只走本地盘，不经 MinIO；默认 data/models 相对项目根解析）。
 LOCAL_MODEL_ROOT = get_env('LOCAL_MODEL_ROOT', os.path.join(BASE_DATA_DIR, 'models'))

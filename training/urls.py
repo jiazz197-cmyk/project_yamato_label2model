@@ -10,8 +10,6 @@ _api_urlpatterns = [
     path('base-models/<int:pk>/', api.BaseModelDetailAPI.as_view(), name='base-model-detail'),
     path('jobs/', api.TrainingJobListAPI.as_view(), name='job-list'),
     path('jobs/<int:pk>/', api.TrainingJobDetailAPI.as_view(), name='job-detail'),
-    path('test-runs/', api.TestRunListAPI.as_view(), name='test-run-list'),
-    path('test-runs/<int:pk>/', api.TestRunDetailAPI.as_view(), name='test-run-detail'),
 ]
 
 urlpatterns = [

@@ -76,10 +76,6 @@ dependencies = [
     # torch：CUDA 版（源 pytorch-cu128，见下方 [[tool.poetry.source]]）；
     #   python_version >=3.11 标记由 poetry 按各包 requires-python 自动生成。
     "torch (>=2.11.0,<3.0.0)",
-    "scikit-learn (>=1.9.0,<2.0.0) ; python_version >= \"3.11\"",
-    "transformers (>=5.15.0,<6.0.0) ; python_version >= \"3.11\"",
-    "joblib (>=1.5.3,<2.0.0) ; python_version >= \"3.11\"",
-    "celery (>=5.3,<6.0) ; python_version >= \"3.11\"",
     "fastapi (>=0.141.1,<0.142.0) ; python_version >= \"3.11\"",
     "uvicorn[standard] (>=0.52.3,<0.53.0) ; python_version >= \"3.11\"",
     "ultralytics (>=8.3,<9.0) ; python_version >= \"3.11\""
