@@ -11,6 +11,7 @@
 | `Dockerfile` | **保留（dev-first 多阶段）** | 阶段：`web-deps` → `web` / `web-dev`；`python-deps` → `runtime` → `app` → `ml`。镜像只装依赖与工具链，源码由 compose 挂载。 |
 | `docker-compose.yml` | **保留（开发编排）** | 默认 5 个服务；`ml` profile 增加 `ml-api`、`ml-worker`，共 7 个。`docker-compose.override.example.yml` 已删除，不再需要手工复制 override。 |
 | `.devcontainer/devcontainer.json` | **新增** | 复用 compose 的 `app` 服务，推荐入口；细节见附录 B。 |
+| `docker-compose.devcontainer.yml` | **新增** | 仅 devcontainer 叠加：把仓库根目录挂到 `/label-studio`，使 web/services/pyproject 可直接编辑。 |
 | `.env.example` | **保留（可选模板）** | 不复制也能用 compose 内置开发默认值；生产必须覆盖敏感项。 |
 | `Makefile` | **更新（dev-first）** | 默认目标 `dev-up`；新增 `dev-*` / `ml-*`，旧 `docker-*` 保留为别名。 |
 | `services/ml_api/` | **新增** | FastAPI 训练域：`app.py`（接口）、`models.py` / `db.py`（SQLAlchemy）、`migrations/`（Alembic）、`db_bootstrap.py`、`jobs.py`（RQ 作业）、`yolo.py` / `yolo_adapter.py`（由 Django training 迁入）。 |
@@ -307,7 +308,7 @@ docker compose up -d web
 
 | 配置 | 值 |
 |---|---|
-| `dockerComposeFile` | `../docker-compose.yml` |
+| `dockerComposeFile` | `../docker-compose.yml` + `../docker-compose.devcontainer.yml`（后者把仓库根目录挂到 `/label-studio`，让 web/services/pyproject 可直接编辑） |
 | `service` | `app` |
 | `runServices` | `postgres`、`redis`、`minio`、`app`、`web`（默认不含 ml profile） |
 | `workspaceFolder` | `/label-studio` |
@@ -318,4 +319,4 @@ docker compose up -d web
 | `postCreateCommand` | `python label_studio/manage.py migrate --noinput` |
 | VS Code 扩展 | `ms-python.python`、`ms-python.vscode-pylance`、`charliermarsh.ruff`、`dbaeumer.vscode-eslint`、`esbenp.prettier-vscode`、`biomejs.biome` |
 
-需要 ml profile 时，在宿主机终端执行 `docker compose --profile ml up -d`；devcontainer 会复用同一个 compose 项目，无需改动配置文件。
+需要 ml profile 时，在宿主机终端执行 `docker compose --profile ml up -d`；devcontainer 会复用同一个 compose 项目，无需改动配置文件。compose 命令也都在宿主机执行（devcontainer 内没有 Docker socket）。

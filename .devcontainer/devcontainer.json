@@ -1,7 +1,8 @@
 {
   "name": "yamato-dev",
   "dockerComposeFile": [
-    "../docker-compose.yml"
+    "../docker-compose.yml",
+    "../docker-compose.devcontainer.yml"
   ],
   "service": "app",
   "runServices": [

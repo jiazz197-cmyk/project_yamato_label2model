@@ -1,0 +1,14 @@
+# 仅供 VS Code Dev Containers 使用，命令行开发不需要这个文件。
+#
+# 基础 compose 只把 label_studio/ 挂进 app 容器；这里再把仓库根目录挂到
+# /label-studio，让 devcontainer 的工作区与宿主机源码完全一致：
+# web/、services/、pyproject.toml、Dockerfile 等都可以直接在 VS Code 里编辑。
+#
+# 用法（由 .devcontainer/devcontainer.json 自动叠加，无需手工 -f）：
+#   docker compose -f docker-compose.yml -f docker-compose.devcontainer.yml up -d
+services:
+  app:
+    volumes:
+      # 父挂载 + 基础 compose 里的 ./label_studio 子挂载可以共存；
+      # Docker 会按挂载路径深度处理，子路径仍指向宿主机同一份源码。
+      - .:/label-studio

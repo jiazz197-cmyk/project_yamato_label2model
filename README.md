@@ -176,10 +176,14 @@ docker compose build web   # 只重建 web
 
 ### devcontainer 说明
 
-- 配置文件：`.devcontainer/devcontainer.json`；复用 `docker-compose.yml`，进入 `app` 服务。
+- 配置文件：`.devcontainer/devcontainer.json` + `docker-compose.devcontainer.yml`；复用 `docker-compose.yml`，进入 `app` 服务。
 - 默认启动 `postgres`、`redis`、`minio`、`app`、`web`（不含 ml profile），并执行 `python label_studio/manage.py migrate --noinput`。
-- 工作目录 `/label-studio`，远程用户 `app`；`overrideCommand: false` 表示沿用 compose 中 app 的启动命令（`runserver`）。
-- 需要在容器里使用 ml profile 时，建议在**宿主机终端**执行 `docker compose --profile ml up -d`（devcontainer 不默认启动 ml 服务）。
+- 工作区**整个仓库** bind mount 到 `/label-studio`（`docker-compose.devcontainer.yml` 里的 `.:/label-studio`），因此 `label_studio/`、`web/`、`services/`、`pyproject.toml` 都能直接在 VS Code 里改；命令行 `docker compose up -d` 不加载这个 override。
+- 远程用户 `app`；`overrideCommand: false` 表示沿用 compose 中 app 的启动命令（`runserver`）。
+- VS Code 终端就在 `app` 容器内，可以直接跑 `python label_studio/manage.py ...`、`pytest`；**compose 命令请在宿主机终端执行**（devcontainer 未挂载 Docker socket）。
+- 依赖或 Dockerfile 变化后：宿主机执行 `make dev-rebuild`（必要时 `make ml-rebuild`），再在 VS Code 执行 **Dev Containers: Rebuild Container**。
+- 需要 ml profile 时，在**宿主机终端**执行 `docker compose --profile ml up -d`；devcontainer 不默认启动 ml 服务。
+- `shutdownAction: stopCompose`：关闭 VS Code 窗口时会停止这套 compose，数据卷与 `./models` 保留。
 
 ## 训练 / 推理架构
 
@@ -406,24 +410,45 @@ ls models/
 
 ### 新增前端依赖后页面报模块找不到
 
-修改 `web/package.json` 并更新 `web/yarn.lock` 后重建镜像：
+修改 `web/package.json` 后先更新 `web/yarn.lock`（二选一）：
+
+```bash
+# 宿主机有 Node/corepack（本机 Node 22 自带 corepack）
+cd web && corepack yarn install
+
+# 或者用 web-dev 镜像生成 lock（会把 node_modules 装到宿主机 web/）
+docker run --rm -u "$(id -u):$(id -g)" -e HOME=/tmp \
+  -v "$PWD/web":/build/web -w /build/web \
+  --entrypoint yarn yamato/label-studio-web-dev:dev install
+```
+
+然后重建镜像：
 
 ```bash
 docker compose build web app
 docker compose up -d
 ```
 
-`node_modules` 烘焙在 `web-dev` 镜像里，而不是宿主机挂载目录；只改 `package.json` 不重建是不会生效的。
+`node_modules` 烘焙在 `web-dev` 镜像里，而不是宿主机挂载目录；只改 `package.json`、不更新 `yarn.lock` 或不重建，都不会生效。
 
 ### 后端 / ml 依赖变更
 
-- `pyproject.toml`、`poetry.lock`、`poetry.toml` 变化：`make dev-rebuild`（重建 app + web），必要时 `make ml-rebuild`。
+- `pyproject.toml` 变化：先更新 `poetry.lock`，再 `make dev-rebuild`（重建 app + web），必要时 `make ml-rebuild`。
+
+  ```bash
+  # 宿主机没装 Poetry 时，用 app 镜像生成 lock（在仓库根目录执行）
+  docker run --rm -u "$(id -u):$(id -g)" -e HOME=/tmp \
+    -e POETRY_CACHE_DIR=/tmp/poetry-cache \
+    -v "$PWD":/label-studio -w /label-studio \
+    --entrypoint poetry yamato/label-studio-app:dev lock
+  ```
+
 - `services/requirements-ml.txt`、`TORCH_*` / `ML_PIP_INDEX_URL` 等构建参数变化：`make ml-rebuild` 后 `make ml-up`。
-- 只改 Python 源码、不新增依赖时不需要重建。
+- 只改 Python 源码、不新增依赖时不需要重建；不要用 `docker compose down -v`，那会清空数据库和 MinIO 数据。
 
 ### 镜像太大 / 磁盘占用高
 
-本机首次构建后的镜像体积量级：`app` ≈ 1.52 GB，`ml` ≈ 3.61 GB，`web-dev` ≈ 9.66 GB。`web-dev` 偏大的原因是把 `node_modules` 烘焙进了镜像，换取容器启动即可 HMR；后续可考虑改用命名卷缓存 `node_modules` 来瘦身。清理不再使用的构建缓存：
+本机首次构建后的镜像体积量级：`app` ≈ 1.52 GB，`ml` ≈ 3.65 GB，`web-dev` ≈ 9.66 GB。`web-dev` 偏大的原因是把 `node_modules` 烘焙进了镜像，换取容器启动即可 HMR；后续可考虑改用命名卷缓存 `node_modules` 来瘦身。清理不再使用的构建缓存：
 
 ```bash
 docker image prune
