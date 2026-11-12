@@ -157,10 +157,11 @@ services:
     ports:
       - "${APP_PORT:-8080}:8080"
     volumes:
+      # 整个仓库挂进容器：命令行与 VS Code devcontainer 行为一致，
+      # 改 label_studio/、web/、services/ 都直接落回宿主机源码。
+      - .:/label-studio
       - appdata:/label-studio/data
       - ./models:/models
-      # 开发时源码直接来自宿主机，改完即时生效（runserver autoreload）
-      - ./label_studio:/label-studio/label_studio
     depends_on:
       postgres:
         condition: service_healthy

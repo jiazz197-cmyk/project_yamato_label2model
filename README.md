@@ -124,7 +124,7 @@ make docker-admin-org EMAIL=<你的邮箱>
 
 | 服务 | 挂载 |
 |---|---|
-| `app` | `./label_studio` → `/label-studio/label_studio`；`appdata` → `/label-studio/data`；`./models` → `/models` |
+| `app` | `.` → `/label-studio`（整个仓库）；`appdata` → `/label-studio/data`；`./models` → `/models` |
 | `web` | `./web/apps`、`./web/libs`、`./web/tools`、`./web/scripts` → 对应容器目录（`node_modules` 与构建配置来自镜像） |
 | `ml-api` | `./services` → `/label-studio/services`；`./models` → `/models` |
 | `ml-worker` | 同 `ml-api` |
@@ -168,7 +168,7 @@ docker compose build web   # 只重建 web
 - `web` 容器（webpack dev server）监听 8010，`publicPath` 为 `/react-app/`；它把 `/api` 代理到 `http://app:8080/api`，其余请求代理到 `http://app:8080`。
 - `web` 容器的 `DJANGO_HOSTNAME` 是**容器内部代理目标** `http://app:8080`，不是浏览器访问地址；浏览器侧地址由 `FRONTEND_HOSTNAME` 控制。
 - 修改 `web/apps`、`web/libs` 等挂载目录下的源码会触发 HMR；`web` 的依赖与配置（`package.json`、`yarn.lock`、`webpack.config.js`、`tsconfig` 等）烘焙在镜像中，修改后必须重建。
-- 把 `FRONTEND_HMR` 设为 `0` 可回退到镜像内的 `web/dist` 静态资源。
+- 把 `FRONTEND_HMR` 设为 `0` 可回退到静态资源；但 `app` 现在挂载整个仓库，镜像内的 `web/dist` 被宿主机目录遮住，回退前需要先在宿主机执行 `cd web && yarn build` 生成 `web/dist`。
 
 ### 远程 / 局域网访问
 
@@ -176,9 +176,9 @@ docker compose build web   # 只重建 web
 
 ### devcontainer 说明
 
-- 配置文件：`.devcontainer/devcontainer.json` + `docker-compose.devcontainer.yml`；复用 `docker-compose.yml`，进入 `app` 服务。
+- 配置文件：`.devcontainer/devcontainer.json`；复用 `docker-compose.yml`，进入 `app` 服务。
 - 默认启动 `postgres`、`redis`、`minio`、`app`、`web`（不含 ml profile），并执行 `python label_studio/manage.py migrate --noinput`。
-- 工作区**整个仓库** bind mount 到 `/label-studio`（`docker-compose.devcontainer.yml` 里的 `.:/label-studio`），因此 `label_studio/`、`web/`、`services/`、`pyproject.toml` 都能直接在 VS Code 里改；命令行 `docker compose up -d` 不加载这个 override。
+- 工作区**整个仓库** bind mount 到 `/label-studio`（基础 compose 里的 `.:/label-studio`），因此 `label_studio/`、`web/`、`services/`、`pyproject.toml` 都能直接在 VS Code 里改；命令行 `docker compose up -d` 与 devcontainer 使用同一套挂载。
 - 远程用户 `app`；`overrideCommand: false` 表示沿用 compose 中 app 的启动命令（`runserver`）。
 - VS Code 终端就在 `app` 容器内，可以直接跑 `python label_studio/manage.py ...`、`pytest`；**compose 命令请在宿主机终端执行**（devcontainer 未挂载 Docker socket）。
 - 依赖或 Dockerfile 变化后：宿主机执行 `make dev-rebuild`（必要时 `make ml-rebuild`），再在 VS Code 执行 **Dev Containers: Rebuild Container**。

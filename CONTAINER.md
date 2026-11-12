@@ -11,7 +11,6 @@
 | `Dockerfile` | **保留（dev-first 多阶段）** | 阶段：`web-deps` → `web` / `web-dev`；`python-deps` → `runtime` → `app` → `ml`。镜像只装依赖与工具链，源码由 compose 挂载。 |
 | `docker-compose.yml` | **保留（开发编排）** | 默认 5 个服务；`ml` profile 增加 `ml-api`、`ml-worker`，共 7 个。`docker-compose.override.example.yml` 已删除，不再需要手工复制 override。 |
 | `.devcontainer/devcontainer.json` | **新增** | 复用 compose 的 `app` 服务，推荐入口；细节见附录 B。 |
-| `docker-compose.devcontainer.yml` | **新增** | 仅 devcontainer 叠加：把仓库根目录挂到 `/label-studio`，使 web/services/pyproject 可直接编辑。 |
 | `.env.example` | **保留（可选模板）** | 不复制也能用 compose 内置开发默认值；生产必须覆盖敏感项。 |
 | `Makefile` | **更新（dev-first）** | 默认目标 `dev-up`；新增 `dev-*` / `ml-*`，旧 `docker-*` 保留为别名。 |
 | `services/ml_api/` | **新增** | FastAPI 训练域：`app.py`（接口）、`models.py` / `db.py`（SQLAlchemy）、`migrations/`（Alembic）、`db_bootstrap.py`、`jobs.py`（RQ 作业）、`yolo.py` / `yolo_adapter.py`（由 Django training 迁入）。 |
@@ -103,7 +102,7 @@ docker compose up -d        # 或 make dev-up / make
 | `postgres` | 官方镜像默认入口 | 5432 | `pgdata` | `pg_isready` |
 | `redis` | `redis-server --appendonly yes` | 6379 | `redisdata` | `redis-cli ping` |
 | `minio` | `server /data --console-address :9001` | 9000 / 9001 | `miniodata` | `/minio/health/live` |
-| `app` | `python label_studio/manage.py runserver 0.0.0.0:8080` | 8080 | `appdata`、`./models`、`./label_studio` | `curl /health/` |
+| `app` | `python label_studio/manage.py runserver 0.0.0.0:8080` | 8080 | `.`（整个仓库 → `/label-studio`）、`appdata`、`./models` | `curl /health/` |
 | `web` | `yarn dev --host 0.0.0.0` | 8010 | `./web/apps`、`libs`、`tools`、`scripts` | `node fetch /react-app/` |
 
 `app` 启动时由 entrypoint 自动迁移并幂等创建 MinIO bucket；`web` 首次启动需要编译，健康检查 `start_period` 为 300 秒。
@@ -248,6 +247,7 @@ docker compose up -d web
 
 - **`web-dev` 镜像约 9.66 GB**：`node_modules` 烘焙在镜像中换取启动即 HMR；后续可改为命名卷缓存以瘦身。
 - **HMR 依赖 `app` + `web` 两个服务同时运行**：8080 的页面、8010 的资源、容器内 `app:8080` 代理三者缺一不可。
+- **app 挂载整个仓库后，镜像内 `web/dist` 被遮住**：默认 `FRONTEND_HMR=1` 不受影响；若要 `FRONTEND_HMR=0` 的静态回退，需先在宿主机构建 `web/dist`。
 - **真实 YOLO 训练/推理未实现**：训练域 CRUD 已可用，但任务创建后不会入队执行；`/api/predictions` 与训练执行仍是 501 占位。
 - **训练域表结构由 Alembic 维护**：旧库首次启动会 `stamp head`；若曾手工改过 `training_*` 表结构，需要自行对齐后再升级。
 - **开发默认凭据仅限本机**：数据库、MinIO、`ML_API_INTERNAL_TOKEN` 等默认值只适合单机；共享/生产必须通过 `.env` 覆盖。
@@ -308,7 +308,7 @@ docker compose up -d web
 
 | 配置 | 值 |
 |---|---|
-| `dockerComposeFile` | `../docker-compose.yml` + `../docker-compose.devcontainer.yml`（后者把仓库根目录挂到 `/label-studio`，让 web/services/pyproject 可直接编辑） |
+| `dockerComposeFile` | `../docker-compose.yml`（基础 compose 已把整个仓库挂到 `/label-studio`，devcontainer 与命令行挂载一致） |
 | `service` | `app` |
 | `runServices` | `postgres`、`redis`、`minio`、`app`、`web`（默认不含 ml profile） |
 | `workspaceFolder` | `/label-studio` |
