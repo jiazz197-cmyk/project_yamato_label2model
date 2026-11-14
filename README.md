@@ -4,9 +4,9 @@
 
 > **dev-first**
 >
-> 默认 `docker compose up -d` 只启动 **5 个服务**：`postgres`、`redis`、`minio`、`app`、`web`。源码通过 bind mount 挂进容器，**改代码即时生效**（Django `runserver` 自动重载 + webpack dev server HMR），不需要重建镜像。只有依赖清单、Dockerfile 或前端构建配置变化时才需要重建。
+> 默认 `docker compose up -d` 只启动 **6 个服务**：`postgres`、`redis`、`minio`、`app`、`web`、`worker`。源码通过 bind mount 挂进容器，**改代码即时生效**（Django `runserver` 自动重载 + webpack dev server HMR），不需要重建镜像。只有依赖清单、Dockerfile 或前端构建配置变化时才需要重建。
 >
-> 训练/推理侧车在 `ml` profile 中按需启动（`docker compose --profile ml up -d`），共 **7 个服务**：再加 `ml-api`、`ml-worker`。训练域（BaseModel / TrainingJob / `/api/training/`）已完整迁移到 FastAPI：Django 只保留登录态与组织上下文并转发请求，表结构由 ml-api 启动时的 Alembic 引导维护；真实 YOLO 训练执行与推理仍由 yolo-3 落地（对应接口返回 501）。
+> 训练/推理侧车在 `ml` profile 中按需启动（`docker compose --profile ml up -d`），共 **8 个服务**：再加 `ml-api`、`ml-worker`。训练域（BaseModel / TrainingJob / `/api/training/`）已完整迁移到 FastAPI：Django 只保留登录态与组织上下文并转发请求，表结构由 ml-api 启动时的 Alembic 引导维护；真实 YOLO 训练执行与推理仍由 yolo-3 落地（对应接口返回 501）。
 >
 > 推荐使用 **VS Code Dev Containers**：打开仓库后执行 `Dev Containers: Reopen in Container`，环境、端口和扩展一次配好；命令行方式作为备选。
 
@@ -88,7 +88,7 @@ make docker-admin-org EMAIL=<你的邮箱>
    # 或 make dev-ps
    ```
 
-   预期 5 个服务全部 `healthy`（`web` 首次启动最长约 5 分钟；`app` 首次启动约 1–2 分钟）。
+   预期 6 个服务全部 `healthy`（`web` 首次启动最长约 5 分钟；`app` 首次启动约 1–2 分钟）。
 
 5. 需要训练/推理侧车时，再加 ml profile：
 
@@ -109,16 +109,38 @@ make docker-admin-org EMAIL=<你的邮箱>
 | 服务 | profile | 宿主机端口（默认） | 镜像 | 作用 |
 |---|---|---|---|---|
 | `postgres` | 默认 | 5432（`POSTGRES_PORT`） | `postgres:16.15-alpine` | 应用数据库 |
-| `redis` | 默认 | 6379（`REDIS_PORT`） | `redis:7.4.12-alpine` | django-rq / RQ 训练队列 broker、进度 pub/sub |
+| `redis` | 默认 | 6379（`REDIS_PORT`） | `redis:7.4.12-alpine` | django-rq / RQ 队列 broker（LS + 训练） |
 | `minio` | 默认 | 9000（`MINIO_PORT`）/ 9001（`MINIO_CONSOLE_PORT`） | `pgsty/minio:RELEASE.2026-08-04T00-00-00Z` | S3 兼容对象存储 / Web Console |
 | `app` | 默认 | 8080（`APP_PORT`） | `yamato/label-studio-app:dev` | Django + DRF，`runserver` 自动重载；挂载源码 |
 | `web` | 默认 | 8010（`WEB_PORT`） | `yamato/label-studio-web-dev:dev` | webpack dev server，前端 HMR；挂载 `web/apps`、`libs`、`tools`、`scripts` |
+| `worker` | 默认 | — | `yamato/label-studio-app:dev` | Label Studio RQ worker（critical/high/default/low），默认 16 进程可调 |
 | `ml-api` | `ml` | 8991（`ML_API_PORT`） | `yamato/label-studio-ml:dev` | FastAPI 训练/推理编排入口，`uvicorn --reload` |
-| `ml-worker` | `ml` | — | 同 ml 镜像 | RQ worker，消费 `training` 队列 |
+| `ml-worker` | `ml` | — | 同 ml 镜像 | RQ worker-pool，消费 `training`，默认 2 进程，GPU |
 
 - 全部服务在自定义 bridge 网络 `yamato-net` 上，服务名即 DNS（例如 `web` 容器内通过 `http://app:8080` 访问 Django）。
-- 默认 `docker compose up -d` 只启动 5 个；`docker compose --profile ml up -d` 启动全部 7 个。
+- 默认 `docker compose up -d` 只启动 6 个；`docker compose --profile ml up -d` 启动全部 8 个。
+- 宿主机端口全部绑定 `127.0.0.1`；远程访问必须通过 VS Code Ports / SSH 转发，直接访问局域网或 Tailscale IP 不可用。
 - `ml-worker` 没有对外端口；`ml-api` 与 `ml-worker` 共用同一个 ml 镜像，仅启动命令不同。
+
+### GPU / CUDA 训练镜像
+
+训练镜像默认按 **CUDA 13.0（cu130）** 构建，适配本机 `RTX 4090 48GB / 驱动 596.36 / CUDA 13.2`：
+
+- `TORCH_INDEX_URL` 默认 `https://mirrors.nju.edu.cn/pytorch/whl/cu130`
+- `ML_PIP_INDEX_URL` 默认 `https://mirrors.aliyun.com/pypi/simple/`
+- torch / torchvision 为 `2.11.0` / `0.26.0`；Dockerfile 内升级到 pip>=26 并用 `--resume-retries 50`，大 wheel 断流可续传
+- 宿主机需要 NVIDIA Container Toolkit；`ml-worker` 通过 `gpus: all` 获取 GPU
+- 训练并发默认 2（`ML_WORKER_CONCURRENCY`），两个进程共享同一张 GPU；单卡不承诺线性加速
+
+构建与验证：
+
+```bash
+docker compose build ml-api
+docker run --rm --gpus all yamato/label-studio-ml:dev \
+  python -c "import torch; print(torch.__version__, torch.version.cuda, torch.cuda.is_available(), torch.cuda.get_device_name(0))"
+```
+
+预期输出包含 `2.11.0+cu130 13.0 True NVIDIA GeForce RTX 4090`。
 
 ### 源码挂载与数据卷
 
@@ -126,6 +148,7 @@ make docker-admin-org EMAIL=<你的邮箱>
 |---|---|
 | `app` | `.` → `/label-studio`（整个仓库）；`appdata` → `/label-studio/data`；`./models` → `/models` |
 | `web` | `./web/apps`、`./web/libs`、`./web/tools`、`./web/scripts` → 对应容器目录（`node_modules` 与构建配置来自镜像） |
+| `worker` | `.` → `/label-studio`；`appdata` → `/label-studio/data` |
 | `ml-api` | `./services` → `/label-studio/services`；`./models` → `/models` |
 | `ml-worker` | 同 `ml-api` |
 | `postgres` | 命名卷 `pgdata` → `/var/lib/postgresql/data` |
@@ -172,12 +195,14 @@ docker compose build web   # 只重建 web
 
 ### 远程 / 局域网访问
 
-默认配置假设浏览器就在本机。若要从另一台机器访问，把 `.env` 中的 `HOST` 与 `FRONTEND_HOSTNAME` 改成实际可访问地址（例如 `http://192.168.1.10:8080` / `http://192.168.1.10:8010`），然后 `docker compose up -d` 让 `app` 重建容器。`DJANGO_HOSTNAME` 保持容器内部地址 `http://app:8080` 不应改成外网地址。使用 VS Code Dev Containers 时，forwardPorts 会把 8080/8010 转到本机，`localhost` 方式直接可用。
+默认配置假设浏览器就在本机，或通过 VS Code Ports / SSH 转发访问。所有宿主机端口只绑 `127.0.0.1`；Remote-SSH 需要同时转发 **8080 和 8010**，Dev Containers 模式由 `.devcontainer` 的 `forwardPorts` 自动处理。
+
+若确实需要局域网/Tailscale 直连，必须同时把 `docker-compose.yml` 里对应端口的绑定地址从 `127.0.0.1` 改成具体网卡 IP，并把 `.env` 中的 `HOST` 与 `FRONTEND_HOSTNAME` 改成该地址；只改 `.env` 不够。`DJANGO_HOSTNAME` 始终是容器内部地址 `http://app:8080`，不要改成外网地址。
 
 ### devcontainer 说明
 
 - 配置文件：`.devcontainer/devcontainer.json`；复用 `docker-compose.yml`，进入 `app` 服务。
-- 默认启动 `postgres`、`redis`、`minio`、`app`、`web`（不含 ml profile），并执行 `python label_studio/manage.py migrate --noinput`。
+- 默认启动 `postgres`、`redis`、`minio`、`app`、`web`、`worker`（不含 ml profile），并执行 `python label_studio/manage.py migrate --noinput`。
 - 工作区**整个仓库** bind mount 到 `/label-studio`（基础 compose 里的 `.:/label-studio`），因此 `label_studio/`、`web/`、`services/`、`pyproject.toml` 都能直接在 VS Code 里改；命令行 `docker compose up -d` 与 devcontainer 使用同一套挂载。
 - 远程用户 `app`；`overrideCommand: false` 表示沿用 compose 中 app 的启动命令（`runserver`）。
 - VS Code 终端就在 `app` 容器内，可以直接跑 `python label_studio/manage.py ...`、`pytest`；**compose 命令请在宿主机终端执行**（devcontainer 未挂载 Docker socket）。
@@ -196,8 +221,9 @@ docker compose build web   # 只重建 web
   - `POST /api/predictions`：预标注推理占位，返回 501（yolo-3）。
   - 内部鉴权头 `X-Internal-Token`（对应 `ML_API_INTERNAL_TOKEN`，为空时回退 `TRAINER_INTERNAL_TOKEN`）；`/docs`、`/redoc`、`/openapi.json` 关闭。
 - **持久化**：训练域使用 SQLAlchemy + Alembic，表名/列名沿用原 Django 表（`training_base_model`、`training_job`），存量库无需搬数据。`ml-api` 启动脚本 `docker/ml-api-start.sh` 先执行 `services/ml_api/db_bootstrap.py`：新库 `upgrade head` 建表；已有表但没有 `alembic_version` 的旧库自动 `stamp head`，不重建、不丢数据。
-- **`ml-worker`**：RQ worker，队列 `training`；当前注册 `services.ml_api.jobs.ping`（返回 `pong`）与占位的 `execute_training_job`（调用即 `NotImplementedError`）。
-- **真实 YOLO 训练/推理未实现**：任务创建后只落库为 `Pending`，不会自动入队执行；执行链路由 yolo-3 接入。原 `training/yolo.py`、`training/adapters/yolo_adapter.py` 已迁入 `services/ml_api/`，不再依赖 Django。
+- **`worker`（Label Studio 异步任务）**：app 镜像，`rq worker-pool -n 16 -w docker.rq_django_worker.DjangoWorker critical high default low`；消费数据导入/导出、Webhook、迁移回填等任务，默认 16 进程（`LS_WORKER_CONCURRENCY` 可调）。
+- **`ml-worker`**：RQ worker-pool，队列 `training`，默认 2 进程（`ML_WORKER_CONCURRENCY`），通过 `gpus: all` 使用单张 RTX 4090；当前注册 `services.ml_api.jobs.ping`（返回 `pong`）与占位的 `execute_training_job`（调用即 `NotImplementedError`）。
+- **真实 YOLO 训练/推理未实现**：任务创建后只落库为 `Pending`，不会自动入队执行；执行链路由 yolo-3 接入。原 `training/yolo.py`、`training/adapters/yolo_adapter.py` 已迁入 `services/ml_api/`，不再依赖 Django。接入真实训练时，入队必须显式传 `job_timeout`（RQ 默认 180 秒，会杀掉训练）；`rq worker-pool` 不带 `--with-scheduler`，若使用延迟重试/延迟任务需另起 scheduler。
 - **原 `predictor` 已合并进 `ml-api`**；`trainer` / `trainer-worker` / `predictor` 服务均已删除。
 
 模型与产物目录：宿主机 `./models` 绑定到容器 `/models`，由 `app`、`ml-api`、`ml-worker` 共享；基模放 `./models/<模型名>/*.pt`，训练产物默认写到 `/models/trained/<job_id>/`（即宿主机 `./models/trained/<job_id>/`）。
@@ -206,7 +232,7 @@ docker compose build web   # 只重建 web
 
 以下命令在仓库根目录执行；`<...>` 替换为实际值。验收结果由项目负责人最终核对，本文只给出可复现的检查清单。
 
-### 1. 默认开发栈（5 个服务）
+### 1. 默认开发栈（6 个服务）
 
 ```bash
 docker compose config -q
@@ -253,15 +279,15 @@ docker compose logs -f web
 
 ```bash
 make docker-test
-# 预期：36 passed
+# 预期：48 passed
 ```
 
-### 5. ml profile（7 个服务）
+### 5. ml profile（8 个服务）
 
 ```bash
 docker compose --profile ml up -d
 docker compose --profile ml ps
-# 预期：在默认 5 个之外增加 ml-api、ml-worker，共 7 个 healthy
+# 预期：在默认 6 个之外增加 ml-api、ml-worker，共 8 个 healthy
 
 curl -fsS http://localhost:8991/health
 # 预期：{"status":"UP","service":"ml-api"}
@@ -369,13 +395,15 @@ ls models/
 
 | 命令 | 作用 |
 |---|---|
-| `make` / `make dev-up` | `docker compose up -d`，启动默认 5 个服务 |
+| `make` / `make dev-up` | `docker compose up -d`，启动默认 6 个服务 |
 | `make dev-up-build` | `docker compose up -d --build`，构建并启动（首次） |
 | `make dev-down` | `docker compose down`，停止并保留数据 |
 | `make dev-down-clean` | `docker compose down -v`，停止并删除命名卷（不可恢复） |
 | `make dev-ps` | `docker compose ps` |
 | `make dev-logs` | 跟随全部服务日志 |
 | `make web-logs` | 只跟随 `web` 服务日志 |
+| `make worker-logs` | 只跟随 Label Studio `worker` 日志 |
+| `make workers-logs` | 同时跟随 LS `worker` 与 `ml-worker` 日志 |
 | `make dev-rebuild` | 重建 `app` 与 `web` 镜像 |
 | `make dev-shell` | 进入 `app` 容器 bash |
 | `make ml-up` | `docker compose --profile ml up -d --build`，启动 ml 侧车 |
@@ -448,7 +476,7 @@ docker compose up -d
 
 ### 镜像太大 / 磁盘占用高
 
-本机首次构建后的镜像体积量级：`app` ≈ 1.52 GB，`ml` ≈ 3.65 GB，`web-dev` ≈ 9.66 GB。`web-dev` 偏大的原因是把 `node_modules` 烘焙进了镜像，换取容器启动即可 HMR；后续可考虑改用命名卷缓存 `node_modules` 来瘦身。清理不再使用的构建缓存：
+本机首次构建后的镜像体积量级：`app` ≈ 1.52 GB，`ml` ≈ 10.2 GB（cu130），`web-dev` ≈ 9.66 GB。`web-dev` 偏大的原因是把 `node_modules` 烘焙进了镜像，换取容器启动即可 HMR；后续可考虑改用命名卷缓存 `node_modules` 来瘦身。清理不再使用的构建缓存：
 
 ```bash
 docker image prune
@@ -474,7 +502,7 @@ make docker-admin-org EMAIL=<你的邮箱>
 
 浏览器 Sign up 注册的用户会自动建组织，不需要这一步。
 
-### 默认只启动了 5 个服务，ml-api 访问不到
+### 默认只启动了 6 个服务，ml-api 访问不到
 
 `ml-api` / `ml-worker` 属于 `ml` profile，默认不启动。执行 `docker compose --profile ml up -d`（或 `make ml-up`）后再访问 <http://localhost:8991/health>。不需要时用 `make ml-down` 停掉即可。
 

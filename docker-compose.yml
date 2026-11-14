@@ -1,10 +1,11 @@
 # 开发环境编排（dev-first）。
 # 生产编排、反向代理与 GPU 发布流水线属于 infra-3，不在本文件范围。
 #
-# 默认只启动：postgres / redis / minio / app / web（5 个）。
-#   - app / ml-api / ml-worker 的源码通过 bind mount 挂进容器，改代码即时生效；
+# 默认只启动：postgres / redis / minio / app / web / worker（6 个）。
+#   - worker 消费 Label Studio 的 critical/high/default/low 队列；
+#   - app / worker / ml-api / ml-worker 的源码通过 bind mount 挂进容器，改代码即时生效；
 #   - 镜像只负责依赖与工具链，只有依赖清单 / Dockerfile 变化才需要重建；
-#   - trainer / worker 等训练侧车在 ml profile 中按需启动。
+#   - ml-api / ml-worker 等训练侧车在 ml profile 中按需启动。
 #
 # 所有变量都带开发默认值：不复制 .env 也能直接 `docker compose up -d`。
 name: yamato-label-studio
@@ -45,12 +46,8 @@ x-common-env: &common-env
   # FastAPI 训练/推理编排服务
   ML_API_URL: ${ML_API_URL:-http://ml-api:8991}
   ML_API_INTERNAL_TOKEN: ${ML_API_INTERNAL_TOKEN:-dev-only-ml-api-token-change-me}
-  # 训练参数
+  # 训练参数（当前 yolo-3 实际使用的前三项）
   TRAINING_ARTIFACTS_STORAGE_PREFIX: ${TRAINING_ARTIFACTS_STORAGE_PREFIX:-trained}
-  TRAINING_UPLOAD_MAX_SIZE: ${TRAINING_UPLOAD_MAX_SIZE:-2147483648}
-  TRAINING_UPLOAD_CHUNK_SIZE: ${TRAINING_UPLOAD_CHUNK_SIZE:-8388608}
-  TRAINING_SAMPLE_SIZE: ${TRAINING_SAMPLE_SIZE:-100}
-  TRAINING_PROGRESS_REDIS_CHANNEL: ${TRAINING_PROGRESS_REDIS_CHANNEL:-training:progress}
   TRAINING_YOLO_VAL_SPLIT: ${TRAINING_YOLO_VAL_SPLIT:-0.2}
 
 # app 镜像：依赖 + 前端产物；开发时源码通过 volume 覆盖
@@ -81,8 +78,8 @@ x-ml-build: &ml-build
     APP_GID: ${APP_GID:-1000}
     POETRY_PYPI_URL: ${POETRY_PYPI_URL:-https://pypi.tuna.tsinghua.edu.cn/simple}
     YARN_REGISTRY: ${YARN_REGISTRY:-https://registry.npmmirror.com}
-    ML_PIP_INDEX_URL: ${ML_PIP_INDEX_URL:-https://pypi.tuna.tsinghua.edu.cn/simple}
-    TORCH_INDEX_URL: ${TORCH_INDEX_URL:-https://mirrors.nju.edu.cn/pytorch/whl/cpu}
+    ML_PIP_INDEX_URL: ${ML_PIP_INDEX_URL:-https://mirrors.aliyun.com/pypi/simple/}
+    TORCH_INDEX_URL: ${TORCH_INDEX_URL:-https://mirrors.nju.edu.cn/pytorch/whl/cu130}
     TORCH_VERSION: ${TORCH_VERSION:-2.11.0}
     TORCHVISION_VERSION: ${TORCHVISION_VERSION:-0.26.0}
     APT_MIRROR: ${APT_MIRROR:-http://mirrors.tuna.tsinghua.edu.cn}
@@ -96,7 +93,7 @@ services:
       POSTGRES_USER: ${POSTGRES_USER:-labelstudio}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-labelstudio}
     ports:
-      - "${POSTGRES_PORT:-5432}:5432"
+      - "127.0.0.1:${POSTGRES_PORT:-5432}:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
     healthcheck:
@@ -113,7 +110,7 @@ services:
     restart: unless-stopped
     command: ["redis-server", "--appendonly", "yes"]
     ports:
-      - "${REDIS_PORT:-6379}:6379"
+      - "127.0.0.1:${REDIS_PORT:-6379}:6379"
     volumes:
       - redisdata:/data
     healthcheck:
@@ -133,8 +130,8 @@ services:
       MINIO_ROOT_USER: ${MINIO_ROOT_USER:-minioadmin}
       MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD:-minioadmin}
     ports:
-      - "${MINIO_PORT:-9000}:9000"
-      - "${MINIO_CONSOLE_PORT:-9001}:9001"
+      - "127.0.0.1:${MINIO_PORT:-9000}:9000"
+      - "127.0.0.1:${MINIO_CONSOLE_PORT:-9001}:9001"
     volumes:
       - miniodata:/data
     healthcheck:
@@ -155,7 +152,7 @@ services:
       <<: *common-env
       RUN_STARTUP_TASKS: "1"
     ports:
-      - "${APP_PORT:-8080}:8080"
+      - "127.0.0.1:${APP_PORT:-8080}:8080"
     volumes:
       # 整个仓库挂进容器：命令行与 VS Code devcontainer 行为一致，
       # 改 label_studio/、web/、services/ 都直接落回宿主机源码。
@@ -193,7 +190,7 @@ services:
       NX_DAEMON: "false"
       NODE_OPTIONS: --max-old-space-size=8192
     ports:
-      - "${WEB_PORT:-8010}:8010"
+      - "127.0.0.1:${WEB_PORT:-8010}:8010"
     volumes:
       - ./web/apps:/build/web/apps
       - ./web/libs:/build/web/libs
@@ -205,6 +202,51 @@ services:
       timeout: 5s
       retries: 20
       start_period: 300s
+    networks:
+      - yamato-net
+
+  # Label Studio 异步任务 worker：django-rq 的队列消费者。
+  # 自定义 DjangoWorker 在子进程里初始化 Django，再执行导入/导出/迁移回填等 job。
+  worker:
+    build: *app-build
+    image: yamato/label-studio-app:dev
+    restart: unless-stopped
+    command:
+      - rq
+      - worker-pool
+      - -n
+      - "${LS_WORKER_CONCURRENCY:-16}"
+      - -u
+      - redis://redis:6379/0
+      - -w
+      - docker.rq_django_worker.DjangoWorker
+      - critical
+      - high
+      - default
+      - low
+    environment:
+      <<: *common-env
+      RUN_STARTUP_TASKS: "0"
+      RQ_HEALTHCHECK_QUEUE: default
+      RQ_HEALTHCHECK_MIN_WORKERS: ${LS_WORKER_CONCURRENCY:-16}
+    volumes:
+      - .:/label-studio
+      - appdata:/label-studio/data
+    depends_on:
+      app:
+        condition: service_healthy
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      minio:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "python", "docker/healthcheck-worker.py"]
+      interval: 15s
+      timeout: 5s
+      retries: 10
+      start_period: 60s
     networks:
       - yamato-net
 
@@ -223,7 +265,7 @@ services:
       <<: *common-env
       RUN_STARTUP_TASKS: "0"
     ports:
-      - "${ML_API_PORT:-8991}:8991"
+      - "127.0.0.1:${ML_API_PORT:-8991}:8991"
     volumes:
       - ./models:/models
       - ./services:/label-studio/services
@@ -246,15 +288,31 @@ services:
     build: *ml-build
     image: yamato/label-studio-ml:dev
     restart: unless-stopped
-    command: ["rq", "worker", "training", "--url", "redis://redis:6379/0", "--name", "ml-worker"]
+    gpus: all
+    shm_size: "4gb"
+    command:
+      - rq
+      - worker-pool
+      - -n
+      - "${ML_WORKER_CONCURRENCY:-2}"
+      - -u
+      - redis://redis:6379/0
+      - training
     environment:
       <<: *common-env
       RUN_STARTUP_TASKS: "0"
-      RQ_WORKER_NAME: ml-worker
+      # 单卡 2 并发共享 24G/48G 显存；减少碎片，失败时更容易复用显存
+      PYTORCH_CUDA_ALLOC_CONF: expandable_segments:True
+      # CPU 回退时的线程上限，避免 2 个训练进程打满所有核心
+      OMP_NUM_THREADS: ${ML_WORKER_OMP_THREADS:-8}
+      RQ_HEALTHCHECK_QUEUE: training
+      RQ_HEALTHCHECK_MIN_WORKERS: ${ML_WORKER_CONCURRENCY:-2}
     volumes:
       - ./models:/models
       - ./services:/label-studio/services
     depends_on:
+      postgres:
+        condition: service_healthy
       redis:
         condition: service_healthy
       ml-api:
@@ -263,8 +321,8 @@ services:
       test: ["CMD", "python", "docker/healthcheck-worker.py"]
       interval: 15s
       timeout: 5s
-      retries: 5
-      start_period: 30s
+      retries: 10
+      start_period: 60s
     networks:
       - yamato-net
 

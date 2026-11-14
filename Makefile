@@ -2,11 +2,11 @@
 # label2model 开发命令
 #
 # 容器化开发（推荐，只依赖 Docker/Compose）：
-#   make dev-up          启动默认开发栈（app/web/中间件，源码挂载）
+#   make dev-up          启动默认开发栈（6 个服务，含 LS worker）
 #   make dev-up-build    首次或改依赖后构建并启动
 #   make dev-rebuild     只重建依赖镜像（改 pyproject/poetry.lock/Dockerfile 后）
 #   make ml-up           启用训练/推理侧车（ml-api + ml-worker）
-#   make dev-logs / web-logs / ml-logs
+#   make dev-logs / web-logs / worker-logs / ml-logs / workers-logs
 #
 # VS Code：安装 Dev Containers 扩展后打开本目录，执行
 #   Dev Containers: Reopen in Container
@@ -17,7 +17,7 @@
 .DEFAULT_GOAL := dev-up
 
 .PHONY: dev-up dev-up-build dev-down dev-down-clean dev-ps dev-logs dev-rebuild \
-        web-logs dev-shell ml-up ml-down ml-logs ml-rebuild env-setup \
+        web-logs worker-logs workers-logs dev-shell ml-up ml-down ml-logs ml-rebuild env-setup \
         docker-build docker-up docker-up-build docker-down docker-down-clean \
         docker-ps docker-logs docker-config docker-build-ml docker-up-ml \
         docker-ps-ml docker-logs-ml docker-migrate-dev docker-makemigrations-dev \
@@ -50,6 +50,14 @@ dev-logs:
 
 web-logs:
 	docker compose logs -f --tail=100 web
+
+# Label Studio 异步任务 worker（导入/导出/迁移回填）
+worker-logs:
+	docker compose logs -f --tail=100 worker
+
+# 同时看 LS worker 与训练 worker
+workers-logs:
+	docker compose logs -f --tail=100 worker ml-worker
 
 # 只有依赖清单 / Dockerfile 变化时才需要执行
 dev-rebuild:

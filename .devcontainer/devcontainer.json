@@ -9,7 +9,8 @@
     "redis",
     "minio",
     "app",
-    "web"
+    "web",
+    "worker"
   ],
   "workspaceFolder": "/label-studio",
   "remoteUser": "app",

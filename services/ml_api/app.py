@@ -44,10 +44,13 @@ def get_expected_token() -> str:
 def require_internal_token(
     x_internal_token: str | None = Header(default=None, alias='X-Internal-Token'),
 ) -> None:
-    """校验内部调用令牌；两个环境变量均为空时关闭校验（便于本地开发）。"""
+    """校验内部调用令牌；未配置令牌时 fail-closed，避免侧车裸奔。"""
     expected_token = get_expected_token()
     if not expected_token:
-        return
+        raise HTTPException(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            detail='内部令牌未配置：请设置 ML_API_INTERNAL_TOKEN',
+        )
     if not x_internal_token:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
@@ -93,11 +96,13 @@ def placeholder_response(message: str) -> JSONResponse:
 
 
 def get_redis_connection() -> redis.Redis:
-    """按环境变量创建 Redis 连接；仅在请求处理中调用，避免模块导入时连接失败。"""
+    """按环境变量创建 Redis 连接；带超时，避免队列接口无限挂起。"""
     return redis.Redis(
         host=os.environ.get('REDIS_HOST', 'redis'),
         port=int(os.environ.get('REDIS_PORT', '6379')),
         db=int(os.environ.get('REDIS_DB', '0')),
+        socket_connect_timeout=3,
+        socket_timeout=5,
     )
 
 
@@ -122,14 +127,36 @@ def _invalid_field(field: str, message: str) -> FieldValidationError:
 
 
 def _parse_pk(payload: dict[str, Any], field: str) -> int:
-    """解析整型外键；缺失/非法按 DRF 序列化器行为返回 400。"""
+    """解析整型外键；缺失/非法按 DRF 序列化器行为返回 400。
+
+    只接受 int 或纯数字字符串；bool/float 一律拒绝，避免 ``int(1.9)`` 被
+    静默截断成 1。
+    """
     value = payload.get(field)
     if value is None:
         raise _invalid_field(field, 'This field is required.')
-    try:
+    if isinstance(value, bool):
+        raise _invalid_field(field, f'Incorrect type. Expected pk value, received {value!r}.')
+    if isinstance(value, int):
+        return value
+    if isinstance(value, str) and value.isdigit():
         return int(value)
-    except (TypeError, ValueError) as exc:
-        raise _invalid_field(field, f'Incorrect type. Expected pk value, received {value!r}.') from exc
+    raise _invalid_field(field, f'Incorrect type. Expected pk value, received {value!r}.')
+
+
+def get_visible_project(session: Session, project_id: int) -> ProjectRef | None:
+    """读取未软删的 Django 项目。
+
+    Django 的 ``Project.objects`` 默认 manager 会过滤 ``deleted_at``；训练域
+    只读映射 ``project`` 表，必须自己加同样的过滤条件，否则软删项目仍可建
+    训练任务。
+    """
+    return session.scalars(
+        sa.select(ProjectRef).where(
+            ProjectRef.id == project_id,
+            ProjectRef.deleted_at.is_(None),
+        )
+    ).first()
 
 
 @app.get('/health')
@@ -206,7 +233,7 @@ def list_training_jobs(
         if not project.isdigit():
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail='Project not found.')
         project_id = int(project)
-        ref = session.get(ProjectRef, project_id)
+        ref = get_visible_project(session, project_id)
         if ref is None:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail='Project not found.')
         if ref.organization_id != organization_id:
@@ -245,7 +272,7 @@ def create_training_job(
     if not isinstance(hyperparams, dict):
         raise _invalid_field('hyperparams', 'Expected a JSON object.')
 
-    project_ref = session.get(ProjectRef, project_id)
+    project_ref = get_visible_project(session, project_id)
     if project_ref is None:
         raise _invalid_field('project', f'Invalid pk "{project_id}" - object does not exist.')
     if project_ref.organization_id != organization_id:
@@ -305,9 +332,11 @@ def update_training_job(
             status_code=status.HTTP_403_FORBIDDEN,
             detail='Only action=cancel is supported.',
         )
-    job.status = 'Canceled'
-    session.commit()
-    session.refresh(job)
+    # 终态任务保持原状态；重复取消是幂等的，不把 Completed/Failed 改成 Canceled。
+    if job.status in ('Pending', 'Running'):
+        job.status = 'Canceled'
+        session.commit()
+        session.refresh(job)
     return training_job_to_dict(job)
 
 

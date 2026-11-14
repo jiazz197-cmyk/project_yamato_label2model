@@ -6,7 +6,7 @@
 #   web-dev    —— 前端 HMR 开发服务器（docker compose 的 web 服务）
 #   python-deps—— Poetry 安装 Django app 依赖（不含 torch/ultralytics）
 #   app        —— Django + 前端静态产物
-#   ml         —— FROM app，额外安装 CPU 版 torch/torchvision + ultralytics + FastAPI
+#   ml         —— FROM app，额外安装 CUDA 13.0 (cu130) torch/torchvision + ultralytics + FastAPI
 #
 # 开发时源码通过 docker-compose bind mount 覆盖镜像内副本；
 # 只有依赖清单 / Dockerfile 变化才需要重建镜像。
@@ -202,8 +202,8 @@ CMD ["python", "label_studio/manage.py", "runserver", "0.0.0.0:8080", "--noreloa
 # ---------------------------------------------------------------------------
 FROM app AS ml
 
-ARG ML_PIP_INDEX_URL=https://pypi.tuna.tsinghua.edu.cn/simple
-ARG TORCH_INDEX_URL=https://mirrors.nju.edu.cn/pytorch/whl/cpu
+ARG ML_PIP_INDEX_URL=https://mirrors.aliyun.com/pypi/simple/
+ARG TORCH_INDEX_URL=https://mirrors.nju.edu.cn/pytorch/whl/cu130
 ARG TORCH_VERSION=2.11.0
 ARG TORCHVISION_VERSION=0.26.0
 # 可选 apt 镜像前缀（如 http://mirrors.tuna.tsinghua.edu.cn），用于加速系统依赖安装
@@ -231,13 +231,21 @@ RUN if [ -n "${APT_MIRROR}" ]; then \
         libxrender1 \
     && rm -rf /var/lib/apt/lists/*
 
-RUN pip install --no-cache-dir --timeout 120 --retries 10 \
+RUN pip install --no-cache-dir --upgrade "pip>=26.0" \
+        --index-url "${ML_PIP_INDEX_URL}" \
+        --timeout 120 --retries 10
+
+# pip>=26 的 --resume-retries 会在读超时后从断点续传；大 wheel（cudnn 366MB）
+# 在国内镜像上偶尔会断流，没有这个参数会导致整个 ml 层构建失败。
+RUN --mount=type=cache,target=/root/.cache/pip \
+    pip install --timeout 30 --retries 10 --resume-retries 50 \
         --index-url "${TORCH_INDEX_URL}" \
         --extra-index-url "${ML_PIP_INDEX_URL}" \
         "torch==${TORCH_VERSION}" "torchvision==${TORCHVISION_VERSION}"
 
 COPY --chown=app:app services/requirements-ml.txt /tmp/requirements-ml.txt
-RUN pip install --no-cache-dir --timeout 120 --retries 10 \
+RUN --mount=type=cache,target=/root/.cache/pip \
+    pip install --timeout 30 --retries 10 --resume-retries 50 \
         --index-url "${ML_PIP_INDEX_URL}" \
         -r /tmp/requirements-ml.txt \
     && rm -f /tmp/requirements-ml.txt

@@ -4,6 +4,8 @@
 项目过滤与扫描接口。真实 YOLO 执行不在本套测试范围（yolo-3）。
 """
 
+import datetime as dt
+
 import pytest
 from fastapi.testclient import TestClient
 from sqlalchemy import create_engine
@@ -18,6 +20,8 @@ ORG_A = 1
 ORG_B = 2
 PROJECT_A = 101
 PROJECT_B = 202
+PROJECT_DELETED = 303
+PROJECT_GLOBAL = 404
 USER_ID = 9
 
 
@@ -44,6 +48,12 @@ def seed(session_factory):
             [
                 ProjectRef(id=PROJECT_A, organization_id=ORG_A),
                 ProjectRef(id=PROJECT_B, organization_id=ORG_B),
+                ProjectRef(id=PROJECT_GLOBAL, organization_id=None),
+                ProjectRef(
+                    id=PROJECT_DELETED,
+                    organization_id=ORG_A,
+                    deleted_at=dt.datetime.now(dt.timezone.utc),
+                ),
             ]
         )
         models = {
@@ -134,6 +144,15 @@ def test_missing_or_wrong_token_401(client):
     assert client.get('/api/training/base-models', headers={'X-Internal-Token': 'wrong'}).status_code == 401
     with TestClient(app) as anonymous:
         assert anonymous.get('/api/training/base-models').status_code == 401
+
+
+def test_missing_configured_token_fails_closed(monkeypatch):
+    """环境里没有配置内部令牌时，接口必须 503，而不是默认放行。"""
+    monkeypatch.delenv('ML_API_INTERNAL_TOKEN', raising=False)
+    monkeypatch.delenv('TRAINER_INTERNAL_TOKEN', raising=False)
+    with TestClient(app) as anonymous:
+        response = anonymous.get('/api/training/base-models')
+        assert response.status_code == 503
 
 
 def test_prediction_placeholder_501(client):
@@ -230,6 +249,26 @@ def test_create_job_invalid_project_400(client, seed):
     assert list(response.json()) == ['project']
 
 
+def test_create_job_for_deleted_project_400(client, seed):
+    """Django Project 软删除后，训练任务不能再引用它。"""
+    response = _create_job(client, seed['base_a'], project=PROJECT_DELETED)
+    assert response.status_code == 400
+    assert list(response.json()) == ['project']
+
+
+def test_jobs_list_deleted_project_404(client, seed):
+    response = client.get('/api/training/jobs', params={'project': PROJECT_DELETED})
+    assert response.status_code == 404
+
+
+@pytest.mark.parametrize('invalid_pk', [1.5, True])
+def test_create_job_rejects_non_integer_pk(client, seed, invalid_pk):
+    """bool 是 int 的子类、float 会被 int() 截断；这里必须按 DRF 拒绝。"""
+    response = _create_job(client, invalid_pk)
+    assert response.status_code == 400
+    assert list(response.json()) == ['base_model']
+
+
 def test_create_job_invalid_train_subset_400(client, seed):
     response = _create_job(client, seed['base_a'], train_subset='Nope')
     assert response.status_code == 400
@@ -272,6 +311,36 @@ def test_cancel_rejects_other_fields(client, seed):
     job_id = _create_job(client, seed['base_a']).json()['id']
     response = client.patch(f'/api/training/jobs/{job_id}', json={'status': 'Running'})
     assert response.status_code == 403
+
+
+def test_cancel_terminal_job_is_noop(client, seed, session_factory):
+    """已完成/已失败的任务不能被 cancel 反向改成 Canceled。"""
+    job_id = _create_job(client, seed['base_a']).json()['id']
+    with session_factory() as session:
+        job = session.get(TrainingJob, job_id)
+        job.status = 'Completed'
+        session.commit()
+
+    response = client.patch(f'/api/training/jobs/{job_id}', json={'action': 'cancel'})
+    assert response.status_code == 200
+    assert response.json()['status'] == 'Completed'
+
+
+def test_null_org_job_matches_legacy_permission(client, seed):
+    """null-org 历史任务保持旧 DRF 的 None == None 行为。"""
+    payload = {
+        'project': PROJECT_GLOBAL,
+        'base_model': seed['base_global'],
+        'train_subset': 'HasGT',
+        'hyperparams': {},
+    }
+    headers = {'X-Organization-Id': ''}
+    response = client.post('/api/training/jobs', json=payload, headers=headers)
+    assert response.status_code == 201, response.text
+    assert response.json()['id'] > 0
+
+    job_id = response.json()['id']
+    assert client.get(f'/api/training/jobs/{job_id}', headers=headers).status_code == 200
 
 
 def test_jobs_list_project_filter(client, seed):

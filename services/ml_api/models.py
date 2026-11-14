@@ -90,8 +90,8 @@ class TrainingJob(Base):
     base_model: Mapped[BaseModel] = relationship(back_populates='training_jobs', lazy='joined')
 
     def has_permission(self, organization_id: int | None) -> bool:
-        """仅同组织成员可访问。"""
-        return organization_id is not None and organization_id == self.organization_id
+        """仅同组织成员可访问；null-org 历史任务保持旧行为的 None == None。"""
+        return organization_id == self.organization_id
 
 
 class ProjectRef(Base):
@@ -105,6 +105,9 @@ class ProjectRef(Base):
 
     id: Mapped[int] = mapped_column(sa.Integer, primary_key=True)
     organization_id: Mapped[int | None] = mapped_column(sa.Integer, nullable=True)
+    # Django Project 是软删除：默认 manager 会过滤 deleted_at IS NOT NULL。
+    # 训练域只读映射该表，因此校验项目可见性时必须自己过滤。
+    deleted_at: Mapped[dt.datetime | None] = mapped_column(_TIMESTAMP, nullable=True)
 
 
 # 枚举值集中定义，序列化/校验共用。
