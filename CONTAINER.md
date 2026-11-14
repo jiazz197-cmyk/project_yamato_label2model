@@ -264,7 +264,7 @@ docker compose up -d web
 - **`web-dev` 镜像约 9.66 GB**：`node_modules` 烘焙在镜像中换取启动即 HMR；后续可改为命名卷缓存以瘦身。
 - **HMR 依赖 `app` + `web` 两个服务同时运行**：8080 的页面、8010 的资源、容器内 `app:8080` 代理三者缺一不可。
 - **app 挂载整个仓库后，镜像内 `web/dist` 被遮住**：默认 `FRONTEND_HMR=1` 不受影响；若要 `FRONTEND_HMR=0` 的静态回退，需先在宿主机构建 `web/dist`。
-- **真实 YOLO 训练/推理未实现**：训练域 CRUD 已可用，但任务创建后不会入队执行；`/api/predictions` 与训练执行仍是 501 占位。yolo-3 入队时必须显式传 `job_timeout`（RQ 默认 180 秒会杀训练）；`rq worker-pool` 没有 `--with-scheduler`，延迟重试/延迟任务需要单独 scheduler 或改用多容器 `rq worker --with-scheduler`。
+- **真实 YOLO 训练/推理未实现**：训练域 CRUD 已可用，但任务创建后不会入队执行；`/api/predictions` 与训练执行仍是 501 占位。yolo-3 入队使用 `services.ml_api.jobs.enqueue_training_job()`：默认 `job_timeout=7 天`（`TRAINING_JOB_TIMEOUT` 可覆盖）、`retry=None`，异常由 `on_training_failure` 把 `training_job` 置为 `Failed` 并结束；不使用延迟任务，因此不依赖 scheduler。
 - **训练域表结构由 Alembic 维护**：旧库首次启动会 `stamp head`；若曾手工改过 `training_*` 表结构，需要自行对齐后再升级。
 - **老库/新库约束不同（有意为之）**：旧库保留 Django training 的 `project/organization/created_by` 外键；新库只有 `base_model` 外键，跨域引用由 API 校验。软删除项目由 `ProjectRef.deleted_at` 过滤，行为与 Django `Project.objects` 一致；若后续要补外键，需要同时调整 `db_bootstrap` 的 stamp 逻辑和 ml-api 的启动顺序。
 - **训练镜像默认 CUDA 13.0（cu130）**：宿主机需要 NVIDIA Container Toolkit；`ml-worker` 使用 `gpus: all`。当前单张 RTX 4090 配 2 个训练 worker，两个任务共享同一张卡，不保证线性加速，显存不足会失败。

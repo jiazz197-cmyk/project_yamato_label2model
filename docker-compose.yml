@@ -49,6 +49,8 @@ x-common-env: &common-env
   # 训练参数（当前 yolo-3 实际使用的前三项）
   TRAINING_ARTIFACTS_STORAGE_PREFIX: ${TRAINING_ARTIFACTS_STORAGE_PREFIX:-trained}
   TRAINING_YOLO_VAL_SPLIT: ${TRAINING_YOLO_VAL_SPLIT:-0.2}
+  # 真实训练 RQ job_timeout：默认 7 天，异常直接 Failed、不重试
+  TRAINING_JOB_TIMEOUT: ${TRAINING_JOB_TIMEOUT:-604800}
 
 # app 镜像：依赖 + 前端产物；开发时源码通过 volume 覆盖
 x-app-build: &app-build

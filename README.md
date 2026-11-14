@@ -223,7 +223,7 @@ docker compose build web   # 只重建 web
 - **持久化**：训练域使用 SQLAlchemy + Alembic，表名/列名沿用原 Django 表（`training_base_model`、`training_job`），存量库无需搬数据。`ml-api` 启动脚本 `docker/ml-api-start.sh` 先执行 `services/ml_api/db_bootstrap.py`：新库 `upgrade head` 建表；已有表但没有 `alembic_version` 的旧库自动 `stamp head`，不重建、不丢数据。
 - **`worker`（Label Studio 异步任务）**：app 镜像，`rq worker-pool -n 16 -w docker.rq_django_worker.DjangoWorker critical high default low`；消费数据导入/导出、Webhook、迁移回填等任务，默认 16 进程（`LS_WORKER_CONCURRENCY` 可调）。
 - **`ml-worker`**：RQ worker-pool，队列 `training`，默认 2 进程（`ML_WORKER_CONCURRENCY`），通过 `gpus: all` 使用单张 RTX 4090；当前注册 `services.ml_api.jobs.ping`（返回 `pong`）与占位的 `execute_training_job`（调用即 `NotImplementedError`）。
-- **真实 YOLO 训练/推理未实现**：任务创建后只落库为 `Pending`，不会自动入队执行；执行链路由 yolo-3 接入。原 `training/yolo.py`、`training/adapters/yolo_adapter.py` 已迁入 `services/ml_api/`，不再依赖 Django。接入真实训练时，入队必须显式传 `job_timeout`（RQ 默认 180 秒，会杀掉训练）；`rq worker-pool` 不带 `--with-scheduler`，若使用延迟重试/延迟任务需另起 scheduler。
+- **真实 YOLO 训练/推理未实现**：任务创建后只落库为 `Pending`，不会自动入队执行；执行链路由 yolo-3 接入。原 `training/yolo.py`、`training/adapters/yolo_adapter.py` 已迁入 `services/ml_api/`，不再依赖 Django。yolo-3 入队时使用 `services.ml_api.jobs.enqueue_training_job()`：默认 `job_timeout=7 天`（`TRAINING_JOB_TIMEOUT` 可覆盖）、`retry=None`，异常由 `on_training_failure` 把 `training_job` 置为 `Failed` 并结束；不使用延迟任务，因此不依赖 scheduler。
 - **原 `predictor` 已合并进 `ml-api`**；`trainer` / `trainer-worker` / `predictor` 服务均已删除。
 
 模型与产物目录：宿主机 `./models` 绑定到容器 `/models`，由 `app`、`ml-api`、`ml-worker` 共享；基模放 `./models/<模型名>/*.pt`，训练产物默认写到 `/models/trained/<job_id>/`（即宿主机 `./models/trained/<job_id>/`）。
