@@ -8,7 +8,7 @@
 
 | 文件 | 结论 | 说明 |
 |---|---|---|
-| `Dockerfile` | **保留（dev-first 多阶段）** | 阶段：`web-deps` → `web` / `web-dev`；`python-deps` → `runtime` → `app` → `ml`。镜像只装依赖与工具链，源码由 compose 挂载。 |
+| `Dockerfile` | **保留（dev-first 多阶段）** | 阶段：`web-deps` → `web` / `web-dev`；`python-deps` → `runtime` → `app` → `ml`；另有独立 `poetry-tools` 用于生成 lock。镜像只装依赖与工具链，源码由 compose 挂载。 |
 | `docker-compose.yml` | **保留（开发编排）** | 默认 6 个服务；`ml` profile 增加 `ml-api`、`ml-worker`，共 8 个。`docker-compose.override.example.yml` 已删除，不再需要手工复制 override。 |
 | `.devcontainer/devcontainer.json` | **新增** | 复用 compose 的 `app` 服务，推荐入口；细节见附录 B。 |
 | `.env.example` | **保留（可选模板）** | 不复制也能用 compose 内置开发默认值；生产必须覆盖敏感项。 |
@@ -18,12 +18,12 @@
 | `docker/` | **更新** | `docker-entrypoint.sh`（仅 app 执行迁移 + MinIO 初始化）、`ml-api-start.sh`（先 Alembic 引导再启动 uvicorn）、`init_minio.py`、`healthcheck-worker.py`（按队列统计）、`rq_django_worker.py`（worker-pool 的 Django 初始化）、`ensure_admin_org.py`（为 `createsuperuser` 用户补组织）。 |
 | `models/` | **保留** | 仅跟踪 `.gitkeep`；宿主机目录绑定到 `/models`，app / ml-api / ml-worker 共享。 |
 | `pyproject.toml` / `poetry.lock` / `poetry.toml` | **保留（app 依赖唯一来源）** | app 依赖 + `test` 组；训练依赖已移出，改由 ml 镜像的 `requirements-ml.txt` 提供。 |
-| `.dockerignore` | **保留** | 排除 `.git`、`.devcontainer`、`.env`、`docs`、`models`、`web/node_modules`、`web/dist`、运行数据与缓存。 |
+| `.dockerignore` | **保留** | 排除 `.git`、`.dsh`、`.devcontainer`、`.env*`（含 `.env.example`）、`docs`、`models`、`web/node_modules`、`web/dist`、运行数据与缓存。 |
 | `web/` | **保留** | `web-deps` 安装 `node_modules`；`web-dev` 镜像烘焙依赖与构建配置，compose 只挂载源码目录。 |
 | `training/` | **已删除** | 训练域（BaseModel / TrainingJob / API / YOLO 数据集与适配器）完整迁移到 `services/ml_api`；Django 只保留 `/api/training/` 网关。 |
 | 旧 `services/trainer`、`services/predictor`、`services/requirements-trainer.txt` | **已删除** | 统一合并到 `services/ml_api` 与 `services/requirements-ml.txt`。 |
 
-**结论**：app 使用 Poetry 安装（main + test 组）；ml 侧车在 app 镜像基础上用固定版本 requirements + torch 索引安装；源码全部通过挂载进入开发容器，镜像不随日常改代码重建。
+**结论**：app 在构建期用 Poetry 安装（main + test 组），runtime 镜像会卸载 Poetry；ml 侧车在 app 镜像基础上用固定版本 requirements + torch 索引安装；源码全部通过挂载进入开发容器，镜像不随日常改代码重建。
 
 ## 2. 构建阶段与缓存
 
@@ -31,15 +31,18 @@
 
 | 阶段 | 基础镜像 | 作用 | 关键动作 / 缓存键 |
 |---|---|---|---|
-| `web-deps` | `node:22.19.0-bookworm-slim` | 安装前端依赖 | 校验镜像自带 yarn 1.22.22；`yarn install --frozen-lockfile`；缓存键主要是 `web/package.json` + `web/yarn.lock` |
+| `web-deps` | `node:22.19.0-bookworm-slim` | 安装前端依赖 | 校验镜像自带 yarn 1.22.22；`yarn install --frozen-lockfile` 后在同层 `yarn cache clean` + 清 `/root/.cache`；缓存键主要是 `web/package.json` + `web/yarn.lock` |
 | `web` | `FROM web-deps` | 构建生产前端产物 | `COPY web/` → `yarn build`，产物 `web/dist`，供 `app` 镜像兜底 |
 | `web-dev` | `FROM web-deps` | 前端 HMR 开发服务器 | `COPY web/` → 默认 `yarn dev --host 0.0.0.0`；`node_modules` 与配置烘焙在镜像中 |
-| `python-deps` | `python:3.12.16-slim-bookworm` | 安装后端依赖 | Poetry 2.4.1 + `virtualenv==20.26.6`；`poetry install --no-root --only main,test`，失败自动重试 5 次 |
+| `python-deps` | `python:3.12.16-slim-bookworm` | 安装后端依赖 | Poetry 2.4.1 + `virtualenv==20.26.6`；`poetry install --no-root --only main,test`，失败自动重试 5 次；装完卸载 Poetry 并 `pip check`（runtime 不带 Poetry） |
+| `poetry-tools` | `python:3.12.16-slim-bookworm` | 生成/更新 `poetry.lock` | 独立安装 Poetry + git；`ENTRYPOINT ["poetry"]`，不进入 app/ml 运行时 |
 | `runtime` | 同 Python 镜像 | 运行时公共层 | 只装 `ca-certificates`、`curl`、`tini`，复制 Python 依赖 |
 | `app` | `FROM runtime` | Django 运行镜像 | 复制源码与 `web/dist`、可编辑安装项目自身（`pip install -e .`）、构建期 `collectstatic`、非 root 用户 |
 | `ml` | `FROM app` | 训练/推理侧车镜像 | 安装 OpenCV 所需系统库、torch/torchvision（按索引固定版本）、`services/requirements-ml.txt` |
 
 `app` 与 `ml` 固定 Python 3.12.16；`ml-api` 与 `ml-worker` 共用 `ml` 镜像，仅启动命令不同。
+
+构建阶段使用 `network: host`（见 compose 的 `x-*-build`），因为国内 PyPI/npm 镜像在 BuildKit 默认网络下偶发大面积超时；这仅影响构建期，运行容器仍使用 `yamato-net`。
 
 ### 2.2 依赖与源
 
@@ -49,10 +52,10 @@
 | Node | `22.19.0-bookworm-slim`（镜像自带 yarn 1.22.22，构建时校验） |
 | Poetry | `2.4.1`；额外固定 `virtualenv==20.26.6`，安装失败自动重试 |
 | app 依赖范围 | `pyproject.toml` main 组 + test 组；build 组与 `uwsgi` extra 不安装 |
-| PyPI | `pyproject.toml` 中 `tuna` source（primary）+ `poetry.toml`；Dockerfile 可用 `POETRY_PYPI_URL` 覆盖为其他索引 |
+| PyPI | `pyproject.toml` 中 `tuna` source（primary）+ `poetry.toml`；Poetry 实际以 `pyproject.toml` 的 source 为准，`POETRY_PYPI_URL` 主要作为 `PIP_INDEX_URL`/环境变量，换 Poetry 源需改 `pyproject.toml` |
 | npm/yarn | 默认 `YARN_REGISTRY=https://registry.npmmirror.com`；构建时替换 `yarn.lock` 中的 registry 前缀并 `yarn config set registry` |
 | APT | 默认 `APT_MIRROR=http://mirrors.tuna.tsinghua.edu.cn`，构建时替换 Debian sources |
-| torch / torchvision | 默认 `TORCH_INDEX_URL=https://mirrors.nju.edu.cn/pytorch/whl/cu130`；版本 `TORCH_VERSION=2.11.0`、`TORCHVISION_VERSION=0.26.0`；CPU 变体改索引即可 |
+| torch / torchvision | 默认 `TORCH_INDEX_URL=https://mirrors.nju.edu.cn/pytorch/whl/cu130`；版本 `TORCH_VERSION=2.11.0`、`TORCHVISION_VERSION=0.26.0`；CPU 变体改索引并设 `REQUIRE_CUDA=0` |
 | ml 额外依赖 | `ultralytics==8.4.118`、`fastapi==0.141.1`、`uvicorn[standard]==0.52.4`、`SQLAlchemy==2.0.36`、`alembic==1.14.0`、`psycopg[binary]==3.2.10`、`httpx==0.28.1` |
 
 `torch` 安装命令使用 `--index-url ${TORCH_INDEX_URL}` + `--extra-index-url ${ML_PIP_INDEX_URL}`，因此所选 torch 索引中必须存在对应版本，其余依赖由 PyPI 镜像解析。默认南京大学 cu130 索引；ml 阶段先升级 pip>=26，并用 `--resume-retries 50 --timeout 30` 处理大 wheel 断流。
@@ -76,11 +79,11 @@ app 镜像构建期执行 `collectstatic`（临时 sqlite、跳过 MinIO，不�
 
 | 镜像 | 体积 | 说明 |
 |---|---|---|
-| `yamato/label-studio-app:dev` | ≈ 1.52 GB | Django + Python 依赖 + `web/dist` + 静态文件 |
+| `yamato/label-studio-app:dev` | ≈ 1.51 GB | Django + Python 依赖 + `web/dist` + 静态文件 |
 | `yamato/label-studio-ml:dev` | ≈ 10.2 GB | app 基础 + CUDA 13.0 torch/torchvision + ultralytics 等 |
-| `yamato/label-studio-web-dev:dev` | ≈ 9.66 GB | `node_modules` 烘焙在镜像中，启动即 HMR，体积偏大 |
+| `yamato/label-studio-web-dev:dev` | ≈ 2.6 GB | `node_modules` 烘焙在镜像中；构建时清理 yarn/root 缓存，保留启动即 HMR |
 
-体积会随依赖版本与构建缓存变化，以上为本机 `docker images` 显示值。`web-dev` 的瘦身方向是把 `node_modules` 改为命名卷缓存，但会牺牲「启动即可用」，暂未实施。
+体积会随依赖版本与构建缓存变化，以上为清理缓存后的目标值。`web-dev` 仍以 root 运行（已确认取舍）；如需彻底避免 root 写挂载目录，需要另开改动切 node 用户。
 
 ### 2.5 缓存与重建的关系
 
@@ -119,7 +122,7 @@ docker compose --profile ml up -d     # 或 make ml-up（带 --build）
 | `ml-api` | `ml-api-start.sh --reload --reload-dir /label-studio/services`（脚本先执行 `python -m services.ml_api.db_bootstrap`，再启动 uvicorn） | 8991 | `./services`、`./models` | postgres + redis healthy |
 | `ml-worker` | `rq worker-pool -n 2 -u redis://redis:6379/0 training`（`gpus: all`） | — | `./services`、`./models` | postgres + redis + ml-api healthy |
 
-`ml-api` 的健康检查是 `GET /health`；`ml-worker` 的健康检查用 `docker/healthcheck-worker.py` 按 `training` 队列统计 worker 数（默认要求 ≥2）。`make ml-down` 只停止这两个服务，默认 6 个服务不受影响。
+`ml-api` 的健康检查是 `GET /health`；`ml-worker` 的健康检查用 `docker/healthcheck-worker.py` 按 `training` 队列统计本容器 hostname、心跳新鲜的 worker 数（默认要求 ≥2）。`worker` / `ml-worker` 的 `stop_grace_period` 默认 5m / 30s，可用 `LS_WORKER_STOP_GRACE` / `ML_WORKER_STOP_GRACE` 覆盖。`make ml-down` 只停止这两个服务，默认 6 个服务不受影响。
 
 ### 3.3 网络与数据
 
@@ -199,7 +202,7 @@ docker compose up -d web
 - 迁移：Alembic，版本文件在 `services/ml_api/migrations/versions/`。
 - 启动引导：`docker/ml-api-start.sh` 先执行 `python -m services.ml_api.db_bootstrap`，再启动 uvicorn。
   - 全新库：执行 `alembic upgrade head` 建表；
-  - 旧库（已有 `training_base_model`、但没有 `alembic_version`）：`alembic stamp head`，不重建、不丢数据；
+  - 旧库（已有 `training_base_model`/`training_job`、但没有 `alembic_version`）：校验表/列完整后 `stamp 0001` 再 `upgrade head`，由 0002 幂等补索引，不重建、不丢数据；
   - 已有 `alembic_version`：正常 `upgrade head`。
 - `project_id` / `organization_id` / `created_by_id` 是跨域引用，按整数保存，不加数据库外键（由 API 层用 `project` 表只读映射校验组织）。
 - 组织隔离：Django 网关把 `X-User-Id`、`X-Organization-Id` 传给 ml-api；ml-api 按组织过滤并在跨组织详情/创建时返回 403。
@@ -219,7 +222,7 @@ docker compose up -d web
 | `GET /api/training/queue` | `X-Internal-Token` | 200：`{"queue":"training","count":<int>}`；Redis 不可用 503 |
 | `POST /api/predictions` | `X-Internal-Token` | 501 占位（原 predictor 路由合并至此） |
 
-- 令牌环境变量为 `ML_API_INTERNAL_TOKEN`；为空时回退 `TRAINER_INTERNAL_TOKEN`；两者都为空则关闭校验（仅便于本地开发）。
+- 令牌环境变量为 `ML_API_INTERNAL_TOKEN`；为空时回退 `TRAINER_INTERNAL_TOKEN`；两者都为空时 **fail-closed**：接口返回 503，不会关闭校验。
 - `/docs`、`/redoc`、`/openapi.json` 均关闭，避免绕过内部令牌读取接口定义。
 - 任务创建后只落库，不会自动入队执行；真实训练执行由 yolo-3 接入。
 
@@ -261,11 +264,11 @@ docker compose up -d web
 
 ## 7. 已知限制
 
-- **`web-dev` 镜像约 9.66 GB**：`node_modules` 烘焙在镜像中换取启动即 HMR；后续可改为命名卷缓存以瘦身。
+- **`web-dev` 镜像约 2.6 GB**：`node_modules` 烘焙在镜像中换取启动即 HMR；构建时已清理 yarn/root 缓存，web 仍以 root 运行。
 - **HMR 依赖 `app` + `web` 两个服务同时运行**：8080 的页面、8010 的资源、容器内 `app:8080` 代理三者缺一不可。
 - **app 挂载整个仓库后，镜像内 `web/dist` 被遮住**：默认 `FRONTEND_HMR=1` 不受影响；若要 `FRONTEND_HMR=0` 的静态回退，需先在宿主机构建 `web/dist`。
-- **真实 YOLO 训练/推理未实现**：训练域 CRUD 已可用，但任务创建后不会入队执行；`/api/predictions` 与训练执行仍是 501 占位。yolo-3 入队使用 `services.ml_api.jobs.enqueue_training_job()`：默认 `job_timeout=7 天`（`TRAINING_JOB_TIMEOUT` 可覆盖）、`retry=None`，异常由 `on_training_failure` 把 `training_job` 置为 `Failed` 并结束；不使用延迟任务，因此不依赖 scheduler。
-- **训练域表结构由 Alembic 维护**：旧库首次启动会 `stamp head`；若曾手工改过 `training_*` 表结构，需要自行对齐后再升级。
+- **真实 YOLO 训练/推理未实现**：训练域 CRUD 已可用，但任务创建后不会入队执行；`/api/predictions` 与训练执行仍是 501 占位。yolo-3 入队使用 `services.ml_api.jobs.enqueue_training_job()`：默认 `job_timeout=7 天`（`TRAINING_JOB_TIMEOUT` 可覆盖）、`retry=None`，同 ID job 幂等返回；异常由 `on_training_failure` 原子置 `Failed`，不覆盖 `Completed/Canceled`。取消会移除排队 job 或发送 stop 命令；ml-api 启动对账把无存活 worker 的 `Running` 置 `Failed`，不依赖 scheduler。
+- **训练域表结构由 Alembic 维护**：旧库首次启动先校验表/列，再 `stamp 0001` + `upgrade head`；若曾手工改过 `training_*` 表结构，会拒绝启动并给出缺失列，需对齐后再升级。
 - **老库/新库约束不同（有意为之）**：旧库保留 Django training 的 `project/organization/created_by` 外键；新库只有 `base_model` 外键，跨域引用由 API 校验。软删除项目由 `ProjectRef.deleted_at` 过滤，行为与 Django `Project.objects` 一致；若后续要补外键，需要同时调整 `db_bootstrap` 的 stamp 逻辑和 ml-api 的启动顺序。
 - **训练镜像默认 CUDA 13.0（cu130）**：宿主机需要 NVIDIA Container Toolkit；`ml-worker` 使用 `gpus: all`。当前单张 RTX 4090 配 2 个训练 worker，两个任务共享同一张卡，不保证线性加速，显存不足会失败。
 - **开发默认凭据仅限本机**：数据库、MinIO、`ML_API_INTERNAL_TOKEN` 等默认值只适合单机；共享/生产必须通过 `.env` 覆盖。
@@ -290,13 +293,13 @@ docker compose up -d web
 | 训练 worker | `worker-pool` 注册 2 个 worker；健康检查按 `training` 队列计数通过 |
 | ml-api 队列/鉴权 | `/api/training/queue` 带 token 正常返回；`/api/predictions` 带 token 返回 501，无 token 返回 401 |
 | RQ 链路 | 入队 `services.ml_api.jobs.ping` 返回 `pong`；`ml-worker` 日志无 Redis 错误 |
-| 训练域测试 | `pytest -c services/pytest.ini services/tests`：48 passed（在 ml 镜像内） |
-| Django 网关测试 | `pytest --import-mode=importlib tests/test_training_proxy.py`：8 passed |
-| 训练域表结构引导 | 存量库启动日志 `stamped existing training tables`，`alembic_version=0001_training_domain`；另建空库验证 `upgraded` 并生成两张表 |
+| 训练域测试 | `pytest -c services/pytest.ini services/tests`：84 passed（在 ml 镜像内） |
+| Django 网关测试 | `pytest --import-mode=importlib tests/test_training_proxy.py`：11 passed |
+| 训练域表结构引导 | 存量库先校验表/列，`stamp 0001` 后 `upgrade head`，`alembic_version=0002_training_indexes`；0002 幂等补索引；空库 `upgrade` 生成两张表与全部索引 |
 | 训练域端到端 | Django 网关（Token 鉴权）→ ml-api：`LIST 200` / `SCAN 200` / `CREATE 201 Pending` / `DETAIL 200` / `CANCEL 200 Canceled` / 未登录 `401` |
 | 网关降级 | ml-api 不可达时返回 503；FastAPI 422 在网关映射为 400（单测覆盖） |
-| 持久化 | `docker compose down`（保留卷）后重新 `up`：PostgreSQL 用户/项目、MinIO 对象、`./models` 文件仍在 |
-| 镜像体积 | `app` ≈ 1.52 GB、`ml` ≈ 10.2 GB（cu130）、`web-dev` ≈ 9.66 GB（本机 `docker images`） |
+| 持久化 | `docker compose --profile ml down`（保留卷）后重新 `up`：PostgreSQL 用户/项目、MinIO 对象、`./models` 文件仍在 |
+| 镜像体积 | `app` ≈ 1.51 GB、`ml` ≈ 10.2 GB（cu130）、`web-dev` ≈ 2.6 GB（清理缓存后） |
 
 ## 附录 A：Makefile
 
@@ -308,7 +311,7 @@ docker compose up -d web
 |---|---|
 | `dev-up` | `docker compose up -d` |
 | `dev-up-build` | `docker compose up -d --build` |
-| `dev-down` / `dev-down-clean` | `docker compose down` / `down -v` |
+| `dev-down` / `dev-down-clean` | `docker compose --profile ml down` / `--profile ml down -v` |
 | `dev-ps` / `dev-logs` / `web-logs` | `docker compose ps` / 全量日志 / 仅 web 日志 |
 | `dev-rebuild` | `docker compose build app web` |
 | `dev-shell` | `docker compose exec app bash` |
@@ -321,6 +324,7 @@ docker compose up -d web
 | `ml-down` | `docker compose --profile ml stop ml-api ml-worker` |
 | `ml-logs` | `docker compose --profile ml logs -f --tail=100 ml-api ml-worker` |
 | `ml-rebuild` | `docker compose --profile ml build`（会构建所有带 build 的服务） |
+| `poetry-lock` | 构建独立 `poetry-tools` 镜像并生成 `poetry.lock` |
 
 **管理与兼容命令**
 
@@ -338,7 +342,7 @@ docker compose up -d web
 | `overrideCommand` | `false`（沿用 compose 中 app 的 `runserver` 命令） |
 | `shutdownAction` | `stopCompose` |
 | `forwardPorts` | 8080、8010、8991、9000、9001、5432、6379 |
-| `postCreateCommand` | `python label_studio/manage.py migrate --noinput` |
+| `postCreateCommand` | 无（迁移由 `app` entrypoint 执行，避免重复 migrate） |
 | VS Code 扩展 | `ms-python.python`、`ms-python.vscode-pylance`、`charliermarsh.ruff`、`dbaeumer.vscode-eslint`、`esbenp.prettier-vscode`、`biomejs.biome` |
 
 需要 ml profile 时，在宿主机终端执行 `docker compose --profile ml up -d`；devcontainer 会复用同一个 compose 项目，无需改动配置文件。compose 命令也都在宿主机执行（devcontainer 内没有 Docker socket）。

@@ -26,7 +26,7 @@
 
 1. 在 VS Code 中打开仓库目录。
 2. 按 `F1`，执行 **Dev Containers: Reopen in Container**（或右下角提示「Reopen in Container」）。
-3. 首次会构建/启动 `postgres`、`redis`、`minio`、`app`、`web` 五个服务并执行 `postCreateCommand` 的数据库迁移，需要等待几分钟到更久（首次构建前端依赖与 Python 依赖）。
+3. 首次会构建/启动 `postgres`、`redis`、`minio`、`app`、`web`、`worker` 六个服务；`app` 的 entrypoint 会自动执行数据库迁移，需要等待几分钟到更久（首次构建前端依赖与 Python 依赖）。
 4. 打开 <http://localhost:8080> 进入标注平台；前端 HMR 资源由 <http://localhost:8010/react-app/> 提供。
 5. 创建管理员：直接在登录页 **Sign up**（会自动创建组织），或使用命令行方式（见下）。浏览器端 `localhost` 能生效是因为 devcontainer 已把 8080/8010/8991/9000/9001/5432/6379 转发到本机。
 
@@ -79,7 +79,7 @@ make docker-admin-org EMAIL=<你的邮箱>
    # 或 make dev-up-build
    ```
 
-   首次构建需要下载 Node 依赖、Python 依赖；耗时从几分钟到数十分钟不等，后续增量构建会快很多。
+   首次构建需要下载 Node 依赖、Python 依赖；耗时从几分钟到数十分钟不等，后续增量构建会快很多。构建使用 compose 的 `network: host`（仅构建期），避免国内镜像在 BuildKit 默认网络下超时；运行容器仍使用 `yamato-net`。
 
 4. 等待服务健康：
 
@@ -216,14 +216,15 @@ docker compose build web   # 只重建 web
 - **`services/ml_api`（FastAPI，8991）**：训练域唯一入口，`ml-api` 与 `ml-worker` 共用 ml 镜像。
   - `GET /health`：健康检查，无需鉴权。
   - `GET /api/training/base-models`、`GET /api/training/base-models/{id}`、`GET /api/training/base-models/scan`：基模列表/详情/本地目录扫描。
-  - `GET/POST /api/training/jobs`、`GET/PATCH /api/training/jobs/{id}`：任务查询/创建/取消（`PATCH {"action":"cancel"}`）。
+  - `GET/POST /api/training/jobs`、`GET/PATCH /api/training/jobs/{id}`：任务查询/创建/取消（`PATCH {"action":"cancel"}`）；列表保持数组响应，支持可选 `limit/offset`（默认 200、最大 1000）；旧 form 提交的 `hyperparams` JSON 字符串由网关解析，保持兼容。
   - `GET /api/training/queue`：`training` 队列长度。
   - `POST /api/predictions`：预标注推理占位，返回 501（yolo-3）。
-  - 内部鉴权头 `X-Internal-Token`（对应 `ML_API_INTERNAL_TOKEN`，为空时回退 `TRAINER_INTERNAL_TOKEN`）；`/docs`、`/redoc`、`/openapi.json` 关闭。
-- **持久化**：训练域使用 SQLAlchemy + Alembic，表名/列名沿用原 Django 表（`training_base_model`、`training_job`），存量库无需搬数据。`ml-api` 启动脚本 `docker/ml-api-start.sh` 先执行 `services/ml_api/db_bootstrap.py`：新库 `upgrade head` 建表；已有表但没有 `alembic_version` 的旧库自动 `stamp head`，不重建、不丢数据。
+  - 内部鉴权头 `X-Internal-Token`（对应 `ML_API_INTERNAL_TOKEN`，为空时回退 `TRAINER_INTERNAL_TOKEN`；两者都为空时 fail-closed 返回 503，不会关闭校验）；`/docs`、`/redoc`、`/openapi.json` 关闭。
+- **持久化**：训练域使用 SQLAlchemy + Alembic，表名/列名沿用原 Django 表（`training_base_model`、`training_job`），存量库无需搬数据。`ml-api` 启动脚本 `docker/ml-api-start.sh` 先执行 `services/ml_api/db_bootstrap.py`：新库 `upgrade head` 建表；已有表但没有 `alembic_version` 的旧库先校验表/列，再 `stamp 0001` 后 `upgrade head`，由 0002 幂等补索引，不重建、不丢数据。
 - **`worker`（Label Studio 异步任务）**：app 镜像，`rq worker-pool -n 16 -w docker.rq_django_worker.DjangoWorker critical high default low`；消费数据导入/导出、Webhook、迁移回填等任务，默认 16 进程（`LS_WORKER_CONCURRENCY` 可调）。
 - **`ml-worker`**：RQ worker-pool，队列 `training`，默认 2 进程（`ML_WORKER_CONCURRENCY`），通过 `gpus: all` 使用单张 RTX 4090；当前注册 `services.ml_api.jobs.ping`（返回 `pong`）与占位的 `execute_training_job`（调用即 `NotImplementedError`）。
-- **真实 YOLO 训练/推理未实现**：任务创建后只落库为 `Pending`，不会自动入队执行；执行链路由 yolo-3 接入。原 `training/yolo.py`、`training/adapters/yolo_adapter.py` 已迁入 `services/ml_api/`，不再依赖 Django。yolo-3 入队时使用 `services.ml_api.jobs.enqueue_training_job()`：默认 `job_timeout=7 天`（`TRAINING_JOB_TIMEOUT` 可覆盖）、`retry=None`，异常由 `on_training_failure` 把 `training_job` 置为 `Failed` 并结束；不使用延迟任务，因此不依赖 scheduler。
+- **真实 YOLO 训练/推理未实现**：任务创建后只落库为 `Pending`，不会自动入队执行；执行链路由 yolo-3 接入。原 `training/yolo.py`、`training/adapters/yolo_adapter.py` 已迁入 `services/ml_api/`，不再依赖 Django。yolo-3 入队时使用 `services.ml_api.jobs.enqueue_training_job()`：默认 `job_timeout=7 天`（`TRAINING_JOB_TIMEOUT` 可覆盖）、`retry=None`，异常由 `on_training_failure` 把 `training_job` 置为 `Failed` 并结束；同 ID job 已存在时幂等返回，不重复入队；不使用延迟任务，因此不依赖 scheduler。
+- **取消与停机语义**：取消会原子置 `Canceled`，排队中的 job 从队列移除，运行中的 job 发送 RQ stop 命令；`worker` / `ml-worker` 的 `stop_grace_period` 默认 5 分钟 / 30 秒。容器停止或异常退出导致训练中断时，`ml-api` 启动对账会把没有存活 worker 持有的 `Running` 任务置 `Failed`，避免一直显示运行中。
 - **原 `predictor` 已合并进 `ml-api`**；`trainer` / `trainer-worker` / `predictor` 服务均已删除。
 
 模型与产物目录：宿主机 `./models` 绑定到容器 `/models`，由 `app`、`ml-api`、`ml-worker` 共享；基模放 `./models/<模型名>/*.pt`，训练产物默认写到 `/models/trained/<job_id>/`（即宿主机 `./models/trained/<job_id>/`）。
@@ -240,7 +241,7 @@ docker compose config -q
 docker compose up -d --build
 
 docker compose ps
-# 预期：postgres / redis / minio / app / web 全部 healthy
+# 预期：postgres / redis / minio / app / web / worker 全部 healthy
 
 docker compose exec app python label_studio/manage.py migrate
 # 预期：No migrations to apply.
@@ -279,7 +280,7 @@ docker compose logs -f web
 
 ```bash
 make docker-test
-# 预期：48 passed
+# 预期：84 passed
 ```
 
 ### 5. ml profile（8 个服务）
@@ -321,7 +322,6 @@ print('scan', client.get('/api/training/base-models/scan/').status_code)
 "
 # 预期：两个请求均 200；若 ml profile 未启动，网关返回 503
 ```
-```
 
 RQ 入队 ping 并取结果（`ml-worker` 已在 ml profile 中运行）：
 
@@ -358,7 +358,7 @@ docker compose --profile ml logs --tail=50 ml-worker
 ### 6. 持久化
 
 ```bash
-docker compose down          # 保留命名卷与 ./models
+docker compose --profile ml down   # 连 ml 侧车一起停；保留命名卷与 ./models
 docker compose up -d
 
 # PostgreSQL 数据仍在
@@ -385,7 +385,7 @@ PY
 ls models/
 ```
 
-`docker compose down -v` 会删除命名卷（`pgdata`/`miniodata`/`appdata`/`redisdata`），但不会删除 `./models`。
+`docker compose --profile ml down -v` 会删除命名卷（`pgdata`/`miniodata`/`appdata`/`redisdata`），但不会删除 `./models`。`down` 会中断正在跑的训练；下次启动 ml-api 时对账会把遗留 `Running` 置 `Failed`。
 
 > 本机开发环境已跑通的关键结果见 [CONTAINER.md](CONTAINER.md) 的「验证结果」一节；最终验收以项目负责人核对为准。
 
@@ -397,8 +397,8 @@ ls models/
 |---|---|
 | `make` / `make dev-up` | `docker compose up -d`，启动默认 6 个服务 |
 | `make dev-up-build` | `docker compose up -d --build`，构建并启动（首次） |
-| `make dev-down` | `docker compose down`，停止并保留数据 |
-| `make dev-down-clean` | `docker compose down -v`，停止并删除命名卷（不可恢复） |
+| `make dev-down` | `docker compose --profile ml down`，停止全部服务并保留数据 |
+| `make dev-down-clean` | `docker compose --profile ml down -v`，停止并删除命名卷（不可恢复） |
 | `make dev-ps` | `docker compose ps` |
 | `make dev-logs` | 跟随全部服务日志 |
 | `make web-logs` | 只跟随 `web` 服务日志 |
@@ -464,11 +464,12 @@ docker compose up -d
 - `pyproject.toml` 变化：先更新 `poetry.lock`，再 `make dev-rebuild`（重建 app + web），必要时 `make ml-rebuild`。
 
   ```bash
-  # 宿主机没装 Poetry 时，用 app 镜像生成 lock（在仓库根目录执行）
+  # 宿主机没装 Poetry 时，用独立 poetry-tools 镜像生成 lock（runtime 不再包含 Poetry）
+  docker build --network=host --target poetry-tools -t yamato/label-studio-poetry:dev .
   docker run --rm -u "$(id -u):$(id -g)" -e HOME=/tmp \
-    -e POETRY_CACHE_DIR=/tmp/poetry-cache \
     -v "$PWD":/label-studio -w /label-studio \
-    --entrypoint poetry yamato/label-studio-app:dev lock
+    yamato/label-studio-poetry:dev lock
+  # 或直接 make poetry-lock
   ```
 
 - `services/requirements-ml.txt`、`TORCH_*` / `ML_PIP_INDEX_URL` 等构建参数变化：`make ml-rebuild` 后 `make ml-up`。
@@ -476,7 +477,7 @@ docker compose up -d
 
 ### 镜像太大 / 磁盘占用高
 
-本机首次构建后的镜像体积量级：`app` ≈ 1.52 GB，`ml` ≈ 10.2 GB（cu130），`web-dev` ≈ 9.66 GB。`web-dev` 偏大的原因是把 `node_modules` 烘焙进了镜像，换取容器启动即可 HMR；后续可考虑改用命名卷缓存 `node_modules` 来瘦身。清理不再使用的构建缓存：
+清理缓存后本机镜像体积量级：`app` ≈ 1.5 GB，`ml` ≈ 10.2 GB（cu130），`web-dev` ≈ 2.6 GB。`web-dev` 仍把 `node_modules` 烘焙进镜像换取启动即 HMR，但构建时会执行 `yarn cache clean` 并清理 `/root/.cache`，不再把约 4.7GB 的包缓存留在镜像里；web 仍以 root 运行（已知取舍）。清理不再使用的构建缓存：
 
 ```bash
 docker image prune
@@ -486,6 +487,21 @@ docker builder prune
 ### Windows / WSL2
 
 不建议在原生 Windows 文件系统上运行：bind mount 性能差，文件权限与 UID/GID 容易不一致。请在 WSL2 的 Linux 文件系统中克隆仓库，并把 Docker Desktop 的 WSL2 集成打开；Dev Containers 同样建议从 WSL2 中打开仓库。
+
+宿主 UID/GID 不是 1000 时，bind mount 的文件在容器内可能不可写。先在仓库根目录创建 `.env` 并写入：
+
+```bash
+APP_UID=$(id -u)
+APP_GID=$(id -g)
+```
+
+再执行 `make dev-up-build` 或 Reopen in Container；`app` / `worker` 会使用该 UID/GID 构建。
+
+### 已知限制（已确认取舍）
+
+- **无组织历史数据**：没有 active organization 的用户仍可见 `organization_id IS NULL` 的历史训练任务/项目（沿用旧 DRF 的 `None == None` 行为）；多用户实例如需收紧，应另开 issue 加 `created_by` 过滤。
+- **web 容器仍以 root 运行**：`web-dev` 镜像默认 root，只挂载源码目录；如宿主机出现 root 属主文件，用 `sudo chown -R "$(id -u):$(id -g)" web/apps web/libs web/tools web/scripts` 修正。彻底解决需要改 node 用户，本次未做。
+- **跨域不建外键**：`project_id` / `organization_id` / `created_by_id` 仍是普通整数列，由 API/启动脚本校验；存量库保留原 Django 外键，新库不建，这是已确认的设计。
 
 ### MinIO 官方镜像拉取失败
 
@@ -525,7 +541,7 @@ docker compose up -d --build
 如果已经初始化过 PostgreSQL / MinIO 数据卷，再修改 `POSTGRES_*` 或 `MINIO_ROOT_*` 凭据，旧卷里的用户/密钥不会自动更新，容器会连接失败。开发环境可直接重建数据卷：
 
 ```bash
-docker compose down -v
+docker compose --profile ml down -v
 docker compose up -d --build
 ```
 
