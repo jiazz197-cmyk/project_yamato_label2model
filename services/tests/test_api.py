@@ -310,7 +310,7 @@ def test_cancel_training_job(client, seed, session_factory):
 def test_cancel_rejects_other_fields(client, seed):
     job_id = _create_job(client, seed['base_a']).json()['id']
     response = client.patch(f'/api/training/jobs/{job_id}', json={'status': 'Running'})
-    assert response.status_code == 403
+    assert response.status_code == 400
 
 
 def test_cancel_terminal_job_is_noop(client, seed, session_factory):
@@ -363,6 +363,54 @@ def test_jobs_list_project_filter_other_org_403(client, seed):
 def test_removed_test_run_routes_404(client):
     assert client.get('/api/training/test-runs/').status_code == 404
     assert client.get('/api/training/test-runs/1/').status_code == 404
+
+
+def test_jobs_list_pagination(client, seed):
+    first = _create_job(client, seed['base_a']).json()['id']
+    second = _create_job(client, seed['base_a'], train_subset='All').json()['id']
+    response = client.get('/api/training/jobs', params={'limit': 1})
+    assert response.status_code == 200
+    assert [item['id'] for item in response.json()] == [second]
+    response = client.get('/api/training/jobs', params={'limit': 1, 'offset': 1})
+    assert [item['id'] for item in response.json()] == [first]
+
+
+def test_base_models_pagination(client, seed):
+    response = client.get('/api/training/base-models', params={'limit': 1})
+    assert response.status_code == 200
+    assert len(response.json()) == 1
+
+
+def test_hyperparams_invalid_type_400(client, seed):
+    response = _create_job(client, seed['base_a'], hyperparams={'epochs': 'fast'})
+    assert response.status_code == 400
+    assert 'hyperparams' in response.json()
+
+
+def test_hyperparams_batch_range_400(client, seed):
+    response = _create_job(client, seed['base_a'], hyperparams={'batch': 0})
+    assert response.status_code == 400
+
+
+def test_inactive_base_model_detail_404(client, seed):
+    response = client.get(f"/api/training/base-models/{seed['base_inactive']}")
+    assert response.status_code == 404
+
+
+def test_inactive_base_model_create_400(client, seed):
+    response = _create_job(client, seed['base_inactive'])
+    assert response.status_code == 400
+
+
+def test_unicode_digit_project_param_404(client, seed):
+    response = client.get('/api/training/jobs', params={'project': '\u00b2'})
+    assert response.status_code == 404
+
+
+def test_patch_invalid_action_400(client, seed):
+    job_id = _create_job(client, seed['base_a']).json()['id']
+    response = client.patch(f'/api/training/jobs/{job_id}', json={'action': 'resume'})
+    assert response.status_code == 400
 
 
 def test_queue_endpoint(client, monkeypatch):

@@ -7,6 +7,7 @@
 - ``X-User-Id`` / ``X-Organization-Id``：当前用户与 active organization。
 """
 
+import json
 import os
 
 import requests
@@ -69,14 +70,31 @@ def forward(request, method: str, path: str, params=None, json_body=None) -> Res
     status_code = response.status_code
     if status_code == status.HTTP_422_UNPROCESSABLE_ENTITY:
         status_code = status.HTTP_400_BAD_REQUEST
+    if status_code == status.HTTP_401_UNAUTHORIZED:
+        # 这是 Django 网关与 ml-api 之间的内部令牌失败，不是用户登录失效。
+        return Response(
+            {'detail': '训练服务鉴权失败，请检查 ML_API_INTERNAL_TOKEN 配置'},
+            status=status.HTTP_502_BAD_GATEWAY,
+        )
     return Response(payload, status=status_code)
 
 
 def _json_body(request):
-    """DRF request.data 可能是 QueryDict，统一成普通 dict。"""
+    """DRF request.data 可能是 QueryDict，统一成普通 dict。
+
+    旧 DRF 视图同时支持 FormParser/MultiPartParser，表单里的 hyperparams 是
+    JSON 字符串；这里解析回对象，保持旧客户端的兼容性。
+    """
     data = request.data
     if isinstance(data, QueryDict):
-        return data.dict()
+        data = data.dict()
+    if isinstance(data, dict):
+        value = data.get('hyperparams')
+        if isinstance(value, str) and value.strip():
+            try:
+                data['hyperparams'] = json.loads(value)
+            except ValueError:
+                pass
     return data
 
 
@@ -86,7 +104,12 @@ class BaseModelListAPI(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
-        return forward(request, 'GET', '/api/training/base-models')
+        params = {}
+        for key in ('limit', 'offset'):
+            value = request.query_params.get(key)
+            if value is not None:
+                params[key] = value
+        return forward(request, 'GET', '/api/training/base-models', params=params)
 
 
 class BaseModelDetailAPI(APIView):
@@ -114,9 +137,10 @@ class TrainingJobListAPI(APIView):
 
     def get(self, request):
         params = {}
-        project = request.query_params.get('project')
-        if project is not None:
-            params['project'] = project
+        for key in ('project', 'limit', 'offset'):
+            value = request.query_params.get(key)
+            if value is not None:
+                params[key] = value
         return forward(request, 'GET', '/api/training/jobs', params=params)
 
     def post(self, request):

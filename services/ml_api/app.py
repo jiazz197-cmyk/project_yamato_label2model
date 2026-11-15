@@ -11,6 +11,7 @@
 """
 
 import hmac
+import logging
 import os
 from typing import Any
 
@@ -22,9 +23,12 @@ from fastapi.responses import JSONResponse
 from sqlalchemy.orm import Session
 
 from services.ml_api.db import get_session
+from services.ml_api.jobs import cancel_training_job
 from services.ml_api.model_files import scan_local_models
-from services.ml_api.models import TRAIN_SUBSETS, BaseModel, ProjectRef, TrainingJob
+from services.ml_api.models import TRAIN_SUBSETS, BaseModel, ProjectRef, TrainingJob, utcnow
 from services.ml_api.serializers import base_model_to_dict, training_job_to_dict
+
+logger = logging.getLogger(__name__)
 
 # 内部 API 不暴露 /docs、/redoc 与 /openapi.json，避免绕过内部令牌读取接口定义。
 app = FastAPI(
@@ -126,10 +130,15 @@ def _invalid_field(field: str, message: str) -> FieldValidationError:
     return FieldValidationError(field, message)
 
 
+def _is_ascii_digits(value: str) -> bool:
+    """只接受 ASCII 数字；``str.isdigit()`` 对 ``²`` 等字符为真但 int() 会炸。"""
+    return value.isascii() and value.isdigit()
+
+
 def _parse_pk(payload: dict[str, Any], field: str) -> int:
     """解析整型外键；缺失/非法按 DRF 序列化器行为返回 400。
 
-    只接受 int 或纯数字字符串；bool/float 一律拒绝，避免 ``int(1.9)`` 被
+    只接受 int 或纯 ASCII 数字字符串；bool/float 一律拒绝，避免 ``int(1.9)`` 被
     静默截断成 1。
     """
     value = payload.get(field)
@@ -139,9 +148,47 @@ def _parse_pk(payload: dict[str, Any], field: str) -> int:
         raise _invalid_field(field, f'Incorrect type. Expected pk value, received {value!r}.')
     if isinstance(value, int):
         return value
-    if isinstance(value, str) and value.isdigit():
+    if isinstance(value, str) and _is_ascii_digits(value):
         return int(value)
     raise _invalid_field(field, f'Incorrect type. Expected pk value, received {value!r}.')
+
+
+def _validate_hyperparams(hyperparams: dict[str, Any]) -> None:
+    """校验当前 adapter 实际使用的超参；未知键保留给后续扩展。
+
+    - epochs: 1..100000
+    - imgsz: 32..16384
+    - batch: -1（自动）或 1..4096
+    - device: 字符串或非负整数（如 ``cpu``、``0``、``0,1``）
+    """
+    checks = (
+        ('epochs', 1, 100000),
+        ('imgsz', 32, 16384),
+    )
+    for key, minimum, maximum in checks:
+        if key not in hyperparams:
+            continue
+        value = hyperparams[key]
+        if isinstance(value, bool) or not isinstance(value, int):
+            raise _invalid_field('hyperparams', f'{key} must be an integer.')
+        if not minimum <= value <= maximum:
+            raise _invalid_field('hyperparams', f'{key} must be between {minimum} and {maximum}.')
+
+    if 'batch' in hyperparams:
+        value = hyperparams['batch']
+        if isinstance(value, bool) or not isinstance(value, int):
+            raise _invalid_field('hyperparams', 'batch must be an integer.')
+        if value != -1 and not 1 <= value <= 4096:
+            raise _invalid_field('hyperparams', 'batch must be -1 or between 1 and 4096.')
+
+    if 'device' in hyperparams:
+        value = hyperparams['device']
+        if isinstance(value, bool) or not isinstance(value, (str, int)):
+            raise _invalid_field('hyperparams', 'device must be a string or integer.')
+        if isinstance(value, int) and value < 0:
+            raise _invalid_field('hyperparams', 'device must be a non-negative integer.')
+        if isinstance(value, str) and len(value) > 64:
+            raise _invalid_field('hyperparams', 'device is too long.')
 
 
 def get_visible_project(session: Session, project_id: int) -> ProjectRef | None:
@@ -178,6 +225,8 @@ def scan_base_models() -> list[dict[str, Any]]:
 
 @app.get('/api/training/base-models', dependencies=[Depends(require_internal_token)])
 def list_base_models(
+    limit: int = Query(default=200, ge=1, le=1000),
+    offset: int = Query(default=0, ge=0),
     organization_id: int | None = Depends(current_organization_id),
     session: Session = Depends(get_session),
 ) -> list[dict[str, Any]]:
@@ -192,7 +241,7 @@ def list_base_models(
                 BaseModel.organization_id == organization_id,
             )
         )
-    statement = statement.order_by(BaseModel.id)
+    statement = statement.order_by(BaseModel.id).offset(offset).limit(limit)
     return [base_model_to_dict(model) for model in session.scalars(statement)]
 
 
@@ -202,9 +251,9 @@ def get_base_model(
     organization_id: int | None = Depends(current_organization_id),
     session: Session = Depends(get_session),
 ) -> dict[str, Any]:
-    """BaseModel 详情：跨组织访问返回 403。"""
+    """BaseModel 详情：停用或跨组织访问按不可见处理。"""
     model = session.get(BaseModel, base_model_id)
-    if model is None:
+    if model is None or not model.is_active:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail='Base model not found.')
     if not model.has_permission(organization_id):
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail='Base model not found.')
@@ -219,10 +268,12 @@ def get_base_model(
 @app.get('/api/training/jobs', dependencies=[Depends(require_internal_token)])
 def list_training_jobs(
     project: str | None = Query(default=None),
+    limit: int = Query(default=200, ge=1, le=1000),
+    offset: int = Query(default=0, ge=0),
     organization_id: int | None = Depends(current_organization_id),
     session: Session = Depends(get_session),
 ) -> list[dict[str, Any]]:
-    """TrainingJob 列表：可选 ``?project=<id>`` 过滤。"""
+    """TrainingJob 列表：可选 ``?project=<id>``、``limit/offset`` 过滤。"""
     statement = sa.select(TrainingJob)
     if organization_id is None:
         statement = statement.where(TrainingJob.organization_id.is_(None))
@@ -230,7 +281,7 @@ def list_training_jobs(
         statement = statement.where(TrainingJob.organization_id == organization_id)
 
     if project is not None and project != '':
-        if not project.isdigit():
+        if not _is_ascii_digits(project):
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail='Project not found.')
         project_id = int(project)
         ref = get_visible_project(session, project_id)
@@ -240,7 +291,11 @@ def list_training_jobs(
             raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail='Project not found.')
         statement = statement.where(TrainingJob.project_id == project_id)
 
-    statement = statement.order_by(TrainingJob.created_at.desc(), TrainingJob.id.desc())
+    statement = (
+        statement.order_by(TrainingJob.created_at.desc(), TrainingJob.id.desc())
+        .offset(offset)
+        .limit(limit)
+    )
     return [training_job_to_dict(job) for job in session.scalars(statement)]
 
 
@@ -271,6 +326,7 @@ def create_training_job(
         hyperparams = {}
     if not isinstance(hyperparams, dict):
         raise _invalid_field('hyperparams', 'Expected a JSON object.')
+    _validate_hyperparams(hyperparams)
 
     project_ref = get_visible_project(session, project_id)
     if project_ref is None:
@@ -279,7 +335,7 @@ def create_training_job(
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail='Project not found.')
 
     base_model = session.get(BaseModel, base_model_id)
-    if base_model is None:
+    if base_model is None or not base_model.is_active:
         raise _invalid_field('base_model', f'Invalid pk "{base_model_id}" - object does not exist.')
     if not base_model.has_permission(organization_id):
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail='Base model not found.')
@@ -329,14 +385,28 @@ def update_training_job(
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail='Training job not found.')
     if not isinstance(payload, dict) or payload.get('action') != 'cancel':
         raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN,
+            status_code=status.HTTP_400_BAD_REQUEST,
             detail='Only action=cancel is supported.',
         )
-    # 终态任务保持原状态；重复取消是幂等的，不把 Completed/Failed 改成 Canceled。
-    if job.status in ('Pending', 'Running'):
-        job.status = 'Canceled'
-        session.commit()
-        session.refresh(job)
+
+    # 原子更新：并发完成/失败不会把终态覆盖成 Canceled。
+    result = session.execute(
+        sa.update(TrainingJob)
+        .where(
+            TrainingJob.id == job_id,
+            TrainingJob.status.in_(('Pending', 'Running')),
+        )
+        .values(status='Canceled', completed_at=utcnow())
+    )
+    updated = result.rowcount
+    session.commit()
+    session.refresh(job)
+
+    if updated:
+        try:
+            cancel_training_job(job.id)
+        except Exception:  # noqa: BLE001 - Redis/RQ 偶发失败不能阻塞取消落库
+            logger.exception('failed to stop RQ job for training_job %s', job.id)
     return training_job_to_dict(job)
 
 
@@ -346,10 +416,11 @@ def get_training_queue() -> JSONResponse:
     try:
         queue = rq.Queue('training', connection=get_redis_connection())
         count = len(queue)
-    except Exception as exc:
+    except Exception:  # noqa: BLE001 - 只记录内部错误，不把 Redis 细节回显给调用方
+        logger.exception('training queue is unavailable')
         return JSONResponse(
             status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
-            content={'detail': f'训练队列不可用：{exc}'},
+            content={'detail': '训练队列暂时不可用'},
         )
     return JSONResponse(status_code=status.HTTP_200_OK, content={'queue': 'training', 'count': count})
 

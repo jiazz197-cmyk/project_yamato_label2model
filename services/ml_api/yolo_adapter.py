@@ -48,10 +48,12 @@ def _base_model(job):
 
 
 def _model_name(base, job):
+    """生成 model_version；按列宽 255 截断，避免 Postgres 写入失败。"""
     name = getattr(base, 'name', None) or (base.get('name') if isinstance(base, dict) else None)
-    if name:
-        return f'{name}__{_job_id(job)}'
-    return f'yolo__{_job_id(job)}'
+    prefix = str(name) if name else 'yolo'
+    suffix = f'__{_job_id(job)}'
+    max_prefix_len = max(1, 255 - len(suffix))
+    return f'{prefix[:max_prefix_len]}{suffix}'
 
 
 def _merged_config(job, base):
@@ -64,6 +66,24 @@ def _merged_config(job, base):
     if isinstance(hyperparams, dict):
         config.update(hyperparams)
     return config
+
+
+def _require_int(config, key, default, minimum, maximum, allow_minus_one=False):
+    """从配置中读取整数并校验范围；非法值给出可读错误。"""
+    if key not in config or config.get(key) is None:
+        return default
+    value = config[key]
+    if isinstance(value, bool) or isinstance(value, float):
+        raise ValueError(f'hyperparams.{key} must be an integer')
+    try:
+        value = int(value)
+    except (TypeError, ValueError) as exc:
+        raise ValueError(f'hyperparams.{key} must be an integer') from exc
+    if allow_minus_one and value == -1:
+        return value
+    if not minimum <= value <= maximum:
+        raise ValueError(f'hyperparams.{key} must be between {minimum} and {maximum}')
+    return value
 
 
 def _copy_weight(run_dir, weight_name, artifact_dir):
@@ -148,10 +168,14 @@ def _extract_metrics(model, result):
 
 
 
-def train(job, dataset, progress_cb=None):
-    """执行 YOLO 训练；失败时回写 Failed 状态并继续抛出异常。"""
+def train(job, dataset, project=None, progress_cb=None):
+    """执行 YOLO 训练；失败时回写 Failed 状态并继续抛出异常。
+
+    ``project`` 必须提供（含 ``get_parsed_config()`` 或 ``parsed_label_config``），
+    或由 job dict 携带；TrainingJob ORM 只有 ``project_id``，不能自动取得标签配置。
+    """
     try:
-        return _train(job, dataset, progress_cb=progress_cb)
+        return _train(job, dataset, project=project, progress_cb=progress_cb)
     except Exception as exc:
         if isinstance(job, dict):
             job['status'] = 'Failed'
@@ -164,11 +188,13 @@ def train(job, dataset, progress_cb=None):
         raise
 
 
-def _train(job, dataset, progress_cb=None):
+def _train(job, dataset, project=None, progress_cb=None):
     """执行 YOLO 训练（内部实现）。
 
     - ``job``: TrainingJob 或兼容对象（含 base_model、hyperparams、id）。
     - ``dataset``: 传给 ``build_yolo_dataset`` 的 tasks 列表。
+    - ``project``: 含 ``get_parsed_config()`` 或 ``parsed_label_config`` 的对象/字典；
+      也可由 job dict 的 ``project`` 键提供。
     - ``progress_cb``: epoch 进度回调。
     """
     base = _base_model(job)
@@ -182,7 +208,13 @@ def _train(job, dataset, progress_cb=None):
     dataset_dir = os.path.join(artifact_dir, 'dataset')
     os.makedirs(dataset_dir, exist_ok=True)
 
-    project = getattr(job, 'project', None) or (job.get('project') if isinstance(job, dict) else None)
+    if project is None:
+        project = getattr(job, 'project', None) or (job.get('project') if isinstance(job, dict) else None)
+    if project is None:
+        raise ValueError(
+            'YOLO training requires project with parsed label config; '
+            'pass project=... or provide job["project"]'
+        )
     base_task_type = base.get('task_type') if isinstance(base, dict) else getattr(base, 'task_type', None)
     task_type = getattr(job, 'task_type', None) or (job.get('task_type') if isinstance(job, dict) else None) or base_task_type
     if task_type in (None, 'ObjectDetection'):
@@ -201,12 +233,15 @@ def _train(job, dataset, progress_cb=None):
         shutil.copyfile(data_yaml, os.path.join(artifact_dir, 'data.yaml'))
 
     config = _merged_config(job, base)
+    device = config.get('device', '')
+    if device is None:
+        device = ''
     train_params = {
         'data': data_yaml,
-        'epochs': int(config.get('epochs', 100)),
-        'imgsz': int(config.get('imgsz', 640)),
-        'batch': int(config.get('batch', 16)),
-        'device': config.get('device', ''),
+        'epochs': _require_int(config, 'epochs', 100, 1, 100000),
+        'imgsz': _require_int(config, 'imgsz', 640, 32, 16384),
+        'batch': _require_int(config, 'batch', 16, 1, 4096, allow_minus_one=True),
+        'device': device,
         'project': artifact_dir,
         'name': 'run',
         'exist_ok': True,
@@ -221,14 +256,22 @@ def _train(job, dataset, progress_cb=None):
     _register_progress_callback(model, progress_cb)
     result = model.train(**train_params)
 
-    _copy_weight(os.path.join(artifact_dir, 'run'), 'best.pt', artifact_dir)
-    _copy_weight(os.path.join(artifact_dir, 'run'), 'last.pt', artifact_dir)
+    copied = [
+        _copy_weight(os.path.join(artifact_dir, 'run'), 'best.pt', artifact_dir),
+        _copy_weight(os.path.join(artifact_dir, 'run'), 'last.pt', artifact_dir),
+    ]
     # 兼容 result.save_dir 指向的自定义 run 目录
     if result is not None:
         save_dir = result.get('save_dir') if isinstance(result, dict) else getattr(result, 'save_dir', None)
         if save_dir:
-            _copy_weight(str(save_dir), 'best.pt', artifact_dir)
-            _copy_weight(str(save_dir), 'last.pt', artifact_dir)
+            copied.extend(
+                [
+                    _copy_weight(str(save_dir), 'best.pt', artifact_dir),
+                    _copy_weight(str(save_dir), 'last.pt', artifact_dir),
+                ]
+            )
+    if not any(copied):
+        raise RuntimeError('YOLO training finished but no best.pt/last.pt was found in the run directory')
 
     metrics = _extract_metrics(model, result)
 

@@ -33,6 +33,25 @@ def test_training_job_columns_match_legacy_schema():
     assert 'celery_task_id' not in columns
 
 
+def test_indexes_match_migration():
+    """0001 已建索引必须在 ORM metadata 中声明，避免 autogenerate 生成 drop_index。"""
+    expected = {
+        'ix_training_base_model_organization_id',
+        'ix_training_base_model_created_by_id',
+        'ix_training_job_base_model_id',
+        'ix_training_job_organization_id',
+        'ix_training_job_created_by_id',
+        'ix_training_job_project_id',
+        'ix_training_job_created_at',
+    }
+    actual = {
+        index.name
+        for table in (BaseModel.__table__, TrainingJob.__table__)
+        for index in table.indexes
+    }
+    assert expected == actual
+
+
 def test_test_run_model_removed():
     """TestRun 模型已删除（YOLO-only 收敛）。"""
     assert not hasattr(training_models, 'TestRun')

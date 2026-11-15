@@ -49,6 +49,27 @@ def test_forwards_context_headers(business_client):
 
 @pytest.mark.django_db
 @responses.activate
+def test_form_hyperparams_is_parsed_to_json(business_client):
+    """旧 form 客户端的 hyperparams 是 JSON 字符串，网关要转成对象。"""
+    responses.add(
+        responses.POST,
+        f'{ML_API}/api/training/jobs',
+        json={'id': 1, 'status': 'Pending'},
+        status=201,
+    )
+
+    response = business_client.post(
+        '/api/training/jobs/',
+        data={'project': '1', 'base_model': '2', 'train_subset': 'HasGT', 'hyperparams': '{"epochs": 5}'},
+    )
+
+    assert response.status_code == 201
+    body = json.loads(responses.calls[0].request.body)
+    assert body['hyperparams'] == {'epochs': 5}
+
+
+@pytest.mark.django_db
+@responses.activate
 def test_post_forwards_json_body(business_client):
     responses.add(
         responses.POST,
@@ -109,6 +130,35 @@ def test_project_query_forwarded(business_client):
 
     assert response.status_code == 200
     assert 'project=7' in responses.calls[0].request.url
+
+
+@pytest.mark.django_db
+@responses.activate
+def test_internal_401_mapped_to_502(business_client):
+    """内部令牌失败不能以 401 返回，否则前端会误以为用户登录失效。"""
+    responses.add(
+        responses.GET,
+        f'{ML_API}/api/training/base-models',
+        json={'detail': 'missing token'},
+        status=401,
+    )
+
+    response = business_client.get('/api/training/base-models/')
+    assert response.status_code == 502
+    assert 'ML_API_INTERNAL_TOKEN' in response.json()['detail']
+
+
+@pytest.mark.django_db
+@responses.activate
+def test_pagination_params_forwarded(business_client):
+    responses.add(responses.GET, f'{ML_API}/api/training/jobs', json=[], status=200)
+
+    response = business_client.get('/api/training/jobs/?limit=10&offset=20')
+
+    assert response.status_code == 200
+    query = responses.calls[0].request.url
+    assert 'limit=10' in query
+    assert 'offset=20' in query
 
 
 @pytest.mark.django_db

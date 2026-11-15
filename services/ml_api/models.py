@@ -48,8 +48,8 @@ class BaseModel(Base):
     is_active: Mapped[bool] = mapped_column(sa.Boolean, default=True, nullable=False)
 
     # Django 的 User / Organization 主键是 integer，跨域引用保持相同类型。
-    created_by_id: Mapped[int | None] = mapped_column(sa.Integer, nullable=True)
-    organization_id: Mapped[int | None] = mapped_column(sa.Integer, nullable=True)
+    created_by_id: Mapped[int | None] = mapped_column(sa.Integer, nullable=True, index=True)
+    organization_id: Mapped[int | None] = mapped_column(sa.Integer, nullable=True, index=True)
     created_at: Mapped[dt.datetime] = mapped_column(_TIMESTAMP, default=utcnow, nullable=False)
     updated_at: Mapped[dt.datetime] = mapped_column(_TIMESTAMP, default=utcnow, onupdate=utcnow, nullable=False)
 
@@ -70,8 +70,9 @@ class TrainingJob(Base):
         _BIGINT,
         sa.ForeignKey('training_base_model.id', ondelete='CASCADE'),
         nullable=False,
+        index=True,
     )
-    project_id: Mapped[int] = mapped_column(sa.Integer, nullable=False)
+    project_id: Mapped[int] = mapped_column(sa.Integer, nullable=False, index=True)
     train_subset: Mapped[str] = mapped_column(sa.String(16), default='HasGT', nullable=False)
     hyperparams: Mapped[dict[str, Any]] = mapped_column(_JSON, default=dict, nullable=False)
 
@@ -81,9 +82,9 @@ class TrainingJob(Base):
     model_version: Mapped[str] = mapped_column(sa.String(255), default='', nullable=False)
     error_message: Mapped[str | None] = mapped_column(sa.Text, nullable=True)
 
-    created_by_id: Mapped[int | None] = mapped_column(sa.Integer, nullable=True)
-    organization_id: Mapped[int | None] = mapped_column(sa.Integer, nullable=True)
-    created_at: Mapped[dt.datetime] = mapped_column(_TIMESTAMP, default=utcnow, nullable=False)
+    created_by_id: Mapped[int | None] = mapped_column(sa.Integer, nullable=True, index=True)
+    organization_id: Mapped[int | None] = mapped_column(sa.Integer, nullable=True, index=True)
+    created_at: Mapped[dt.datetime] = mapped_column(_TIMESTAMP, default=utcnow, nullable=False, index=True)
     started_at: Mapped[dt.datetime | None] = mapped_column(_TIMESTAMP, nullable=True)
     completed_at: Mapped[dt.datetime | None] = mapped_column(_TIMESTAMP, nullable=True)
 
