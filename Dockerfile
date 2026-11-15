@@ -5,6 +5,7 @@
 #   web        —— 构建生产用 web/dist（app 镜像兜底使用）
 #   web-dev    —— 前端 HMR 开发服务器（docker compose 的 web 服务）
 #   python-deps—— Poetry 安装 Django app 依赖（不含 torch/ultralytics）
+#   poetry-tools—— 独立的 Poetry 工具镜像，用于生成 poetry.lock
 #   app        —— Django + 前端静态产物
 #   ml         —— FROM app，额外安装 CUDA 13.0 (cu130) torch/torchvision + ultralytics + FastAPI
 #
@@ -25,8 +26,12 @@ ARG YARN_VERSION=1.22.22
 ARG YARN_REGISTRY=https://registry.npmmirror.com
 ARG APT_MIRROR=http://mirrors.tuna.tsinghua.edu.cn
 
+# HMR 开发不需要浏览器二进制；避免 Cypress/Playwright 在构建期下载数百 MB。
 ENV NX_DAEMON=false \
-    NODE_OPTIONS=--max-old-space-size=8192
+    NODE_OPTIONS=--max-old-space-size=8192 \
+    CYPRESS_INSTALL_BINARY=0 \
+    PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1 \
+    PUPPETEER_SKIP_DOWNLOAD=1
 
 WORKDIR /build
 
@@ -51,7 +56,9 @@ RUN if [ -n "${YARN_REGISTRY}" ]; then \
         && yarn config set registry "${YARN_REGISTRY}"; \
     fi
 
-RUN yarn install --frozen-lockfile --network-timeout 600000
+RUN yarn install --frozen-lockfile --network-timeout 600000 \
+    && yarn cache clean \
+    && rm -rf /root/.cache
 
 # ---------------------------------------------------------------------------
 # 2) 前端生产构建（app 镜像内的 web/dist）
@@ -115,6 +122,35 @@ RUN for attempt in 1 2 3 4 5; do \
         sleep 10; \
     done; \
     exit 1
+
+# Poetry 只用于构建依赖；从运行时依赖中移除，避免 httpx2/anyio 等冲突与镜像膨胀。
+# virtualenv 保留：pre-commit（test 组）仍依赖它。
+RUN pip uninstall -y poetry httpx2 httpcore2 findpython \
+    && pip check
+
+# ---------------------------------------------------------------------------
+# 4.5) Poetry 工具镜像：生成/更新 poetry.lock，不进入 app/ml 运行时
+# ---------------------------------------------------------------------------
+FROM ${PYTHON_IMAGE} AS poetry-tools
+
+ARG POETRY_VERSION=2.4.1
+ARG POETRY_PYPI_URL=https://pypi.tuna.tsinghua.edu.cn/simple
+ARG APT_MIRROR=http://mirrors.tuna.tsinghua.edu.cn
+
+RUN if [ -n "${APT_MIRROR}" ]; then \
+        sed -i \
+            -e "s#http://deb.debian.org/debian-security#${APT_MIRROR}/debian-security#g" \
+            -e "s#http://deb.debian.org/debian#${APT_MIRROR}/debian#g" \
+            /etc/apt/sources.list.d/debian.sources; \
+    fi \
+    && apt-get update \
+    && apt-get install -y --no-install-recommends git ca-certificates \
+    && rm -rf /var/lib/apt/lists/* \
+    && pip install --no-cache-dir --index-url "${POETRY_PYPI_URL}" "poetry==${POETRY_VERSION}"
+
+WORKDIR /label-studio
+
+ENTRYPOINT ["poetry"]
 
 # ---------------------------------------------------------------------------
 # 5) 运行时公共层
@@ -198,7 +234,8 @@ CMD ["python", "label_studio/manage.py", "runserver", "0.0.0.0:8080", "--noreloa
 # ---------------------------------------------------------------------------
 # 7) ML 镜像：app 基础 + torch / ultralytics / FastAPI
 #    训练与推理合并到 services.ml_api，由 ml-api / ml-worker 共用。
-#    默认 CPU；CUDA 变体通过 TORCH_INDEX_URL / TORCH_VERSION / TORCHVISION_VERSION 覆盖。
+#    默认 CUDA 13.0（cu130）；CPU 变体通过 TORCH_INDEX_URL / TORCH_VERSION 覆盖，
+#    并显式设置 REQUIRE_CUDA=0 跳过 CUDA 断言。
 # ---------------------------------------------------------------------------
 FROM app AS ml
 
@@ -206,6 +243,7 @@ ARG ML_PIP_INDEX_URL=https://mirrors.aliyun.com/pypi/simple/
 ARG TORCH_INDEX_URL=https://mirrors.nju.edu.cn/pytorch/whl/cu130
 ARG TORCH_VERSION=2.11.0
 ARG TORCHVISION_VERSION=0.26.0
+ARG REQUIRE_CUDA=1
 # 可选 apt 镜像前缀（如 http://mirrors.tuna.tsinghua.edu.cn），用于加速系统依赖安装
 ARG APT_MIRROR=
 
@@ -250,7 +288,10 @@ RUN --mount=type=cache,target=/root/.cache/pip \
         -r /tmp/requirements-ml.txt \
     && rm -f /tmp/requirements-ml.txt
 
-RUN python -c "import torch, torchvision; print('torch', torch.__version__, '/ torchvision', torchvision.__version__)"
+RUN REQUIRE_CUDA="${REQUIRE_CUDA}" python -c "import os, torch, torchvision; \
+    assert os.environ['REQUIRE_CUDA'] != '1' or torch.version.cuda, \
+        'torch was resolved without CUDA; check TORCH_INDEX_URL/TORCH_VERSION or set REQUIRE_CUDA=0'; \
+    print('torch', torch.__version__, '/ cuda', torch.version.cuda, '/ torchvision', torchvision.__version__)"
 
 USER app
 

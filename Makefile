@@ -18,6 +18,7 @@
 
 .PHONY: dev-up dev-up-build dev-down dev-down-clean dev-ps dev-logs dev-rebuild \
         web-logs worker-logs workers-logs dev-shell ml-up ml-down ml-logs ml-rebuild env-setup \
+        poetry-lock \
         docker-build docker-up docker-up-build docker-down docker-down-clean \
         docker-ps docker-logs docker-config docker-build-ml docker-up-ml \
         docker-ps-ml docker-logs-ml docker-migrate-dev docker-makemigrations-dev \
@@ -37,10 +38,10 @@ dev-up-build:
 	docker compose up -d --build
 
 dev-down:
-	docker compose down
+	docker compose --profile ml down
 
 dev-down-clean:
-	docker compose down -v
+	docker compose --profile ml down -v
 
 dev-ps:
 	docker compose ps
@@ -80,6 +81,13 @@ ml-logs:
 
 ml-rebuild:
 	docker compose --profile ml build
+
+# 用独立 poetry-tools 镜像生成/更新 poetry.lock（runtime 不再安装 Poetry）
+poetry-lock:
+	docker build --network=host --target poetry-tools -t yamato/label-studio-poetry:dev .
+	docker run --rm -u "$$(id -u):$$(id -g)" -e HOME=/tmp \
+		-v "$$PWD":/label-studio -w /label-studio \
+		yamato/label-studio-poetry:dev lock
 
 # ---------------------------------------------------------------------------
 # 兼容旧命令名

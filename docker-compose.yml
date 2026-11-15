@@ -51,11 +51,17 @@ x-common-env: &common-env
   TRAINING_YOLO_VAL_SPLIT: ${TRAINING_YOLO_VAL_SPLIT:-0.2}
   # 真实训练 RQ job_timeout：默认 7 天，异常直接 Failed、不重试
   TRAINING_JOB_TIMEOUT: ${TRAINING_JOB_TIMEOUT:-604800}
+  # 单张训练图片下载上限（字节），默认 50MB
+  TRAINING_IMAGE_MAX_BYTES: ${TRAINING_IMAGE_MAX_BYTES:-52428800}
+  # MinIO 初始化失败是否阻止 app 启动；默认只告警，设 1 则严格失败
+  MINIO_INIT_REQUIRED: ${MINIO_INIT_REQUIRED:-0}
 
 # app 镜像：依赖 + 前端产物；开发时源码通过 volume 覆盖
 x-app-build: &app-build
   context: .
   target: app
+  # 国内镜像源在 BuildKit 默认网络下偶发超时；构建走 host 网络，dev 环境可接受。
+  network: host
   args:
     APP_UID: ${APP_UID:-1000}
     APP_GID: ${APP_GID:-1000}
@@ -67,6 +73,7 @@ x-app-build: &app-build
 x-web-build: &web-build
   context: .
   target: web-dev
+  network: host
   args:
     YARN_REGISTRY: ${YARN_REGISTRY:-https://registry.npmmirror.com}
     APT_MIRROR: ${APT_MIRROR:-http://mirrors.tuna.tsinghua.edu.cn}
@@ -75,6 +82,7 @@ x-web-build: &web-build
 x-ml-build: &ml-build
   context: .
   target: ml
+  network: host
   args:
     APP_UID: ${APP_UID:-1000}
     APP_GID: ${APP_GID:-1000}
@@ -84,6 +92,7 @@ x-ml-build: &ml-build
     TORCH_INDEX_URL: ${TORCH_INDEX_URL:-https://mirrors.nju.edu.cn/pytorch/whl/cu130}
     TORCH_VERSION: ${TORCH_VERSION:-2.11.0}
     TORCHVISION_VERSION: ${TORCHVISION_VERSION:-0.26.0}
+    REQUIRE_CUDA: ${REQUIRE_CUDA:-1}
     APT_MIRROR: ${APT_MIRROR:-http://mirrors.tuna.tsinghua.edu.cn}
 
 services:
@@ -219,7 +228,7 @@ services:
       - -n
       - "${LS_WORKER_CONCURRENCY:-16}"
       - -u
-      - redis://redis:6379/0
+      - redis://redis:6379/${REDIS_DB:-0}
       - -w
       - docker.rq_django_worker.DjangoWorker
       - critical
@@ -249,6 +258,7 @@ services:
       timeout: 5s
       retries: 10
       start_period: 60s
+    stop_grace_period: ${LS_WORKER_STOP_GRACE:-5m}
     networks:
       - yamato-net
 
@@ -276,6 +286,8 @@ services:
         condition: service_healthy
       redis:
         condition: service_healthy
+      app:
+        condition: service_healthy
     healthcheck:
       test: ["CMD-SHELL", "curl -fsS http://127.0.0.1:8991/health || exit 1"]
       interval: 15s
@@ -298,7 +310,7 @@ services:
       - -n
       - "${ML_WORKER_CONCURRENCY:-2}"
       - -u
-      - redis://redis:6379/0
+      - redis://redis:6379/${REDIS_DB:-0}
       - training
     environment:
       <<: *common-env
@@ -325,6 +337,7 @@ services:
       timeout: 5s
       retries: 10
       start_period: 60s
+    stop_grace_period: ${ML_WORKER_STOP_GRACE:-30s}
     networks:
       - yamato-net
 

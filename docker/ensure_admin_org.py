@@ -35,12 +35,17 @@ def main(argv):
         print(f'用户不存在: {email}', file=sys.stderr)
         return 1
 
-    membership = OrganizationMember.objects.filter(user=user).select_related('organization').first()
+    membership = (
+        OrganizationMember.objects.filter(user=user, deleted_at__isnull=True)
+        .select_related('organization')
+        .order_by('id')
+        .first()
+    )
     if membership:
         organization = membership.organization
         print(f'用户 {email} 已属于组织 {organization.title}（id={organization.id}）')
     else:
-        organization = Organization.objects.first()
+        organization = Organization.objects.order_by('id').first()
         if organization is None:
             organization = Organization.create_organization(title='Default Organization', created_by=user)
             print(f'已创建组织 {organization.title}（id={organization.id}）')

@@ -25,7 +25,6 @@
     5432,
     6379
   ],
-  "postCreateCommand": "python label_studio/manage.py migrate --noinput",
   "customizations": {
     "vscode": {
       "extensions": [

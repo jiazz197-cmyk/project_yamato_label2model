@@ -67,8 +67,12 @@ def main():
         )
         time.sleep(_RETRY_INTERVAL_SECONDS)
 
+    required = os.environ.get('MINIO_INIT_REQUIRED', '0') == '1'
     print(f'[minio-init] bucket 初始化失败: {last_error}', file=sys.stderr)
-    return 1
+    if required:
+        return 1
+    print('[minio-init] MINIO_INIT_REQUIRED=0，告警后继续启动 app', file=sys.stderr)
+    return 0
 
 
 if __name__ == '__main__':
