@@ -1,14 +1,14 @@
 """本地预置 YOLO 基模目录校验与扫描。
 
-轻依赖：只 import 标准库 + ``django.core.exceptions.ValidationError``。
-不 import 训练适配器/模型，使 ``validate_local_model_path`` / ``scan_local_models``
-可脱离 Django ORM 做纯单测。
+轻依赖：只 import 标准库，可脱离 Django/FastAPI 做纯单测。
 """
 
 import glob
 import os
 
-from django.core.exceptions import ValidationError
+
+class LocalModelPathError(ValueError):
+    """本地基模路径不可用（目录不存在 / 不含 ``*.pt``）。"""
 
 FRAMEWORK_YOLO = 'YOLO'
 
@@ -27,10 +27,10 @@ def validate_local_model_path(path):
     只查文件存在性，不加载权重内容。
     """
     if not path or not os.path.isdir(path):
-        raise ValidationError(f'Local model path does not exist or is not a directory: {path}')
+        raise LocalModelPathError(f'Local model path does not exist or is not a directory: {path}')
 
     if not _has_yolo_weights(path):
-        raise ValidationError(f'YOLO model missing .pt file in: {path}')
+        raise LocalModelPathError(f'YOLO model missing .pt file in: {path}')
 
 
 def scan_local_models(root):

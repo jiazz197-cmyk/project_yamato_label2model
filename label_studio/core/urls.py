@@ -65,7 +65,7 @@ urlpatterns = [
     re_path(r'^', include('tasks.urls')),
     re_path(r'^', include('io_storages.urls')),
     re_path(r'^', include('ml.urls')),
-    re_path(r'^', include('training.urls')),
+    re_path(r'^', include('core.training_api')),
     re_path(r'^', include('webhooks.urls')),
     re_path(r'^', include('labels_manager.urls')),
     re_path(r'^', include('fsm.urls')),

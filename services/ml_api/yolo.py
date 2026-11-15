@@ -2,9 +2,11 @@
 
 本模块只处理 Label Studio 的 RectangleLabels（目标检测）与 PolygonLabels
 （实例分割）标注，输出 Ultralytics YOLO 训练/验证所需的目录与 data.yaml。
-所有图像来源仅限 task.data['image']；本地路径直接复制，存储/HTTP URL 下载后落盘。
+图像来源仅限 task.data['image']：本地文件必须在 BASE_DATA_DIR 内，远程图片
+必须由 Label Studio storage resolver 解析；直接 HTTP URL 一律拒绝。
 """
 
+import logging
 import os
 import random
 import shutil
@@ -17,6 +19,7 @@ import yaml
 _MODE_DETECT = 'detect'
 _MODE_SEGMENT = 'segment'
 _IMAGE_SUFFIXES = {'.jpg', '.jpeg', '.png', '.bmp', '.webp', '.tif', '.tiff'}
+logger = logging.getLogger(__name__)
 
 
 class YoloDatasetInfo(str):
@@ -218,8 +221,29 @@ def annotation_to_yolo(annotation, class_map, mode):
     return None
 
 
+def _annotation_value(annotation, key, default=None):
+    """同时兼容 ORM Annotation 与序列化 dict。"""
+    if isinstance(annotation, dict):
+        return annotation.get(key, default)
+    return getattr(annotation, key, default)
+
+
+def _annotation_sort_key(annotation):
+    """按 updated_at / created_at / id 排序，取最新一份 annotation。"""
+    updated = _annotation_value(annotation, 'updated_at')
+    created = _annotation_value(annotation, 'created_at')
+    identifier = _annotation_value(annotation, 'id')
+    timestamp = updated or created or ''
+    return (str(timestamp), str(identifier or ''))
+
+
 def _iter_annotation_regions(task):
-    """从 Task 序列化 dict/ORM 对象中产出 annotation result region。"""
+    """从 Task 序列化 dict/ORM 对象中产出**最新一份未取消** annotation 的 region。
+
+    Label Studio 一个 task 可能有多份 annotation（多人标注/多轮修订）。训练只应
+    使用最终结果，否则同一目标会被写成多个正样本。这里按 updated_at/created_at
+    取最新，跳过 ``was_cancelled=True`` 的草稿。
+    """
     if isinstance(task, dict):
         annotations = task.get('annotations') or []
     else:
@@ -232,22 +256,98 @@ def _iter_annotation_regions(task):
         except AttributeError:
             pass
 
+    candidates = []
     for annotation in annotations:
-        if isinstance(annotation, dict):
-            if 'result' in annotation:
-                results = annotation.get('result') or []
-                for result in results:
-                    yield result
-            elif annotation.get('type') and annotation.get('value') is not None:
-                yield annotation
-        else:
-            results = getattr(annotation, 'result', None) or []
+        if _annotation_value(annotation, 'was_cancelled', False):
+            continue
+        candidates.append(annotation)
+    if not candidates:
+        return
+
+    annotation = max(candidates, key=_annotation_sort_key)
+    if isinstance(annotation, dict):
+        if 'result' in annotation:
+            results = annotation.get('result') or []
             for result in results:
                 yield result
+        elif annotation.get('type') and annotation.get('value') is not None:
+            yield annotation
+    else:
+        results = getattr(annotation, 'result', None) or []
+        for result in results:
+            yield result
+
+
+def _image_max_bytes() -> int:
+    """单张图片允许的最大字节数；默认 50MB。"""
+    raw = os.environ.get('TRAINING_IMAGE_MAX_BYTES', '')
+    try:
+        value = int(raw)
+    except (TypeError, ValueError):
+        return 50 * 1024 * 1024
+    return value if value > 0 else 50 * 1024 * 1024
+
+
+def _download_image(url: str, dst_path: Path) -> str | None:
+    """下载 storage resolver 返回的图片；禁止重定向并限制大小。"""
+    parsed = urlparse(str(url))
+    if parsed.scheme not in ('http', 'https') or not parsed.hostname:
+        logger.warning('reject non-http image url from storage resolver: scheme=%s', parsed.scheme)
+        return None
+
+    max_bytes = _image_max_bytes()
+    tmp_path = dst_path.with_name(f'{dst_path.name}.part')
+    try:
+        with requests.get(
+            str(url),
+            stream=True,
+            timeout=(5, 30),
+            allow_redirects=False,
+        ) as response:
+            if int(getattr(response, 'status_code', 0)) != 200:
+                logger.warning(
+                    'storage image download failed: host=%s status=%s',
+                    parsed.hostname,
+                    getattr(response, 'status_code', None),
+                )
+                return None
+            content_length = getattr(response, 'headers', {}).get('Content-Length')
+            if content_length:
+                try:
+                    if int(content_length) > max_bytes:
+                        logger.warning('storage image too large: host=%s', parsed.hostname)
+                        return None
+                except (TypeError, ValueError):
+                    pass
+
+            written = 0
+            with tmp_path.open('wb') as handle:
+                for chunk in response.iter_content(chunk_size=8192):
+                    if not chunk:
+                        continue
+                    written += len(chunk)
+                    if written > max_bytes:
+                        logger.warning('storage image exceeded size limit: host=%s', parsed.hostname)
+                        handle.close()
+                        tmp_path.unlink(missing_ok=True)
+                        return None
+                    handle.write(chunk)
+        tmp_path.replace(dst_path)
+        return str(dst_path)
+    except Exception as exc:  # noqa: BLE001 - 单张图片失败只跳过该样本
+        logger.warning('storage image download error: host=%s error=%s', parsed.hostname, type(exc).__name__)
+        tmp_path.unlink(missing_ok=True)
+        return None
 
 
 def materialize_image(task, project, dst):
     """把 task 图片落到 ``dst``（文件路径或目录）。
+
+    安全约束：
+    - 只接受 Label Studio storage resolver 返回的 http(s) URL；
+    - task.data['image'] 直接写 http(s) 一律拒绝（避免 SSRF）；
+    - 本地文件必须位于 ``BASE_DATA_DIR`` 内（避免任意文件读取）；
+    - 单文件默认上限 50MB（``TRAINING_IMAGE_MAX_BYTES``）。
 
     成功返回写入后的路径字符串；无法解析/下载/复制时返回 ``None``。
     """
@@ -274,53 +374,48 @@ def materialize_image(task, project, dst):
         try:
             resolved = resolver(image)
             if isinstance(resolved, dict) and resolved.get('url'):
-                resolved_url = resolved['url']
+                resolved_url = str(resolved['url'])
         except Exception:
             resolved_url = None
 
-    try:
-        if resolved_url:
-            response = requests.get(resolved_url, stream=True, timeout=10)
-            try:
-                status_code = int(getattr(response, 'status_code', 200))
-            except (TypeError, ValueError):
-                status_code = 200
-            if status_code != 200:
-                return None
-            content = getattr(response, 'content', None)
-            if content is None:
-                content = b''.join(response.iter_content(chunk_size=8192))
-            dst_path.write_bytes(content)
-            return str(dst_path)
+    if resolved_url:
+        return _download_image(resolved_url, dst_path)
 
-        if image.startswith(('http://', 'https://')):
-            response = requests.get(image, stream=True, timeout=10)
-            try:
-                status_code = int(getattr(response, 'status_code', 200))
-            except (TypeError, ValueError):
-                status_code = 200
-            if status_code != 200:
-                return None
-            content = getattr(response, 'content', None)
-            if content is None:
-                content = b''.join(response.iter_content(chunk_size=8192))
-            dst_path.write_bytes(content)
-            return str(dst_path)
-
-        src = Path(image)
-        if src.is_file():
-            shutil.copyfile(src, dst_path)
-            return str(dst_path)
-    except Exception:
+    if image.startswith(('http://', 'https://')):
+        logger.warning('reject direct remote image url; import it through Label Studio storage first')
         return None
-    return None
 
+    src = Path(image)
+    if not src.is_file():
+        return None
+
+    base_dir = os.environ.get('BASE_DATA_DIR', '')
+    if not base_dir:
+        logger.warning('reject local image without BASE_DATA_DIR: %s', src.name)
+        return None
+    try:
+        src_resolved = src.resolve()
+        base_resolved = Path(base_dir).resolve()
+        src_resolved.relative_to(base_resolved)
+    except (OSError, ValueError):
+        logger.warning('reject local image outside BASE_DATA_DIR: %s', src.name)
+        return None
+
+    try:
+        if src_resolved.stat().st_size > _image_max_bytes():
+            logger.warning('local image too large: %s', src.name)
+            return None
+        shutil.copyfile(src_resolved, dst_path)
+        return str(dst_path)
+    except OSError as exc:
+        logger.warning('local image copy failed: %s (%s)', src.name, type(exc).__name__)
+        return None
 
 def build_yolo_dataset(project, tasks, workdir, mode, val_split=None):
     """构造 YOLO 数据集目录并返回数据集元信息。
 
     - ``mode``: ``'detect'`` 或 ``'segment'``。
-    - ``val_split``: train/val 比例；``None`` 时读取 Django settings
+    - ``val_split``: train/val 比例；``None`` 时读取环境变量
       ``TRAINING_YOLO_VAL_SPLIT``，默认 0.2。
     - 样本 < 2 时不生成 val 集。
     """
@@ -332,10 +427,8 @@ def build_yolo_dataset(project, tasks, workdir, mode, val_split=None):
 
     if val_split is None:
         try:
-            from django.conf import settings as django_settings
-
-            val_split = float(getattr(django_settings, 'TRAINING_YOLO_VAL_SPLIT', 0.2))
-        except Exception:
+            val_split = float(os.environ.get('TRAINING_YOLO_VAL_SPLIT', '0.2'))
+        except (TypeError, ValueError):
             val_split = 0.2
     val_split = float(val_split)
 

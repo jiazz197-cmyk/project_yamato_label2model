@@ -1,9 +1,7 @@
-"""training.utils 纯单测（无 DB）：validate_local_model_path + scan_local_models（YOLO-only）。"""
+"""services.ml_api.model_files 纯单测（无 DB）：路径校验 + 基模目录扫描（YOLO-only）。"""
 
 import pytest
-from django.core.exceptions import ValidationError
-
-from training.utils import FRAMEWORK_YOLO, scan_local_models, validate_local_model_path
+from services.ml_api.model_files import FRAMEWORK_YOLO, LocalModelPathError, scan_local_models, validate_local_model_path
 
 
 def _make_yolo_dir(parent, name='yolo-model'):
@@ -31,26 +29,26 @@ def test_validate_yolo_ok(tmp_path):
 
 
 def test_validate_nonexistent_path(tmp_path):
-    with pytest.raises(ValidationError):
+    with pytest.raises(LocalModelPathError):
         validate_local_model_path(str(tmp_path / 'nope'))
 
 
 def test_validate_empty_dir(tmp_path):
     directory = tmp_path / 'empty'
     directory.mkdir()
-    with pytest.raises(ValidationError):
+    with pytest.raises(LocalModelPathError):
         validate_local_model_path(str(directory))
 
 
 def test_validate_path_is_file(tmp_path):
     file_path = tmp_path / 'weights.pt'
     file_path.write_bytes(b'dummy')
-    with pytest.raises(ValidationError):
+    with pytest.raises(LocalModelPathError):
         validate_local_model_path(str(file_path))
 
 
 def test_validate_none_path():
-    with pytest.raises(ValidationError):
+    with pytest.raises(LocalModelPathError):
         validate_local_model_path(None)
 
 

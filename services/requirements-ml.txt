@@ -1,0 +1,13 @@
+# ml 镜像专用的 Python 依赖清单（仅 ml-api / ml-worker 使用，不进 app 镜像）。
+# torch / torchvision 不在本文件：Dockerfile 会先按构建参数 TORCH_INDEX_URL /
+# TORCH_VERSION / TORCHVISION_VERSION 从 CPU/CUDA 索引单独安装固定版本
+# （默认 torch==2.11.0、torchvision==0.26.0），再安装本清单。
+ultralytics==8.4.118
+fastapi==0.141.1
+uvicorn[standard]==0.52.4
+# 训练域持久化（SQLAlchemy + Alembic）+ PostgreSQL 驱动
+SQLAlchemy==2.0.36
+alembic==1.14.0
+psycopg[binary]==3.2.10
+# FastAPI TestClient（services/tests）依赖
+httpx==0.28.1
